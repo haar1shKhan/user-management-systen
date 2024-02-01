@@ -4,7 +4,7 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/select2.css')}}">
 @endsection
 
 @section('style')
@@ -17,6 +17,7 @@
         /* Additional styles as needed */
     }
     </style>
+
 @endsection
 
 @section('breadcrumb-title')
@@ -46,31 +47,97 @@
                             {{-- @can('permission_create') --}}
 
                             {{-- modal start --}}
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">{{trans('admin/leaveSettings/leaveEntitlement.addType') }}</button>
-                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                   <form action="{{route('admin.'.$url.".leaveEntitlement.store")}}" method="POST" class="modal-content">
-                                    @csrf
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Apply Leave</button>
+
+                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                   <div class="modal-content">
                                       <div class="modal-header">
-                                         <h5 class="modal-title">Add Title</h5>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Add Entitlment</h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
-                                      <div class="modal-body">
-                                        <div class="d-flex flex-column mx-3">
-                                            <input class="form-control " id="validationCustom01" name="title" type="text" required="" data-bs-original-title="" title="">
-                                            {{-- <div class="valid-feedback">Looks good!</div> --}}
-                                            <div class="text-danger mt-1">
-                                                @error("type")
-                                                {{$message}}    
-                                                @enderror
-                                            </div>
-                                        </div>
+                                      
+
+                                      <form action="{{route('admin.'.$url.".leaveEntitlement.store")}}" method="POST" class="modal-content">
+                                        @csrf
+
+                                       <div class="modal-body">
+                                            <div class="">
+
+                                                <div class="row">
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label" for="validationCustom04">Leave policy</label>
+                                                        <select name="leave_policy_id"  class="form-select" id="validationCustom04" >
+                        
+                                                            <option selected="true" disabled value="">Choose...</option>
+                                                            @foreach ($leavePolicies as $policies)
+                                                            <option value="{{ $policies->id }}">
+                                                                {{ $policies->title }}
+                                                            </option>
+                                                         @endforeach
+                                                
+                                                        </select>
+                                                        <div class="text-danger mt-1">
+                                                            @error("leave_policy_id")
+                                                            {{$message}}    
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label" for="validationCustom04">Leave Year</label>
+                                                        <select name="leave_year"  class="form-select" id="validationCustom04" >
+
+                                                            <option   value="current">{{date("Y")}}</option>
+                                                            <option   value="next">{{date("Y", strtotime("+1 year"))}}</option>
+                                                
+                                                        </select>
+                                                        <div class="text-danger mt-1">
+                                                            @error("leave_year")
+                                                            {{$message}}    
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="d-flex flex-column  col-md-4">
+                                                        <label class="form-label" for="validationCustom01">Days</label>
+                                                         <input class="form-control" id="validationCustom01"  name="days" type="number"  data-bs-original-title="" title="">
+                                                         <div class="text-danger mt-1">
+                                                             @error("days")
+                                                                 {{ $message }}
+                                                             @enderror
+                                                         </div>
+                                                     </div>
+
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="o-hidden">
+                                                        <div class="mb-2">
+                                                            <div class="form-label">Default Placeholder</div>
+                                                            <select name="user_id[]" class="js-example-placeholder-multiple col-sm-12" multiple="multiple">
+                                                                @foreach ($users as $user)
+                                                                <option value="{{ $user->id }}">
+                                                                    {{ $user->first_name}} {{ $user->last_name}}
+                                                                </option>
+                                                             @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                   
+                                             </div>
                                       </div>
                                       <div class="modal-footer">
-                                         <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                                         <button class="btn btn-primary" type="submit">Add</button>
-                                      </div>
-                                   </form>
+                                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                        <button class="btn btn-primary" type="submit">Add</button>
+                                     </div>
+                                      </form>
+
+                                     
+                                   </div>
                                 </div>
                              </div>
                             {{-- modal end --}}
@@ -111,7 +178,9 @@
 
                                     <th>{{trans('global.id') }}</th>
                                     <th class="col-8">{{trans('admin/leaveSettings/leaveEntitlement.type') }}</th>
-
+                                    <th>Leave year</th>
+                                    <th>days</th>
+                                    <th>Users</th>
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
                                     <th>{{trans('global.action') }}</th>
@@ -121,53 +190,126 @@
                             </thead>
                             <tbody>
                                 @if(!is_null($leaveEntitlement))
-                                    @foreach ($leaveEntitlement as $type)
+                                    @foreach ($leaveEntitlement as $list)
                                         <tr>
                                             <td>
                                                 <div class="form-check checkbox checkbox-dark mb-0">
-                                                    <input class="form-check-input" name="massAction" id={{"inline-".$type->id}} value="{{ $type->id }}" type="checkbox" data-bs-original-title="" title>
-                                                    <label class="form-check-label" for={{"inline-".$type->id}}></label>
+                                                    <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
+                                                    <label class="form-check-label" for={{"inline-".$list->id}}></label>
                                                 </div>
                                             </td>
-                                            <td>{{$type->id}}</td>
+                                            <td>{{$list->id}}</td>
                                             <td>
-                                                <h6>{{$type->title}}</h6>
+                                                <h6>{{$list->policy->title}}</h6>
                                             </td>
+                                            <td>{{$list->leave_year}}</td>
+                                            <td>{{$list->days ?? $list->policy->days}}</td>
+                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
                                             <td>
                                                 <ul class="action">
                                                     <li class="edit">
-                                                        <button class="border-none" type="button" data-bs-toggle="modal" data-bs-target="#editModal{{ $type->id }}">
+                                                        <button class="border-none" type="button" data-bs-toggle="modal" data-bs-target=".bd-{{$list->id}}-modal-lg">
+
                                                             <i class="icon-pencil-alt"></i>
+
                                                         </button>
                                                     </li>
-                                                    <div class="modal fade" id="editModal{{ $type->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <form action="{{ route('admin.'.$url.'.leaveEntitlement.update', ['leaveEntitlement' => $type->id]) }}" method="POST" class="modal-content">
+
+                                                    <div class="modal fade bd-{{$list->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg">
+                                                           <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                 <h4 class="modal-title" id="myLargeModalLabel">Update Policies</h4>
+                                                                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                              </div>
+                                                              
+                        
+                                                              <form action="{{route('admin.'.$url.'.leaveEntitlement.update', ['leaveEntitlement' => $list->id])}}" method="POST" class="modal-content">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Update Title</h5>
-                                                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="d-flex flex-column mx-3">
-                                                                        <input class="form-control" id="validationCustom01" value="{{ $type->title }}" name="title" type="text" required="" data-bs-original-title="" title="">
-                                                                        <div class="text-danger mt-1">
-                                                                            @error("title")
-                                                                                {{ $message }}
-                                                                            @enderror
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                                                                    <button class="btn btn-primary" type="submit">Save</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
+                                                            
+                                                            <div class="modal-body">
+                                                                    <div class="">
 
-                                                    <form action="{{ route('admin.'.$url.'.leaveEntitlement.destroy', ['leaveEntitlement' => $type->id]) }}" method="post">
+                                                                        <div class="row">
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="form-label" for="validationCustom04">Leave policy</label>
+                                                                                <select name="leave_policy_id"  class="form-select" id="validationCustom04" >
+                                                
+                                                                                    <option selected="true" disabled value="">Choose...</option>
+                                                                                    @foreach ($leavePolicies as $policies)
+                                                                                    <option {{$list->policy->id == $policies->id? "selected": ""}} value="{{ $policies->id }}">
+                                                                                        {{ $policies->title }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                        
+                                                                                </select>
+                                                                                <div class="text-danger mt-1">
+                                                                                    @error("leave_policy_id")
+                                                                                    {{$message}}    
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4">
+                                                                                <label class="form-label" for="validationCustom04">Leave Year</label>
+                                                                                <select name="leave_year"  class="form-select" id="validationCustom04" >
+
+                                                                                    <option {{$list->leave_year == "current"? "selected": ""}}   value="current">{{date("Y")}}</option>
+                                                                                    <option {{$list->leave_year == "next"? "selected": ""}}   value="next">{{date("Y", strtotime("+1 year"))}}</option>
+                                                                        
+                                                                                </select>
+                                                                                <div class="text-danger mt-1">
+                                                                                    @error("leave_year")
+                                                                                    {{$message}}    
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="d-flex flex-column  col-md-4">
+                                                                                <label class="form-label" for="validationCustom01">Days</label>
+                                                                                <input class="form-control" id="validationCustom01" value="{{$list->days ?? $list->policy->days}}"  name="days" type="number"  data-bs-original-title="" title="">
+                                                                                <div class="text-danger mt-1">
+                                                                                    @error("days")
+                                                                                        {{ $message }}
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        {{-- <div class="row">
+                                                                            <div class="o-hidden">
+                                                                                <div class="mb-2">
+                                                                                    <div class="form-label">Default Placeholder</div>
+                                                                                    <select name="user_id[]" class="js-example-placeholder-multiple col-sm-12" multiple="multiple">
+                                                                                        @foreach ($users as $user)
+                                                                                        <option value="{{ $user->id }}">
+                                                                                            {{ $user->first_name}} {{ $user->last_name}}
+                                                                                        </option>
+                                                                                    @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div> --}}
+                                                                        
+                                                                    </div>
+                                                            </div>
+
+                                                              <div class="modal-footer">
+                                                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                                                <button class="btn btn-primary" type="submit">Add</button>
+                                                             </div>
+                                                              </form>
+                        
+                                                             
+                                                           </div>
+                                                        </div>
+                                                     </div>
+
+                                                    <form action="{{ route('admin.'.$url.'.leaveEntitlement.destroy', ['leaveEntitlement' => $list->id]) }}" method="post">
                                                         @csrf
                                                         @method('DELETE')
                                                         <li class="delete">
@@ -232,8 +374,6 @@
              $('#massActionButton').click(function(e) {
                  e.preventDefault();
                  
-                 
-                 
                 //  var actionType = $('#actionType').val();
                 //  console.log(actionType);
                  var selectedPermissionIds = [];
@@ -264,7 +404,7 @@
                      // Make AJAX request
                      $.ajax({
                          type: 'POST',
-                         url: "{{route('admin.localization.longLeave.massAction')}}", // Update the URL to your controller method
+                         url: "{{route('admin.leaveSettings.leaveEntitlement.massAction')}}", // Update the URL to your controller method
                          data: requestData,
                          success: function(response) {
                              // Handle success response
@@ -283,8 +423,15 @@
                  }
              });  
 
+
+
+
+
+
         });
 </script>
     <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+    <script src="{{asset('assets/js/select2/select2.full.min.js')}}"></script>
+    <script src="{{asset('assets/js/select2/select2-custom.js')}}"></script>
 @endsection

@@ -31,14 +31,6 @@ class LeavePoliciesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -63,22 +55,6 @@ class LeavePoliciesController extends Controller
         $leavePolicy->save();
 
         return redirect("admin/leaveSettings/policies");
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -111,5 +87,19 @@ class LeavePoliciesController extends Controller
     public function destroy(string $id)
     {
         //
+        LeavePolicies::find($id)->delete();
+        return redirect('admin/leaveSettings/policies');
+    }
+
+    public function massAction(Request $request)
+    {
+        $massAction = $request['massAction'];
+
+        foreach ($massAction as $id) {
+            
+            LeavePolicies::find($id)->delete();
+        }
+        return redirect('admin/leaveSettings/policies');
+
     }
 }

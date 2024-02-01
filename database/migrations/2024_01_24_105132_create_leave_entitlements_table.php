@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('leave_policy_id')->constrained('leave_policies')->onDelete('cascade');
             $table->enum('leave_year', ['current', 'next']);
-            $table->integer('days');
+            $table->integer('days')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\LocalizationLeave;
+use App\Models\LeavePolicies;
 
 
 class LeaveController extends Controller
@@ -14,7 +14,7 @@ class LeaveController extends Controller
    public function index()
    {
        //
-       $longLeaveList = LocalizationLeave::get();
+       $longLeaveList = LeavePolicies::get();
        $page_title = 'Leave Application';
        $trash = false;
        $data['page_title']=$page_title;

@@ -15,7 +15,7 @@ class LateAttendanceController extends Controller
     public function index()
     {
         //
-        $lateAttendances = LateAttendance::with('user','approvedBy')->get();
+        $lateAttendances = LateAttendance::where('user_id',auth()->user()->id)->with('user','approvedBy')->get();
         $page_title = 'Late Attendance Application';
         $trash = false;
         $data['page_title']=$page_title;

@@ -121,7 +121,7 @@ class PermissionController extends Controller
     public function massAction(Request $request)
     {
         $massAction = $request['massAction'];
-        
+        dd($massAction);
         abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         foreach ($massAction as $id) {
