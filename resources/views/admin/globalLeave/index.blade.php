@@ -124,62 +124,61 @@
                         
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <ul class="nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
+                      <li class="nav-item"><a class="nav-link active" id="top-home-tab" data-bs-toggle="tab" href="#top-appearance" role="tab" aria-controls="top-home" aria-selected="true"><i class="icofont icofont-layout"></i>Long Leave</a></li>
+                      <li class="nav-item"><a class="nav-link" id="profile-top-tab" data-bs-toggle="tab" href="#top-profile" role="tab" aria-controls="top-profile" aria-selected="false"><i class="icofont icofont-man-in-glasses"></i>Late Attendance</a></li>
+                      <li class="nav-item"><a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-contact" role="tab" aria-controls="top-contact" aria-selected="false"><i class="icofont icofont-contacts"></i>Short Leave</a></li>
+                    </ul>
+                    <div class="tab-content" id="top-tabContent">
+
+                      <div class="tab-pane fade show active" id="top-appearance" role="tabpanel" aria-labelledby="top-home-tab">
+                        
+
+                        <div class="table-responsive">
                         <table class="display" id="basic-1">
                             <thead>
                                 <tr>
                                     {{-- @can('user_edit' || 'user_delete') --}}
 
-                                    {{-- <th>
+                                    <th>
                                         <div class="form-check checkbox checkbox-dark mb-2">
                                               <input id='selectall' class="form-check-input select-all-checkbox" data-category="all" type="checkbox">
                                               <label for="selectall" class="form-check-label"></label>
                                         </div>
-                                    </th> --}}
+                                    </th>
 
                                     {{-- @endcan --}}
                                     <th>{{ trans('global.id') }}</th>
                                     <th>{{ trans('admin/user.name') }}</th>
-
                                     <th>Duration</th>
                                     <th>Reason</th>
                                     <th>status</th>
-                                    <th>Approved by</th>
-
-                                  
+                                    <th>Approved By</th>
                                     {{-- @can('user_edit' || 'user_delete') --}}
                                     <th>{{ trans('global.action') }}</th>
                                     {{-- @endcan --}}
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(!empty($allLeaves))
-                                    @foreach ($allLeaves as $list )
-                                    
-                                        <tr class="globalLeaves_id{{$list->id}}">
+                                @if(!empty($longLeaves))
+                                    @foreach ($longLeaves as $list )
+                                        <tr class="list_id{{$list->id}}">
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
-{{-- 
+
                                             <td>
                                                 <div class="form-check checkbox checkbox-dark mb-0">
                                                     <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
                                                     <label class="form-check-label" for={{"inline-".$list->id}}></label>
                                                 </div>
-                                            </td> --}}
+                                            </td>
 
                                             {{-- @endcan --}}
 
                                             <td>{{$list->id}}</td>
-
-                                            <td>
-                                                <h6>{{$list->user->first_name}} {{$list->user->last_name}}</h6>
-                                            </td>
-
-                                            <td><span class="font-weight-bold">From: </span> {{date ('h:i a',strtotime($list->from))}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
-
-                                            <td>
-                                              {{$list->reason}}
-                                            </td>
+                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
+                                            <td><span class="font-weight-bold">From: </span> {{$list->from}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
+                                            <td>{{$list->reason}}</td>
                                             <td>
                                                 @if ($list->approved==0)
                                                     <p class="text-warning">Pending</p>
@@ -191,59 +190,34 @@
                                               
                                             </td>
                                             <td>
-                                                  {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                                                {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
                                             </td>
+                                            
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
 
                                             <td>
                                                 <ul class="action">
-                                                    
-                                                    <li class="edit">
-                                                        <button class="border-none" type="button" data-bs-toggle="modal" data-bs-target="#editModal{{ $list->id }}">
-                                                            <i class="icon-pencil-alt"></i>
-                                                        </button>
-                                                    </li>
-                                                    <div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                                            <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="POST" class="modal-content">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Update Title</h5>
-                                                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="d-flex flex-column mx-3">
-                                                                        <input class="form-control" id="validationCustom01" value="{{ $list->reason }}" name="reason" type="text" required="" data-bs-original-title="" title="">
-                                                                        <div class="text-danger mt-1">
-                                                                            @error("reason")
-                                                                                {{ $message }}
-                                                                            @enderror
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                                                                    <button class="btn btn-primary" type="submit">Save</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
 
-                                                    <form action="{{route('admin.'.$url.'.destroy',['globalLeave'=>$list->id])}}" method="post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
+                                                    {{-- @can('permission_edit') --}}
 
-                                                    </form>
+                                                      {{-- <li class="edit">
+                                                         <a href="{{route('admin.'.$url.'.edit',['longLeave'=>$list->id])}}"><i class="icon-pencil-alt"></i></a>
+                                                      </li> --}}
+                                                      
+                                                    {{-- @endcan --}}
                                                     
+                                                    {{-- @can('permission_delete') --}}
+
+                                                    {{-- @endcan --}}
+
                                                     <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                     
                                                         <!-- Add a hidden input field for user ID -->
                                                         <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                        <input type="hidden" name="type" value="longLeave">
                                                     
                                                         <li class="edit">
                                                             <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
@@ -255,13 +229,14 @@
                                                         @method('PUT')
                                                     
                                                         <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                        {{-- <input type="hidden" name="_id" value="{{ $list->policy->id }}"> --}}
+                                                        <input type="hidden" name="type" value="longLeave">
                                                     
                                                         <li class="delete">
                                                             <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
                                                         </li>
                                                     </form>
-                                                    
+
                                                   </ul>
                                             </td>
                                             {{-- @endcan --}}
@@ -272,7 +247,253 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+                        
+
+
+                      </div>
+
+
+
+
+                      <div class="tab-pane fade" id="top-profile" role="tabpanel" aria-labelledby="profile-top-tab">
+
+
+                        <div class="table-responsive">
+                            <table class="display" id="basic-2">
+                                <thead>
+                                    <tr>
+                                        {{-- @can('user_edit' || 'user_delete') --}}
+    
+                                        {{-- <th>
+                                            <div class="form-check checkbox checkbox-dark mb-2">
+                                                  <input id='selectall' class="form-check-input select-all-checkbox" data-category="all" type="checkbox">
+                                                  <label for="selectall" class="form-check-label"></label>
+                                            </div>
+                                        </th> --}}
+    
+                                        {{-- @endcan --}}
+                                        <th>{{ trans('global.id') }}</th>
+                                        <th>{{ trans('admin/user.name') }}</th>
+    
+                                        <th>Duration</th>
+                                        <th>Reason</th>
+                                        <th>status</th>
+                                        <th>Approved by</th>
+    
+                                      
+                                        {{-- @can('user_edit' || 'user_delete') --}}
+                                        <th>{{ trans('global.action') }}</th>
+                                        {{-- @endcan --}}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(!empty($lateAttendances))
+                                        @foreach ($lateAttendances as $list )
+                                            <tr class="LateAttendances_id{{$list->id}}">
+    
+                                                {{-- @can('user_edit' || 'user_delete') --}}
+    {{-- 
+                                                <td>
+                                                    <div class="form-check checkbox checkbox-dark mb-0">
+                                                        <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
+                                                        <label class="form-check-label" for={{"inline-".$list->id}}></label>
+                                                    </div>
+                                                </td> --}}
+    
+                                                {{-- @endcan --}}
+    
+                                                <td>{{$list->id}}</td>
+    
+                                                <td>
+                                                    <h6>{{$list->user->first_name}} {{$list->user->last_name}}</h6>
+                                                </td>
+    
+                                                <td><span class="font-weight-bold">From: </span> {{date ('h:i a',strtotime($list->from))}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
+    
+                                                <td>
+                                                  {{$list->reason}}
+                                                </td>
+                                                <td>
+                                                    @if ($list->approved==0)
+                                                        <p class="text-warning">Pending</p>
+                                                    @elseif ($list->approved==1)
+                                                        <p class="text-success">Approved</p>
+                                                    @else
+                                                        <p class="text-danger">Rejected</p>  
+                                                    @endif
+                                                  
+                                                </td>
+                                                <td>
+                                                      {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                                                </td>
+    
+                                                {{-- @can('user_edit' || 'user_delete') --}}
+    
+                                                <td>
+                                                    <ul class="action">                                                    
+                                                        
+                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                        
+                                                            <!-- Add a hidden input field for user ID -->
+                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                            <input type="hidden" name="type" value="lateAttendances">
+
+                                                        
+                                                            <li class="edit">
+                                                                <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
+                                                            </li>
+                                                        </form>
+    
+                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                        
+                                                            <!-- Add a hidden input field for user ID -->
+                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                            <input type="hidden" name="type" value="lateAttendances">
+
+                                                        
+                                                            <li class="delete">
+                                                                <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
+                                                            </li>
+                                                        </form>
+                                                        
+                                                      </ul>
+                                                </td>
+                                                {{-- @endcan --}}
+    
+                                            </tr>
+                                        @endforeach
+                                     @endif
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+                       </div>
+
+
+
+
+                      <div class="tab-pane fade" id="top-contact" role="tabpanel" aria-labelledby="contact-top-tab">
+                        <div class="table-responsive">
+                            <table class="display" id="basic-3">
+                                <thead>
+                                    <tr>
+                                        {{-- @can('user_edit' || 'user_delete') --}}
+    
+                                        {{-- <th>
+                                            <div class="form-check checkbox checkbox-dark mb-2">
+                                                  <input id='selectall' class="form-check-input select-all-checkbox" data-category="all" type="checkbox">
+                                                  <label for="selectall" class="form-check-label"></label>
+                                            </div>
+                                        </th> --}}
+    
+                                        {{-- @endcan --}}
+                                        <th>{{ trans('global.id') }}</th>
+                                        <th>{{ trans('admin/user.name') }}</th>
+    
+                                        <th>Duration</th>
+                                        <th>Reason</th>
+                                        <th>status</th>
+                                        <th>Approved by</th>
+    
+                                      
+                                        {{-- @can('user_edit' || 'user_delete') --}}
+                                        <th>{{ trans('global.action') }}</th>
+                                        {{-- @endcan --}}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if(!empty($shortLeave))
+                                        @foreach ($shortLeave as $list )
+                                            <tr class="shortLeave_id{{$list->id}}">
+    
+                                                {{-- @can('user_edit' || 'user_delete') --}}
+    {{-- 
+                                                <td>
+                                                    <div class="form-check checkbox checkbox-dark mb-0">
+                                                        <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
+                                                        <label class="form-check-label" for={{"inline-".$list->id}}></label>
+                                                    </div>
+                                                </td> --}}
+    
+                                                {{-- @endcan --}}
+    
+                                                <td>{{$list->id}}</td>
+    
+                                                <td>
+                                                    <h6>{{$list->user->first_name}} {{$list->user->last_name}}</h6>
+                                                </td>
+    
+                                                <td><span class="font-weight-bold">From: </span> {{$list->from}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
+    
+                                                <td>
+                                                  {{$list->reason}}
+                                                </td>
+                                                <td>
+                                                    @if ($list->approved==0)
+                                                        <p class="text-warning">Pending</p>
+                                                    @elseif ($list->approved==1)
+                                                        <p class="text-success">Approved</p>
+                                                    @else
+                                                        <p class="text-danger">Rejected</p>  
+                                                    @endif
+                                                  
+                                                </td>
+                                                <td>
+                                                      {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                                                </td>
+    
+                                                {{-- @can('user_edit' || 'user_delete') --}}
+    
+                                                <td>
+                                                    <ul class="action">
+                                                        
+                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                        
+                                                            <!-- Add a hidden input field for user ID -->
+                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                            <input type="hidden" name="type" value="shortLeave">
+
+                                                        
+                                                            <li class="edit">
+                                                                <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
+                                                            </li>
+                                                        </form>
+    
+                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                        
+                                                            <!-- Add a hidden input field for user ID -->
+                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                            <input type="hidden" name="type" value="shortLeave">
+
+                                                        
+                                                            <li class="delete">
+                                                                <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
+                                                            </li>
+                                                        </form>
+                                                        
+                                                      </ul>
+                                                </td>
+                                                {{-- @endcan --}}
+    
+                                            </tr>
+                                        @endforeach
+                                     @endif
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                    </div>
+                  </div>
             </div>
             {{-- multi select form Ends--}}
         </div>

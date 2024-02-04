@@ -15,7 +15,7 @@ class ShortLeaveController extends Controller
     public function index()
     {
         //
-        $shortLeave = ShortLeave::with('user','approvedBy')->get();
+        $shortLeave = ShortLeave::where('user_id',auth()->user()->id)->with('user','approvedBy')->get();
         $page_title = 'Short Leave Application';
         $trash = false;
         $data['page_title']=$page_title;

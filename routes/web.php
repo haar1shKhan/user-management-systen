@@ -121,7 +121,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'globalLeave.destroy',
     ]);
 
-    Route::post('globalLeave/massAction', [App\Http\Controllers\Admin\LeaveController::class,'massAction'])->name('globalLeave.massAction');
+    Route::post('globalLeave/massAction', [App\Http\Controllers\Admin\GlobalLeaveController::class,'massAction'])->name('globalLeave.massAction');
+    // Route::update('globalLeave/updateLongLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLongLeave'])->name('globalLeave.updateLongLeave');
+    // Route::update('globalLeave/updateLateAttendance/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLateAttendance'])->name('globalLeave.updateLateAttendance');
+    // Route::update('globalLeave/updateShortLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateShortLeave'])->name('globalLeave.updateShortLeave');
 
 
     Route::resource('shortLeave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([

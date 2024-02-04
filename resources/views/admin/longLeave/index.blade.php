@@ -282,30 +282,6 @@ form button.border-none {
 
                                                     {{-- @endcan --}}
 
-                                                    <form action="{{ route('admin.'.$url.'.update', ['longLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                    
-                                                        <li class="edit">
-                                                            <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
-                                                        </li>
-                                                    </form>
-
-                                                    <form action="{{ route('admin.'.$url.'.update', ['longLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        {{-- <input type="hidden" name="_id" value="{{ $list->policy->id }}"> --}}
-                                                    
-                                                        <li class="delete">
-                                                            <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
-                                                        </li>
-                                                    </form>
-
                                                   </ul>
                                             </td>
                                             {{-- @endcan --}}
