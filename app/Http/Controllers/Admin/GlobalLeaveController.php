@@ -74,6 +74,9 @@ class GlobalLeaveController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        if(auth()->user()->roles[0]->title != "Admin"){
+            return redirect('admin/globalLeave');
+        }
 
         if($request->type=="longLeave"){
 
