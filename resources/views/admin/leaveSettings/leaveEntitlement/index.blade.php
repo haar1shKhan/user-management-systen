@@ -72,10 +72,10 @@
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             @foreach ($leavePolicies as $policies)
-                                                            <option value="{{ $policies->id }}">
-                                                                {{ $policies->title }}
-                                                            </option>
-                                                         @endforeach
+                                                             <option value="{{ $policies->id }}">
+                                                                 {{ $policies->title }}
+                                                             </option>
+                                                            @endforeach
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
