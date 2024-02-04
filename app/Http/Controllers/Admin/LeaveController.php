@@ -13,6 +13,11 @@ class LeaveController extends Controller
 {  /**
     * Display a listing of the resource.
     */
+
+
+    //remaing holiddays and expired holidays are not working as expected 
+    //The form and the approval is working also when admin approve the total holiday is reduced
+
    public function index()
    {
        //
