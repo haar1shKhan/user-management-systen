@@ -50,6 +50,7 @@
                 <li><a class="" href="{{ route('admin.lateAttendance') }}">Late Attendance</a></li>
                 <li><a class="" href="{{ route('admin.shortLeave') }}">Short Leave</a></li>
                 <li><a class="" href="{{ route('admin.longLeave') }}">Request for Leave</a></li>
+                <li><a class="" href="{{ route('admin.globalLeave') }}">Global Leave</a></li>
                 <li><a class="submenu-title" href="#">Leave Settings<span class="sub-arrow">
                   <i class="fa fa-angle-right"></i></span></a>
                         <ul class="nav-sub-childmenu submenu-content">

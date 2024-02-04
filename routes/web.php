@@ -107,6 +107,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'longLeave.destroy',
     ]);
 
+    Route::post('longLeave/massAction', [App\Http\Controllers\Admin\LeaveController::class,'massAction'])->name('longLeave.massAction');
+
+    //Leave
+    Route::resource('globalLeave', App\Http\Controllers\Admin\GlobalLeaveController::class)->except([
+        'show', // If you don't have a show method in your controller
+    ])->names([
+        'index' => 'globalLeave',
+        'create' => 'globalLeave.create',
+        'store' => 'globalLeave.store',
+        'edit' => 'globalLeave.edit',
+        'update' => 'globalLeave.update',
+        'destroy' => 'globalLeave.destroy',
+    ]);
+
+    Route::post('globalLeave/massAction', [App\Http\Controllers\Admin\LeaveController::class,'massAction'])->name('globalLeave.massAction');
+
 
     Route::resource('shortLeave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([
         'show', // If you don't have a show method in your controller

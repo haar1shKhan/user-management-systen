@@ -9,7 +9,7 @@
 
 @section('style')
 <style>
-form button.border-none {
+ button.border-none {
     border: none;
     background: none;
     padding: 0;
@@ -60,7 +60,7 @@ form button.border-none {
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal <span class="text-danger">{{$error??""}}</span></h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
@@ -73,78 +73,33 @@ form button.border-none {
                                     
                                                 <h6>Vactions</h6>
                         
-                                                <div class="">
-                                                    <select name="policy_id" class="form-select" id="validationCustom04" required="">
-                                                        <option selected="true" disabled value="">Choose...</option>
-                                                        @foreach ($leaveEntitlement as $leaveType)
-                                                            <option value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" data-number-of-days="{{ $leaveType->days ?? $leaveType->policy->days }}">
-                                                                {{ $leaveType->policy->title }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>                                                    
-                                                    <div class="text-danger mt-1">
-                                                        @error("policy_id")
-                                                        {{$message}}    
-                                                        @enderror
-                                                    </div>
-                                                </div>
                         
+                                                    <div class="row" id="shortLeaveFields">
+                                                        <div class="col-md-4">
+                                                            <label class="col-form-label">From</label>
+                                                            <div class="col-sm-12">
+                                                                <input class="form-control digits" type="time" name="from" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="col-form-label">To</label>
+                                                            <div class="col-sm-12">
+                                                                <input class="form-control digits" type="time" name="to" required>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     
-                                                <div class="row" id="longLeaveFields">
-                                                    <div class="col-md-4">
-                                                        <label class="col-form-label">Start Date</label>
-                                                        <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date" name="startDate">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="col-form-label">End Date</label>
-                                                        <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date" name="endDate">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
-                                                        <div class="mx-2 days-field">
-                                                            Number of days: 0
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                    
+
                         
-                                                <div class="row mb-2 my-4">
-                                                    
-                                                    <div class=" d-flex justify-content-around">
-                                                        <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline2" type="radio" name="advance_salary">
-                                                        <label class="form-check-label mb-0 small" for="radioinline2">Advance Salary</label>
-                                                        </div>
-                                                        <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline3" type="radio" name="monthly">
-                                                        <label class="form-check-label mb-0 small" for="radioinline3">Monthly</label>
-                                                        </div>
-                                                    </div>
-             
-                                                </div>
-                        
-                        
-                                                        <div class="row">
-                                                            <div class="col">
-                                                            <div class="mb-3 row">
-                                                                <div class="col-sm-12">
-                                                                <input class="form-control" type="file">
-                                                                </div>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                        
-                                                        <div class="row">
-                                                            <div class="col">
-                                                            <div>
-                                                                <label class="form-label" for="exampleFormControlTextarea4">Comments</label>
-                                                                <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3"></textarea>
-                                                            </div>
-                                                            </div>
-                                                        </div>
+                                                   <div class="row">
+                                                       <div class="col">
+                                                       <div>
+                                                           <label class="form-label" for="exampleFormControlTextarea4">Reason</label>
+                                                           <textarea class="form-control" name="reason" id="exampleFormControlTextarea4" rows="3" required></textarea>
+                                                       </div>
+                                                       </div>
+                                                   </div>
+                                                   
                                              </div>
                                       </div>
                                       <div class="modal-footer">
@@ -158,42 +113,13 @@ form button.border-none {
                                 </div>
                              </div>
 
+                            {{-- <a class="btn btn-danger" href="/admin/users?trash=1">{{ trans('global.trash') }}</a> --}}
                             <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
 
                             {{-- @endcan --}}
 
                         </div>
                         @endif
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mt-4">
-                            <h5 class="p-1 bg-success">Previous Vacation</h5>
-                    
-                            <table class="table table-bordered table-striped" style="background-color: #f8f9fa;">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="small">Leave Year</th>
-                                        <th class="small">leave Type</th>
-                                        <th class="small">Balance</th>
-                                        <th class="small">Vacation Days</th>
-                                        <th class="small">Ended Days</th>
-                                        <th class="small">Remaining Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="small">2023</td>
-                                        <td class="small">{{$totalHolidays}}</td>
-                                        <td class="small">{{$totalDays}}</td>
-                                        <td class="small">15</td>
-                                        <td class="small">{{$expiredHolidays}}</td>
-                                        <td class="small">{{$remainingHolidays}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                        </div>
                     </div>
                         
                 </div>
@@ -204,45 +130,56 @@ form button.border-none {
                                 <tr>
                                     {{-- @can('user_edit' || 'user_delete') --}}
 
-                                    <th>
+                                    {{-- <th>
                                         <div class="form-check checkbox checkbox-dark mb-2">
                                               <input id='selectall' class="form-check-input select-all-checkbox" data-category="all" type="checkbox">
                                               <label for="selectall" class="form-check-label"></label>
                                         </div>
-                                    </th>
+                                    </th> --}}
 
                                     {{-- @endcan --}}
                                     <th>{{ trans('global.id') }}</th>
                                     <th>{{ trans('admin/user.name') }}</th>
+
                                     <th>Duration</th>
                                     <th>Reason</th>
                                     <th>status</th>
-                                    <th>Approved By</th>
+                                    <th>Approved by</th>
+
+                                  
                                     {{-- @can('user_edit' || 'user_delete') --}}
                                     <th>{{ trans('global.action') }}</th>
                                     {{-- @endcan --}}
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(!empty($longLeave))
-                                    @foreach ($longLeave as $list )
-                                        <tr class="list_id{{$list->id}}">
+                                @if(!empty($allLeaves))
+                                    @foreach ($allLeaves as $list )
+                                    
+                                        <tr class="globalLeaves_id{{$list->id}}">
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
-
+{{-- 
                                             <td>
                                                 <div class="form-check checkbox checkbox-dark mb-0">
                                                     <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
                                                     <label class="form-check-label" for={{"inline-".$list->id}}></label>
                                                 </div>
-                                            </td>
+                                            </td> --}}
 
                                             {{-- @endcan --}}
 
                                             <td>{{$list->id}}</td>
-                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
-                                            <td><span class="font-weight-bold">From: </span> {{$list->from}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
-                                            <td>{{$list->reason}}</td>
+
+                                            <td>
+                                                <h6>{{$list->user->first_name}} {{$list->user->last_name}}</h6>
+                                            </td>
+
+                                            <td><span class="font-weight-bold">From: </span> {{date ('h:i a',strtotime($list->from))}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
+
+                                            <td>
+                                              {{$list->reason}}
+                                            </td>
                                             <td>
                                                 @if ($list->approved==0)
                                                     <p class="text-warning">Pending</p>
@@ -254,35 +191,54 @@ form button.border-none {
                                               
                                             </td>
                                             <td>
-                                                {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                                                  {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
                                             </td>
-                                            
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
 
                                             <td>
                                                 <ul class="action">
-
-                                                    {{-- @can('permission_edit') --}}
-
-                                                      {{-- <li class="edit">
-                                                         <a href="{{route('admin.'.$url.'.edit',['longLeave'=>$list->id])}}"><i class="icon-pencil-alt"></i></a>
-                                                      </li> --}}
-                                                      
-                                                    {{-- @endcan --}}
                                                     
-                                                    {{-- @can('permission_delete') --}}
+                                                    <li class="edit">
+                                                        <button class="border-none" type="button" data-bs-toggle="modal" data-bs-target="#editModal{{ $list->id }}">
+                                                            <i class="icon-pencil-alt"></i>
+                                                        </button>
+                                                    </li>
+                                                    <div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="POST" class="modal-content">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Update Title</h5>
+                                                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="d-flex flex-column mx-3">
+                                                                        <input class="form-control" id="validationCustom01" value="{{ $list->reason }}" name="reason" type="text" required="" data-bs-original-title="" title="">
+                                                                        <div class="text-danger mt-1">
+                                                                            @error("reason")
+                                                                                {{ $message }}
+                                                                            @enderror
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                                                    <button class="btn btn-primary" type="submit">Save</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
 
-                                                    <form action="{{route('admin.'.$url.'.destroy',['longLeave'=>$list->id])}}" method="post">
-                                                      @csrf
-                                                      @method('DELETE')
-                                                      <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
+                                                    <form action="{{route('admin.'.$url.'.destroy',['globalLeave'=>$list->id])}}" method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
 
                                                     </form>
-
-                                                    {{-- @endcan --}}
-
-                                                    <form action="{{ route('admin.'.$url.'.update', ['longLeave' => $list->id]) }}" method="post">
+                                                    
+                                                    <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                     
@@ -294,18 +250,18 @@ form button.border-none {
                                                         </li>
                                                     </form>
 
-                                                    <form action="{{ route('admin.'.$url.'.update', ['longLeave' => $list->id]) }}" method="post">
+                                                    <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
                                                         @csrf
                                                         @method('PUT')
                                                     
                                                         <!-- Add a hidden input field for user ID -->
-                                                        {{-- <input type="hidden" name="_id" value="{{ $list->policy->id }}"> --}}
+                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
                                                     
                                                         <li class="delete">
                                                             <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
                                                         </li>
                                                     </form>
-
+                                                    
                                                   </ul>
                                             </td>
                                             {{-- @endcan --}}
@@ -410,7 +366,7 @@ form button.border-none {
                      // Make AJAX request
                      $.ajax({
                          type: 'POST',
-                         url: "{{route('admin.longLeave.massAction')}}", // Update the URL to your controller method
+                         url: "{{route('admin.user.massAction')}}", // Update the URL to your controller method
                          data: requestData,
                          success: function(response) {
                              // Handle success response
@@ -431,39 +387,6 @@ form button.border-none {
         });
 
 
-        $('#validationCustom04').change(function () {
-            var selectedLeaveType = $(this).find(':selected');
-            updateFormFields(selectedLeaveType);
-        });
-
-        function updateFormFields(selectedLeaveType) {
-            // Reset form fields
-            $('input[name="advance_salary"]').prop('checked', false);
-            $('input[name="monthly"]').prop('checked', false);
-
-            // Add logic to show/hide and update fields based on the selected leave type
-            var monthly = selectedLeaveType.data('monthly');
-            var advanceSalary = selectedLeaveType.data('advance-salary');
-            var numberOfDays = selectedLeaveType.data('number-of-days');
-
-            $('.days-field').text('Number of days: ' + numberOfDays);
-
-
-            if (monthly) {
-                // Update fields for monthly leave
-                $('input[name="monthly"]').prop('checked', true);
-                
-            }
-            
-            if (advanceSalary) {
-                // Update fields for leave with advance salary
-                $('input[name="advance_salary"]').prop('checked', true);
-            }
-
-            // Add more conditions based on your dynamic leave type properties
-
-            // Show the relevant form fields
-        }
 
 
     </script>

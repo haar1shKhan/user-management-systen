@@ -16,6 +16,7 @@ class LateAttendanceController extends Controller
     {
         //
         $lateAttendances = LateAttendance::where('user_id',auth()->user()->id)->with('user','approvedBy')->get();
+        // dd($lateAttendances);
         $page_title = 'Late Attendance Application';
         $trash = false;
         $data['page_title']=$page_title;

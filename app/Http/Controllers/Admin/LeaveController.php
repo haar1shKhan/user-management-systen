@@ -171,6 +171,7 @@ class LeaveController extends Controller
 
 
        } elseif ($request->has('reject')) {
+
            $longLeave->update(['approved' => -1]); // Assuming 2 represents rejection, adjust as needed
            $startDate = Carbon::parse($longLeave->from);
            $endDate = Carbon::parse($longLeave->to);
@@ -196,5 +197,23 @@ class LeaveController extends Controller
    public function destroy(string $id)
    {
        //
+       longLeave::find($id)->delete();
+
+       return redirect('admin/longLeave');
+
    }
+
+   public function massAction(Request $request)
+    {
+        $massAction = $request['massAction'];
+
+        foreach ($massAction as $id) {
+            
+            longLeave::find($id)->delete();
+
+        }
+        return redirect('admin/longLeave');
+
+    }
+    
 }

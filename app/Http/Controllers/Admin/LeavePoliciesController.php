@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LeavePolicies;
+use App\Models\LeaveEntitlement;
+use App\Models\User;
 use App\Models\Role;
 
 
@@ -52,7 +54,21 @@ class LeavePoliciesController extends Controller
         ]);
 
         // Save the leave policy
+     
+
         $leavePolicy->save();
+
+        if($request->has('existing_user')){
+            $users = User::all();
+            foreach($users as $user){
+                LeaveEntitlement::create([
+                    'leave_policy_id' => $leavePolicy->id,
+                    'leave_year' => "current",
+                    'days' => $request->input('days'),
+                    'user_id' => $user->id,
+                ]);
+            }
+        }
 
         return redirect("admin/leaveSettings/policies");
     }
