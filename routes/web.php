@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\UsersController;
 
 /*
@@ -119,15 +120,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'shortLeave.destroy',
     ]);
 
-    Route::resource('lateAttendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
+    Route::resource('late-attendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
         'show', // If you don't have a show method in your controller
     ])->names([
-        'index' => 'lateAttendance',
-        'create' => 'lateAttendance.create',
-        'store' => 'lateAttendance.store',
-        'edit' => 'lateAttendance.edit',
-        'update' => 'lateAttendance.update',
-        'destroy' => 'lateAttendance.destroy',
+        'index' => 'late-attendance',
+        'create' => 'late-attendance.create',
+        'store' => 'late-attendance.store',
+        'edit' => 'late-attendance.edit',
+        'update' => 'late-attendance.update',
+        'destroy' => 'late-attendance.destroy',
     ]);
 
     Route::resource('localization/longLeave', App\Http\Controllers\Admin\localization\LocalizationLeaveController::class)->except([

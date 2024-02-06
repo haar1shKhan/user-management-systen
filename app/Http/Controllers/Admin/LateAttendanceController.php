@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\LateAttendance;
+use Carbon\Carbon;
 
 class LateAttendanceController extends Controller
 {
@@ -16,12 +17,12 @@ class LateAttendanceController extends Controller
     {
         //
         $lateAttendances = LateAttendance::with('user','approvedBy')->get();
-        $page_title = 'Late Attendance Application';
+
         $trash = false;
-        $data['page_title']=$page_title;
-        $data['trash']=$trash;
-        $data['lateAttendances']=$lateAttendances;
-        $data['url']='lateAttendance';
+        $data['page_title'] = 'Late Attendance';
+        $data['trash'] = $trash;
+        $data['lateAttendances'] = $lateAttendances;
+        $data['url'] = 'late-attendance';
  
         return view('admin.lateAttendance.index',$data);
     }
@@ -41,18 +42,23 @@ class LateAttendanceController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'from' => 'required',
+            'to' => 'required',
+            'reason' => 'required',
+        ]);
+
         $user = User::find(auth()->user()->id);
-        // dd($user);
-        // die;
+        
         $lateAttendance = lateAttendance::create([
-            'date' => '1/1/21', // You may want to adjust this as needed
+            'date' => Carbon::now(new \DateTimeZone('Asia/Dubai')),
             'from' => $request->input('from'),
             'to' => $request->input('to'),
             'reason' => $request->input('reason'),
         ]);
         $user->lateAttendance()->save($lateAttendance);
 
-        return redirect('admin/lateAttendance');
+        return redirect('admin/late-attendance');
 
     }
 
@@ -97,7 +103,7 @@ class LateAttendanceController extends Controller
         $lateAttendance->update(['reason' => $request->reason]);
         }
 
-        return redirect('admin/lateAttendance');
+        return redirect('admin/late-attendance');
     }
 
     /**
@@ -107,6 +113,6 @@ class LateAttendanceController extends Controller
     {
         //
         LateAttendance::find($id)->delete();
-        return redirect('admin/lateAttendance');
+        return redirect('admin/late-attendance');
     }
 }

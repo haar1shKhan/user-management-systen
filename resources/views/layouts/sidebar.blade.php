@@ -15,24 +15,21 @@
             </li>
 
 
+            <li class="sidebar-main-title">
+                <div>
+                    <h6 class="lan-1">General</h6>
+                </div>
+            </li>
             <li class="sidebar-list">
-              <a class="sidebar-link sidebar-title"
-                  href="#">
-                  <svg class="stroke-icon">
-                    <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-user') }}"></use>
-                </svg>
-                <svg class="fill-icon">
-                  <use href="{{ asset('assets/svg/icon-sprite.svg#fill-user') }}"></use>
-              </svg>
-
-              <span >User management</span></a>
-              <ul class="sidebar-submenu">
-                  <li><a class="lan-5" href="{{ route('admin.users') }}">Users</a></li>
-                  <li><a class="" href="{{ route('admin.roles') }}">Roles</a></li>
-                  <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
-                 
-              </ul>
-          </li>
+                <a class="sidebar-link sidebar-title link-nav" href="#">
+                    <svg class="stroke-icon">
+                        <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-home') }}"></use>
+                    </svg>
+                    <svg class="fill-icon">
+                        <use href="{{ asset('assets/svg/icon-sprite.svg#fill-home') }}"></use>
+                    </svg>
+                    <span class="lan-3">Dashboard</span></a>
+            </li>
 
 
             <li class="sidebar-list">
@@ -47,7 +44,7 @@
 
               <span >Leave management</span></a>
               <ul class="sidebar-submenu">
-                <li><a class="" href="{{ route('admin.lateAttendance') }}">Late Attendance</a></li>
+                <li><a class="" href="{{ route('admin.late-attendance') }}">Late Attendance</a></li>
                 <li><a class="" href="{{ route('admin.shortLeave') }}">Short Leave</a></li>
                 <li><a class="" href="{{ route('admin.longLeave') }}">Request for Leave</a></li>
                 <li><a class="submenu-title" href="#">Leave Settings<span class="sub-arrow">
@@ -92,15 +89,35 @@
                 </ul>
             </li>
 
-          <li class="sidebar-list"><a
-            class="sidebar-link sidebar-title link-nav" href="{{ route('admin.passport') }}">
+          <li class="sidebar-list">
+          <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.passport') }}">
             <svg class="stroke-icon">
                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-form') }}"></use>
             </svg>
             <svg class="fill-icon">
                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-form') }}"></use>
             </svg>
-            <span>Passport Application</span></a>
+            <span>Passport Application</span>
+            </a>
+          </li>
+
+          <li class="sidebar-list">
+              <a class="sidebar-link sidebar-title"
+                  href="#">
+                  <svg class="stroke-icon">
+                    <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-user') }}"></use>
+                </svg>
+                <svg class="fill-icon">
+                  <use href="{{ asset('assets/svg/icon-sprite.svg#fill-user') }}"></use>
+              </svg>
+
+              <span >User management</span></a>
+              <ul class="sidebar-submenu">
+                  <li><a class="lan-5" href="{{ route('admin.users') }}">Users</a></li>
+                  <li><a class="" href="{{ route('admin.roles') }}">Roles</a></li>
+                  <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
+                 
+              </ul>
           </li>
 
 
