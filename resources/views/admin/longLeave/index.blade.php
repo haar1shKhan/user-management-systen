@@ -60,7 +60,7 @@ form button.border-none {
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal <span class="text-danger">{{$error??""}}</span></h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
@@ -74,16 +74,16 @@ form button.border-none {
                                                 <h6>Vactions</h6>
                         
                                                 <div class="">
-                                                    <select name="requestType" class="form-select" id="validationCustom04" required="">
+                                                    <select name="policy_id" class="form-select" id="validationCustom04" required="">
                                                         <option selected="true" disabled value="">Choose...</option>
-                                                         @foreach ($longLeaveList as $list)
-                                                             <option value="{{ $list->id }}">
-                                                                 {{ $list->title }}
-                                                             </option>
-                                                         @endforeach
-                                                    </select>
+                                                        @foreach ($leaveEntitlement as $leaveType)
+                                                            <option value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" data-number-of-days="{{ $leaveType->days ?? $leaveType->policy->days }}">
+                                                                {{ $leaveType->policy->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>                                                    
                                                     <div class="text-danger mt-1">
-                                                        @error("requestType")
+                                                        @error("policy_id")
                                                         {{$message}}    
                                                         @enderror
                                                     </div>
@@ -103,12 +103,9 @@ form button.border-none {
                                                             <input class="form-control digits" type="date" name="endDate">
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 d-flex justify-content-center my-4 ">
-                                                        <div class="mx-2">
+                                                    <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
+                                                        <div class="mx-2 days-field">
                                                             Number of days: 0
-                                                        </div>
-                                                        <div class="">
-                                                            Expansion: 0
                                                         </div>
                                                     </div>
                                                 </div>
@@ -118,12 +115,12 @@ form button.border-none {
                                                     
                                                     <div class=" d-flex justify-content-around">
                                                         <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline2" type="radio" name="radio1" value="option1">
+                                                        <input class="form-check-input" id="radioinline2" type="radio" name="advance_salary">
                                                         <label class="form-check-label mb-0 small" for="radioinline2">Advance Salary</label>
                                                         </div>
                                                         <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline3" type="radio" name="radio1" value="option1">
-                                                        <label class="form-check-label mb-0 small" for="radioinline3">Without Salary</label>
+                                                        <input class="form-check-input" id="radioinline3" type="radio" name="monthly">
+                                                        <label class="form-check-label mb-0 small" for="radioinline3">Monthly</label>
                                                         </div>
                                                     </div>
              
@@ -161,7 +158,6 @@ form button.border-none {
                                 </div>
                              </div>
 
-                            <a class="btn btn-danger" href="/admin/users?trash=1">{{ trans('global.trash') }}</a>
                             <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
 
                             {{-- @endcan --}}
@@ -172,13 +168,13 @@ form button.border-none {
 
                     <div class="col-md-6">
                         <div class="mt-4">
-                            <h5 class="p-1 bg-success">Previous Vaction</h5>
+                            <h5 class="p-1 bg-success">Previous Vacation</h5>
                     
                             <table class="table table-bordered table-striped" style="background-color: #f8f9fa;">
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="small">Leave Year</th>
-                                        <th class="small">Holiday Type</th>
+                                        <th class="small">leave Type</th>
                                         <th class="small">Balance</th>
                                         <th class="small">Vacation Days</th>
                                         <th class="small">Ended Days</th>
@@ -188,14 +184,15 @@ form button.border-none {
                                 <tbody>
                                     <tr>
                                         <td class="small">2023</td>
-                                        <td class="small">Public Holidays</td>
-                                        <td class="small">25</td>
-                                        <td class="small">20</td>
-                                        <td class="small">5</td>
+                                        <td class="small">{{$totalHolidays}}</td>
+                                        <td class="small">{{$totalDays}}</td>
                                         <td class="small">15</td>
+                                        <td class="small">{{$expiredHolidays}}</td>
+                                        <td class="small">{{$remainingHolidays}}</td>
                                     </tr>
                                 </tbody>
                             </table>
+                            
                         </div>
                     </div>
                         
@@ -217,42 +214,49 @@ form button.border-none {
                                     {{-- @endcan --}}
                                     <th>{{ trans('global.id') }}</th>
                                     <th>{{ trans('admin/user.name') }}</th>
-                                    <th>{{ trans('admin/user.email') }}</th>
-                                    <th>{{ trans('admin/user.role') }}</th>
+                                    <th>Duration</th>
+                                    <th>Reason</th>
+                                    <th>status</th>
+                                    <th>Approved By</th>
                                     {{-- @can('user_edit' || 'user_delete') --}}
                                     <th>{{ trans('global.action') }}</th>
                                     {{-- @endcan --}}
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(!empty($users))
-                                    @foreach ($users as $user )
-                                        <tr class="user_id{{$user->id}}">
+                                @if(!empty($longLeave))
+                                    @foreach ($longLeave as $list )
+                                        <tr class="list_id{{$list->id}}">
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
 
                                             <td>
                                                 <div class="form-check checkbox checkbox-dark mb-0">
-                                                    <input class="form-check-input" name="massAction" id={{"inline-".$user->id}} value="{{ $user->id }}" type="checkbox" data-bs-original-title="" title>
-                                                    <label class="form-check-label" for={{"inline-".$user->id}}></label>
+                                                    <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
+                                                    <label class="form-check-label" for={{"inline-".$list->id}}></label>
                                                 </div>
                                             </td>
 
                                             {{-- @endcan --}}
 
-                                            <td>{{$user->id}}</td>
-
+                                            <td>{{$list->id}}</td>
+                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
+                                            <td><span class="font-weight-bold">From: </span> {{$list->from}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
+                                            <td>{{$list->reason}}</td>
                                             <td>
-                                                <h6>{{$user->name}}</h6>
+                                                @if ($list->approved==0)
+                                                    <p class="text-warning">Pending</p>
+                                                @elseif ($list->approved==1)
+                                                    <p class="text-success">Approved</p>
+                                                @else
+                                                    <p class="text-danger">Rejected</p>  
+                                                @endif
+                                              
                                             </td>
-
-                                            <td>{{$user->email}}</td>
-
                                             <td>
-                                                @foreach ($user->roles as $role)
-                                                    {{ $role->title }}<br>
-                                                @endforeach
+                                                {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
                                             </td>
+                                            
 
                                             {{-- @can('user_edit' || 'user_delete') --}}
 
@@ -261,15 +265,15 @@ form button.border-none {
 
                                                     {{-- @can('permission_edit') --}}
 
-                                                      <li class="edit">
-                                                         <a href="{{route('admin.'.$url.'.edit',['permission'=>$permission->id])}}"><i class="icon-pencil-alt"></i></a>
-                                                      </li>
+                                                      {{-- <li class="edit">
+                                                         <a href="{{route('admin.'.$url.'.edit',['longLeave'=>$list->id])}}"><i class="icon-pencil-alt"></i></a>
+                                                      </li> --}}
                                                       
                                                     {{-- @endcan --}}
                                                     
                                                     {{-- @can('permission_delete') --}}
 
-                                                    <form action="{{route('admin.'.$url.'.destroy',['permission'=>$permission->id])}}" method="post">
+                                                    <form action="{{route('admin.'.$url.'.destroy',['longLeave'=>$list->id])}}" method="post">
                                                       @csrf
                                                       @method('DELETE')
                                                       <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
@@ -382,7 +386,7 @@ form button.border-none {
                      // Make AJAX request
                      $.ajax({
                          type: 'POST',
-                         url: "{{route('admin.user.massAction')}}", // Update the URL to your controller method
+                         url: "{{route('admin.longLeave.massAction')}}", // Update the URL to your controller method
                          data: requestData,
                          success: function(response) {
                              // Handle success response
@@ -403,6 +407,39 @@ form button.border-none {
         });
 
 
+        $('#validationCustom04').change(function () {
+            var selectedLeaveType = $(this).find(':selected');
+            updateFormFields(selectedLeaveType);
+        });
+
+        function updateFormFields(selectedLeaveType) {
+            // Reset form fields
+            $('input[name="advance_salary"]').prop('checked', false);
+            $('input[name="monthly"]').prop('checked', false);
+
+            // Add logic to show/hide and update fields based on the selected leave type
+            var monthly = selectedLeaveType.data('monthly');
+            var advanceSalary = selectedLeaveType.data('advance-salary');
+            var numberOfDays = selectedLeaveType.data('number-of-days');
+
+            $('.days-field').text('Number of days: ' + numberOfDays);
+
+
+            if (monthly) {
+                // Update fields for monthly leave
+                $('input[name="monthly"]').prop('checked', true);
+                
+            }
+            
+            if (advanceSalary) {
+                // Update fields for leave with advance salary
+                $('input[name="advance_salary"]').prop('checked', true);
+            }
+
+            // Add more conditions based on your dynamic leave type properties
+
+            // Show the relevant form fields
+        }
 
 
     </script>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LeavePolicies;
+use App\Models\LeaveEntitlement;
+use App\Models\User;
 use App\Models\Role;
 
 
@@ -31,14 +33,6 @@ class LeavePoliciesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -60,25 +54,23 @@ class LeavePoliciesController extends Controller
         ]);
 
         // Save the leave policy
+     
+
         $leavePolicy->save();
 
+        if($request->has('existing_user')){
+            $users = User::all();
+            foreach($users as $user){
+                LeaveEntitlement::create([
+                    'leave_policy_id' => $leavePolicy->id,
+                    'leave_year' => "current",
+                    'days' => $request->input('days'),
+                    'user_id' => $user->id,
+                ]);
+            }
+        }
+
         return redirect("admin/leaveSettings/policies");
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -111,5 +103,19 @@ class LeavePoliciesController extends Controller
     public function destroy(string $id)
     {
         //
+        LeavePolicies::find($id)->delete();
+        return redirect('admin/leaveSettings/policies');
+    }
+
+    public function massAction(Request $request)
+    {
+        $massAction = $request['massAction'];
+
+        foreach ($massAction as $id) {
+            
+            LeavePolicies::find($id)->delete();
+        }
+        return redirect('admin/leaveSettings/policies');
+
     }
 }

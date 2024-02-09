@@ -27,4 +27,4 @@ class LeavePolicies extends Model
     {
         return $this->hasMany(LeaveEntitlement::class);
     }
-}
+  }

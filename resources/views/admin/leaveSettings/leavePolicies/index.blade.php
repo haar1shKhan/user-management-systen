@@ -323,8 +323,8 @@
                         
                                                                         <div class="row">
                                                                             <div class="d-flex flex-column ">
-                                                                                <label class="form-label" for="validationCustom01">Title</label>
-                                                                                <input class="form-control" id="validationCustom01"  name="title" value="{{$type->title}}" type="text" required="" data-bs-original-title="" title="">
+                                                                                <label class="form-label" for="update_title-{{$type->id}}">Title</label>
+                                                                                <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required="" data-bs-original-title="" title="">
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("title")
                                                                                         {{ $message }}
@@ -336,8 +336,8 @@
                                                                         <div class="row d-flex align-items-end my-4">
                         
                                                                             <div class="d-flex flex-column  col-md-3">
-                                                                               <label class="form-label" for="validationCustom01">Days</label>
-                                                                                <input class="form-control" id="validationCustom01"  name="days" value="{{$type->days}}" type="number" required="" data-bs-original-title="" title="">
+                                                                               <label class="form-label" for="update_days-{{$type->id}}">Days</label>
+                                                                                <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required="" data-bs-original-title="" title="">
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("days")
                                                                                         {{ $message }}
@@ -346,13 +346,13 @@
                                                                             </div>
                         
                                                                             <div class="form-check checkbox checkbox-dark  mx-3  col-md-3">
-                                                                                <input id='monthly' {{$type->monthly?"checked":""}} name="monthly_checkbox" class="form-check-input monthly-checkbox" data-category="monthly" type="checkbox">
-                                                                                <label for="monthly" class="form-check-label">Monthly</label>
+                                                                                <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox" data-category="monthly" type="checkbox">
+                                                                                <label for="update_monthly-{{$type->id}}" class="form-check-label">Monthly</label>
                                                                             </div>
                         
                                                                             <div class="form-check checkbox checkbox-dark  mx-3 col-md-3">
-                                                                                <input id='advance_salary' {{$type->advance_salary?"checked":""}} name="advance_salary_checkbox" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
-                                                                                <label for="advance_salary" class="form-check-label">Advance Salary</label>
+                                                                                <input id='update_advance_salary-{{$type->id}}' {{$type->advance_salary?"checked":""}} name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
+                                                                                <label for="update_advance_salary-{{$type->id}}" class="form-check-label">Advance Salary</label>
                                                                             </div>
                         
                                                                         </div>
@@ -361,8 +361,8 @@
                         
                         
                                                                             <div class="col-md-3">
-                                                                                <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
-                                                                                <select name="role"  class="form-select" id="validationCustom04">
+                                                                                <label class="form-label" for="update_role-{{$type->id}}">{{ trans('admin/user.role') }}</label>
+                                                                                <select name="role"  class="form-select" id="update_role-{{$type->id}}">
                         
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     @foreach ($roles as $role)
@@ -381,8 +381,8 @@
                                                                             </div>
                         
                                                                             <div class="col-md-3">
-                                                                                <label class="form-label" for="validationCustom04">Gender</label>
-                                                                                <select name="gender"  class="form-select" id="validationCustom04" >
+                                                                                <label class="form-label" for="update_gender-{{$type->id}}">Gender</label>
+                                                                                <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     <option  {{$type->gender=="Male"?"selected":""}} value="Male">Male</option>
@@ -397,8 +397,8 @@
                                                                             </div>
                         
                                                                             <div class="col-md-3">
-                                                                                <label class="form-label" for="validationCustom04">Marital status</label>
-                                                                                <select name="marital_status"  class="form-select" id="validationCustom04" >
+                                                                                <label class="form-label" for="update_marital_status-{{$type->id}}">Marital status</label>
+                                                                                <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
@@ -419,8 +419,8 @@
                         
                                                                             <div class="col-md-3">
                                                                             
-                                                                                <label class="form-label" for="validationCustom04">Activate</label>
-                                                                                <select name="activate"  class="form-select" id="validationCustom04" required="">
+                                                                                <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
+                                                                                <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required="">
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
@@ -437,8 +437,8 @@
                                                                                 
                                                                              <div class="form-check checkbox checkbox-dark  mx-3 col-md-5">
                         
-                                                                                <input id='existing_user' {{$type->apply_existing_users?"checked":""}} name="existing_user_checkbox" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
-                                                                                 <label for="existing_user" class="form-check-label">Apply to existing user</label>
+                                                                                <input id='update_existing_user-{{$type->id}}' {{$type->apply_existing_users?"checked":""}} name="existing_user" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
+                                                                                 <label for="update_existing_user-{{$type->id}}" class="form-check-label">Apply to existing user</label>
                         
                                                                              </div>
                         
@@ -560,7 +560,7 @@
                      // Make AJAX request
                      $.ajax({
                          type: 'POST',
-                         url: "{{route('admin.localization.longLeave.massAction')}}", // Update the URL to your controller method
+                         url: "{{route('admin.leaveSettings.policies.massAction')}}", // Update the URL to your controller method
                          data: requestData,
                          success: function(response) {
                              // Handle success response

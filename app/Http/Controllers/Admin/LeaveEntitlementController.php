@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LeaveEntitlement;
+use App\Models\LeavePolicies;
+use App\Models\User;
 
 
 class LeaveEntitlementController extends Controller
@@ -15,9 +17,15 @@ class LeaveEntitlementController extends Controller
     public function index()
     {
         //
-        $leaveEntitlement = LeaveEntitlement::get();
+        $leaveEntitlement = LeaveEntitlement::with("policy","user")->get();
+        $leavePolicies = LeavePolicies::get();
+        $users = User::get();
+        $users = User::get();
+
         $data['page_title'] = 'Leave Setting';
         $data['leaveEntitlement'] = $leaveEntitlement;
+        $data['leavePolicies'] = $leavePolicies;
+        $data['users'] = $users;
         $data['trash'] = null;
         $data['url'] = 'leaveSettings';
 
@@ -38,6 +46,24 @@ class LeaveEntitlementController extends Controller
     public function store(Request $request)
     {
         //
+          // Create a new LeaveEntitlement instance
+          $users = $request->input("user_id");
+
+          foreach($users as $user){
+            
+          $leaveEntitlement = new LeaveEntitlement([
+            'leave_policy_id' => $request->input('leave_policy_id'),
+            'leave_year' => $request->input('leave_year'),
+            'days' => $request->input('days'),
+            'user_id' => $user,
+        ]);
+
+        $leaveEntitlement->save();
+        }
+
+        // Save the LeaveEntitlement instance
+
+        return redirect('admin/leaveSettings/leaveEntitlement');
     }
 
     /**
@@ -62,6 +88,17 @@ class LeaveEntitlementController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $leaveEntitlement = LeaveEntitlement::findOrFail($id);
+
+        $leaveEntitlement -> update([
+            'leave_policy_id' => $request->input('leave_policy_id'),
+            'leave_year' => $request->input('leave_year'),
+            'days' => $request->input('days'),
+            // 'user_id' => $user,
+        ]);
+
+        return redirect('admin/leaveSettings/leaveEntitlement');
+
     }
 
     /**
@@ -70,5 +107,23 @@ class LeaveEntitlementController extends Controller
     public function destroy(string $id)
     {
         //
+        LeaveEntitlement::find($id)->delete();
+
+        return redirect('admin/leaveSettings/leaveEntitlement');
+
+    }
+
+
+    public function massAction(Request $request)
+    {
+        $massAction = $request['massAction'];
+
+        foreach ($massAction as $id) {
+            
+            LeaveEntitlement::find($id)->delete();
+
+        }
+        return redirect('admin/leaveSettings/leaveEntitlement');
+
     }
 }

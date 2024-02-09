@@ -121,35 +121,6 @@
                         </div>
                         @endif
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="mt-4">
-                            <h5 class="p-1 bg-success">Previous Vaction</h5>
-                    
-                            <table class="table table-bordered table-striped" style="background-color: #f8f9fa;">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="small">Leave Year</th>
-                                        <th class="small">Holiday Type</th>
-                                        <th class="small">Balance</th>
-                                        <th class="small">Vacation Days</th>
-                                        <th class="small">Ended Days</th>
-                                        <th class="small">Remaining Balance</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="small">2023</td>
-                                        <td class="small">Public Holidays</td>
-                                        <td class="small">25</td>
-                                        <td class="small">20</td>
-                                        <td class="small">5</td>
-                                        <td class="small">15</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                         
                 </div>
                 <div class="card-body">
@@ -264,30 +235,6 @@
                                                         @method('DELETE')
                                                         <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
 
-                                                    </form>
-                                                    
-                                                    <form action="{{ route('admin.'.$url.'.update', ['shortLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                    
-                                                        <li class="edit">
-                                                            <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
-                                                        </li>
-                                                    </form>
-
-                                                    <form action="{{ route('admin.'.$url.'.update', ['shortLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                    
-                                                        <li class="delete">
-                                                            <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
-                                                        </li>
                                                     </form>
                                                     
                                                   </ul>

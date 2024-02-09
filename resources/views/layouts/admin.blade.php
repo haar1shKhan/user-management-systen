@@ -46,7 +46,7 @@
             <div class="page-title">
               <div class="row">
                 <div class="col-6">
-                  @yield('page-title')
+                  @yield('breadcrumb-title')
                 </div>
                 <div class="col-6">
                   <ol class="breadcrumb">
@@ -54,7 +54,7 @@
                       <svg class="stroke-icon">
                         <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-home') }}"></use>
                       </svg></a></li></li>
-                      @yield('breadcrumb')
+                    @yield('breadcrumb-items')
                   </ol>
                 </div>
               </div>

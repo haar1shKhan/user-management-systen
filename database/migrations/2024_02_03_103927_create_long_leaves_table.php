@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leave_entitlements', function (Blueprint $table) {
+        Schema::create('long_leaves', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('leave_policy_id')->constrained('leave_policies')->onDelete('cascade');
-            $table->enum('leave_year', ['current', 'next']);
-            $table->integer('days')->nullable();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->date('from');
+            $table->date('to');
+            $table->longText('reason');
+            $table->boolean('approved')->default(0);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('leave_entitlements');
+        Schema::dropIfExists('long_leaves');
     }
 };

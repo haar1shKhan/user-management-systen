@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\UsersController;
 
 /*
@@ -108,6 +107,25 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'longLeave.destroy',
     ]);
 
+    Route::post('longLeave/massAction', [App\Http\Controllers\Admin\LeaveController::class,'massAction'])->name('longLeave.massAction');
+
+    //Leave
+    Route::resource('globalLeave', App\Http\Controllers\Admin\GlobalLeaveController::class)->except([
+        'show', // If you don't have a show method in your controller
+    ])->names([
+        'index' => 'globalLeave',
+        'create' => 'globalLeave.create',
+        'store' => 'globalLeave.store',
+        'edit' => 'globalLeave.edit',
+        'update' => 'globalLeave.update',
+        'destroy' => 'globalLeave.destroy',
+    ]);
+
+    Route::post('globalLeave/massAction', [App\Http\Controllers\Admin\GlobalLeaveController::class,'massAction'])->name('globalLeave.massAction');
+    // Route::update('globalLeave/updateLongLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLongLeave'])->name('globalLeave.updateLongLeave');
+    // Route::update('globalLeave/updateLateAttendance/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLateAttendance'])->name('globalLeave.updateLateAttendance');
+    // Route::update('globalLeave/updateShortLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateShortLeave'])->name('globalLeave.updateShortLeave');
+
 
     Route::resource('shortLeave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([
         'show', // If you don't have a show method in your controller
@@ -120,15 +138,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'shortLeave.destroy',
     ]);
 
-    Route::resource('late-attendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
+    Route::resource('lateAttendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
         'show', // If you don't have a show method in your controller
     ])->names([
-        'index' => 'late-attendance',
-        'create' => 'late-attendance.create',
-        'store' => 'late-attendance.store',
-        'edit' => 'late-attendance.edit',
-        'update' => 'late-attendance.update',
-        'destroy' => 'late-attendance.destroy',
+        'index' => 'lateAttendance',
+        'create' => 'lateAttendance.create',
+        'store' => 'lateAttendance.store',
+        'edit' => 'lateAttendance.edit',
+        'update' => 'lateAttendance.update',
+        'destroy' => 'lateAttendance.destroy',
     ]);
 
     Route::resource('localization/longLeave', App\Http\Controllers\Admin\localization\LocalizationLeaveController::class)->except([
