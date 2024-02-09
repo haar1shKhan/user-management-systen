@@ -13,8 +13,8 @@ class UserTableSeeder extends Seeder
         $users = [
             [
                 'id'                 => 1,
-                'first_name'               => 'Admin',
-                'last_name'               => 'Khan',
+                'first_name'               => 'John',
+                'last_name'               => 'Due',
                 'email'              => 'admin@admin.com',
                 'password'           => bcrypt('password'),
                 #'approved'           => 1,
