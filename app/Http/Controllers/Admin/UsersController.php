@@ -9,10 +9,10 @@ use App\Models\Role;
 use App\Models\Role_user;
 use App\Models\Profile;
 use App\Models\JobDetail;
-use Gate;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 
 class UsersController extends Controller
 {

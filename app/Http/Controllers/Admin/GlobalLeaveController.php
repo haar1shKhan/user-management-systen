@@ -25,11 +25,10 @@ class GlobalLeaveController extends Controller
         $shortLeave = ShortLeave::all();
         $lateAttendances = LateAttendance::all();
 
-        $page_title = 'Global leave';
+        $page_title = 'Leave Requests';
         $trash = false;
         $data['url']='globalLeave';
 
-        $data['trash']=$trash;
         $data['longLeaves']=$longLeaves;
         $data['shortLeave']=$shortLeave;
         $data['lateAttendances']=$lateAttendances;

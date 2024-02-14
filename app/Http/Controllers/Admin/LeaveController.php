@@ -203,7 +203,7 @@ class LeaveController extends Controller
 
    }
 
-   public function massAction(Request $request)
+    public function massAction(Request $request)
     {
         $massAction = $request['massAction'];
 

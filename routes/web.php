@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\UsersController;
 
 /*
@@ -15,14 +16,36 @@ use App\Http\Controllers\Admin\UsersController;
 */
 
 Route::get('/', function () {
-     return redirect()->route('admin.index');
+     return redirect()->route('admin.dashboard');
 })->name('/');
 
-Auth::routes();
+Auth::routes(['register'=>false]);
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Http\Controllers\Admin')->group( function () {
+
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+   })->name('index');
+
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::resource('short-leave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([
+        'show', // If you don't have a show method in your controller
+    ])->names([
+        'index' => 'short-leave',
+        'create' => 'short-leave.create',
+        'store' => 'short-leave.store',
+        'edit' => 'short-leave.edit',
+        'update' => 'short-leave.update',
+        'destroy' => 'short-leave.destroy',
+    ]);
+    Route::post('short-leave/mass-delete', [App\Http\Controllers\Admin\ShortLeaveController::class,'massDelete'])->name('user.massDelete');
+
+});
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-    // Permissions
-    Route::view('index', 'view')->name('index');
+
+    
 
     Route::resource('users', UsersController::class)->names([
         'index' => 'users',
@@ -127,16 +150,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     // Route::update('globalLeave/updateShortLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateShortLeave'])->name('globalLeave.updateShortLeave');
 
 
-    Route::resource('shortLeave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([
-        'show', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'shortLeave',
-        'create' => 'shortLeave.create',
-        'store' => 'shortLeave.store',
-        'edit' => 'shortLeave.edit',
-        'update' => 'shortLeave.update',
-        'destroy' => 'shortLeave.destroy',
-    ]);
+    
 
     Route::resource('lateAttendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
         'show', // If you don't have a show method in your controller

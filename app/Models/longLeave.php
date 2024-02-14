@@ -28,7 +28,7 @@ class longLeave extends Model
     }
     public function policy()
     {
-        return $this->belongsTo(LeavePolicies::class, 'leave_policy_id');
+        return $this->belongsTo(LeavePolicies::class, 'policy_id');
     }
 
 }

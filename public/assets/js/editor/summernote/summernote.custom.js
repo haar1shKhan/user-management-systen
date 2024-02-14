@@ -21,10 +21,6 @@ var summernote_custom = {
                 }
             }
         });
-        $("#error-log").summernote({
-            height: 500,
-            toolbar: false,
-        });
     }
 };
 (function($) {

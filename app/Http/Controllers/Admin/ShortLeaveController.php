@@ -6,24 +6,31 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ShortLeave;
 use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class ShortLeaveController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
+    public $base_url = "admin/short-leave";
+
     public function index()
     {
-        //
+        abort_if(Gate::denies('short_leave_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $shortLeave = ShortLeave::where('user_id',auth()->user()->id)->with('user','approvedBy')->get();
-        $page_title = 'Short Leave Application';
+        $page_title = 'Short Leave';
         $trash = false;
         $data['page_title']=$page_title;
         $data['shortLeave']=$shortLeave;
         $data['trash']=$trash;
-        $data['url']='shortLeave';
+        $data['url']='short-leave';
  
-        return view('admin.shortLeave.index',$data);
+        return view('admin.short-leave.index',$data);
     }
 
     /**
@@ -39,19 +46,19 @@ class ShortLeaveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort_if(Gate::denies('short_leave_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $user = User::find(auth()->user()->id);
-        // dd($user);
-        // die;
+         
         $shortLeave = ShortLeave::create([
-            'date' => '1/1/21', // You may want to adjust this as needed
+            'date' => Carbon::now('Asia/Dubai'), // You may want to adjust this as needed
             'from' => $request->input('from'),
             'to' => $request->input('to'),
             'reason' => $request->input('reason'),
         ]);
         $user->shortLeave()->save($shortLeave);
 
-        return redirect('admin/shortLeave');
+        return redirect($this->base_url);
 
     }
 
@@ -76,27 +83,15 @@ class ShortLeaveController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        $shortLeave = ShortLeave::findOrFail($id);
+        abort_if(Gate::denies('short_leave_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        // Check if the button clicked is for approval or rejection
-        if ($request->has('approve')) {
-            $shortLeave->update(['approved' => 1]);
-        } elseif ($request->has('reject')) {
-            $shortLeave->update(['approved' => -1]); // Assuming 2 represents rejection, adjust as needed
-        }
-    
-        // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
-        if(auth()->user()->roles[0]->title == "Admin")
-        {
-            $shortLeave->update(['approved_by' => auth()->user()->id]);
-        }
+        $shortLeave = ShortLeave::findOrFail($id);
         // Update the field 
         if($request->reason){
         $shortLeave->update(['reason' => $request->reason]);
         }
 
-        return redirect('admin/shortLeave');
+        return redirect($this->base_url);
     }
 
     /**
@@ -104,8 +99,30 @@ class ShortLeaveController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort_if(Gate::denies('short_leave_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $shortleave = ShortLeave::findOrFail($id);
+        if ($shortleave->approved){
+            return redirect($this->base_url)->with('status', "Sorry you can't Delete Approved Requests");
+        }
         ShortLeave::find($id)->delete();
-        return redirect('admin/shortLeave');
+        return redirect($this->base_url);
+    }
+
+    public function massDelete(Request $request)
+    {
+        abort_if(Gate::denies('short_leave_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $massDelete = $request['massDelete'];
+
+        foreach ($massDelete as $id) {
+
+            $shortleave = ShortLeave::findOrFail($id);
+            if (!$shortleave->approved){
+                ShortLeave::find($id)->delete();
+            }
+
+        }
+        return redirect('admin/longLeave');
+
     }
 }

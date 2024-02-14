@@ -1,47 +1,59 @@
-@extends('layouts.app')
+@extends('layouts.authentication.master')
+@section('title', 'Forget-password')
+
+@section('css')
+@endsection
+
+@section('style')
+@endsection
+
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
+<!-- tap on top starts-->
+<div class="tap-top"><i data-feather="chevrons-up"></i></div>
+<!-- tap on tap ends-->
+<!-- page-wrapper Start-->
+<div class="page-wrapper">
+   <div class="container-fluid p-0">
+      <div class="row">
+         <div class="col-12">
+            <div class="login-card">
+               <div>
+                  <div><a class="logo" href="{{ route('/') }}"><img class="img-fluid for-light" src="{{asset('assets/images/logo/login.png')}}" alt="looginpage"><img class="img-fluid for-dark" src="{{asset('assets/images/logo/logo_dark.png')}}" alt="looginpage"></a></div>
+                  <div class="login-main">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    <form method="POST" action="{{ route('password.email') }}">
+                     <form class="theme-form" method="POST" action="{{ route('password.email') }}">
                         @csrf
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
+                        <h4>Reset Your Password</h4>
+                        <div class="form-group">
+                           <label class="col-form-label">Enter Your Email Address</label>
+                           <div class="row">
+                              <div class="col-12">
+                                <input class="form-control email @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="name@email.com">
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback" style="display:block;">{{ $message }}</div>
                                 @enderror
-                            </div>
+                              </div>
+                              <div class="col-12">
+                                 <button class="btn btn-primary btn-block m-t-10" type="submit">Send</button>
+                              </div>
+                           </div>
                         </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        <p class="mt-4 mb-0">Already have an password?<a class="ms-2" href="{{ route('login') }}">Sign in</a></p>
+                     </form>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
+         </div>
+      </div>
+   </div>
 </div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/js/sidebar-menu.js')}}"></script>
 @endsection

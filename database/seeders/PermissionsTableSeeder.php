@@ -90,6 +90,32 @@ class PermissionsTableSeeder extends Seeder
                 'title' => 'user_access',
                 'slug' => 'user_access',
             ],
+            //Short Leave Access
+            [
+                'id' => 17,
+                'title' => 'Short Leave Access',
+                'slug' => 'short_leave_access',
+            ],
+            [
+                'id' => 18,
+                'title' => 'Short Leave Create',
+                'slug' => 'short_leave_create',
+            ],
+            [
+                'id' => 19,
+                'title' => 'Short Leave Update',
+                'slug' => 'short_leave_update',
+            ],
+            [
+                'id' => 20,
+                'title' => 'Short Leave Show',
+                'slug' => 'short_leave_show',
+            ],
+            [
+                'id' => 21,
+                'title' => 'Short Leave Delete',
+                'slug' => 'short_leave_delete',
+            ],
         ];
 
         Permission::insert($permissions);

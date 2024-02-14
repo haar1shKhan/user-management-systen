@@ -59,7 +59,7 @@
                                     <div class="col-4 my-2">
                                         <h6 class="permission-category">{{ $category }}</h6>
                                         @foreach($permissions as $permission)
-                                            @if (str_starts_with($permission->title, strtolower($category)))
+                                            @if (str_starts_with($permission->slug, strtolower($category)))
                                             
                                                 <div class="form-check checkbox checkbox-dark mb-0">
                                                     <input class="form-check-input select" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" data-bs-original-title="" title=""

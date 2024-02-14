@@ -1,65 +1,73 @@
-@extends('layouts.app')
+
+
+
+
+@extends('layouts.authentication.master')
+@section('title', 'Reset-password')
+
+@section('css')
+@endsection
+
+@section('style')
+@endsection
+
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('password.update') }}">
+<!-- tap on top starts-->
+<div class="tap-top"><i data-feather="chevrons-up"></i></div>
+<!-- tap on tap ends-->
+<!-- page-wrapper Start-->
+<div class="page-wrapper">
+   <div class="container-fluid p-0">
+      <div class="row">
+         <div class="col-12">
+            <div class="login-card">
+               <div>
+                  <div><a class="logo" href="{{ route('/') }}"><img class="img-fluid for-light" src="{{asset('assets/images/logo/login.png')}}" alt="looginpage"><img class="img-fluid for-dark" src="{{asset('assets/images/logo/logo_dark.png')}}" alt="looginpage"></a></div>
+                  <div class="login-main">
+                     <form class="theme-form" method="POST" action="{{ route('password.update') }}">
                         @csrf
-
                         <input type="hidden" name="token" value="{{ $token }}">
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <h4>Create Your Password</h4>
+                        <div class="form-group">
+                           <label class="col-form-label">Email Address</label>
+                           <input class="form-control email @error('email') is-invalid @enderror" type="email" id="email" name="email" value="{{ $email ?? old('email') }}" @if ($email) readonly @endif required autocomplete="email" autofocus placeholder="name@email.com">
+                            @error('email')
+                                <div class="invalid-feedback" style="display:block;">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                           <label class="col-form-label">New Password</label>
+                           <input class="form-control @error('password') is-invalid @enderror" type="password" id="password" name="password" placeholder="*********" required autocomplete="new-password">
+                           @error('password')
+                                <div class="invalid-feedback" style="display:block;">{{ $message }}</div>
+                            @enderror
+                           <div class="show-hide" style="top: 70%;">
+                                <span class="show"></span>
                             </div>
                         </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="form-group">
+                           <label class="col-form-label">Retype Password</label>
+                           <input class="form-control" type="password" id="password-confirm" name="password_confirmation" placeholder="*********" required autocomplete="new-password">
                         </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
+                        <div class="form-group mb-0">
+                           <div class="checkbox p-0">
+                              <input id="checkbox1" type="checkbox">
+                              <label class="text-muted" for="checkbox1">Remember password</label>
+                           </div>
+                           <button class="btn btn-primary btn-block" type="submit">Done                          </button>
                         </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Reset Password') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                        <p class="mt-4 mb-0">Don't have account?<a class="ms-2" href="#">Please Contact Admin</a></p>
+                     </form>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
+         </div>
+      </div>
+   </div>
 </div>
+@endsection
+
+@section('script')
+
 @endsection

@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('short_leaves', function (Blueprint $table) {
 
             $table->id();
-            $table->date('date');
+            $table->timestamp('date');
             $table->time('from');
             $table->time('to');
             $table->longText('reason');
             $table->boolean('approved')->default(0);
             $table->timestamps();
-            
         });
     }
 

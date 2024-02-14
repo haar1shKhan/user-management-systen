@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Permission;
-use Gate;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -50,17 +50,23 @@ class RolesController extends Controller
 
         $permissions = Permission::all();
         
-        $categories=[];
+        $categories = [];
         
         foreach ($permissions as $item) {
-            $parts = explode('_', $item['title']);
-            
-            // Assuming the base name is the first part of the title
-            $baseName = $parts[0];
-            
-            // Add to the permissions array
-            if (!in_array($baseName, $categories)) {
-                $categories[] = $baseName;
+
+            //$parts = explode('_', $item['slug']);
+            $permission_title = $item->title;
+
+            $str = preg_replace('/\W\w+\s*(\W*)$/','$1',$permission_title);
+            // $words =  array_splice($parts, 0, -1);
+            // $category = "";
+
+            // foreach ($words as $value) {
+            //     $category .= $value." ";
+            // }
+           
+            if (!in_array($str, $categories)) {
+                $categories[] = $str;
             }
         }
         $data['permissions'] = $permissions;
@@ -122,7 +128,7 @@ class RolesController extends Controller
         $categories=[];
 
         foreach ($permissions as $item) {
-            $parts = explode('_', $item['title']);
+            $parts = explode('_', $item['slug']);
         
             // Assuming the base name is the first part of the title
             $baseName = $parts[0];
