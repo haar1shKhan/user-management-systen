@@ -29,11 +29,14 @@ class Profile extends Model
         'religion',
         'passport_issued_at',
         'passport_expires_at',
+        'passport_file',
         'nid_issued_at',
         'nid_expires_at',
+        'nid_file',
         'visa',
         'visa_issued_at',
         'visa_expires_at',
+        'visa_file',
     ];
 
     public function user()

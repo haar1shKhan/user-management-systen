@@ -17,6 +17,7 @@ class LeaveEntitlement extends Model
         'leave_year',
         'days',
         'user_id',
+        'leave_taken',
     ];
 
     // Relationships

@@ -81,42 +81,63 @@ class GlobalLeaveController extends Controller
 
 
             $longLeave= longLeave::findOrFail($id);
-            $userEntitlement = LeaveEntitlement::where('user_id',$longLeave->user->id)->where('leave_policy_id',$longLeave->policy_id)->with("policy")->first();
+            $userEntitlement = LeaveEntitlement::where('user_id',$longLeave->user->id)->where('leave_policy_id',$request["leave_policy_id"])->with("policy")->first();
+            $startDate = Carbon::parse($longLeave->from);
+            $endDate = Carbon::parse($longLeave->to);
+            $numberOfDays = $startDate->diffInDays($endDate) + 1;
            
-     
+            // dd($request->all());
+            // dd($userEntitlement->leave_taken);
+            
             // Check if the button clicked is for approval or rejection
             if ($request->has('approve')) {
      
-                $longLeave->update(['approved' => 1]);
-                $startDate = Carbon::parse($longLeave->from);
-                $endDate = Carbon::parse($longLeave->to);
-                $numberOfDays = $startDate->diffInDays($endDate) + 1;
-     
-                $totalEntitlementDays = ($userEntitlement->days != null) ? ($userEntitlement->days - $numberOfDays) : ($userEntitlement->policy->days - $numberOfDays);   
-                $userEntitlement->update(['days'=>$totalEntitlementDays]);
+               
+                
+                if($userEntitlement->leave_taken==0){
+                    
+                    $userEntitlement->update(['leave_taken'=> $numberOfDays]);
+                    $longLeave->update(['approved' => 1]);
+
+                } 
+                else{
+                    
+                    $totalDays = $userEntitlement->leave_taken + $numberOfDays;
+                    $userEntitlement->update(['leave_taken'=>$totalDays]);
+                    $longLeave->update(['approved' => 1]);
+
+               }
      
      
             } elseif ($request->has('reject')) {
-     
+
+                if($longLeave->approved==1){
+                    $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+                    $userEntitlement->update(['leave_taken'=>$totalDays]);
+                }
+                
                 $longLeave->update(['approved' => -1]); // Assuming 2 represents rejection, adjust as needed
-                $startDate = Carbon::parse($longLeave->from);
-                $endDate = Carbon::parse($longLeave->to);
-                $numberOfDays = $startDate->diffInDays($endDate) + 1;
-     
-                $totalEntitlementDays = ($userEntitlement->days != null) ? ($userEntitlement->days + $numberOfDays) : ($userEntitlement->policy->days + $numberOfDays);   
-                $userEntitlement->update(['days'=>$totalEntitlementDays]);
             }
-        
+            
             // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
-            if(auth()->user()->roles[0]->title == "Admin")
+            if(auth()->user()->roles[0]->title == "Admin" && !$request->has('pending') )
             {
                 $longLeave->update(['approved_by' => auth()->user()->id]);
+                return redirect("/admin/globalLeave");
             }
-     
-            return redirect("/admin/globalLeave");
-     
+            
+            if($longLeave->approved==1){
+                $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+                $userEntitlement->update(['leave_taken'=>$totalDays]);
+            }
+            $longLeave->update(['approved_by' => null]);
+            $longLeave->update(['approved' => 0]); 
+            
 
+            return redirect("/admin/globalLeave");
         }
+
+        
         if($request->type=="lateAttendances"){
 
             $lateAttendance = LateAttendance::findOrFail($id);
@@ -129,15 +150,19 @@ class GlobalLeaveController extends Controller
             }
         
             // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
-            if(auth()->user()->roles[0]->title == "Admin")
+            if(auth()->user()->roles[0]->title == "Admin"  && !$request->has('pending')  )
             {
                 $lateAttendance->update(['approved_by' => auth()->user()->id]);
+                return redirect('admin/globalLeave');
             }
             // Update the field 
             if($request->reason){
             $lateAttendance->update(['reason' => $request->reason]);
             }
-    
+
+            $lateAttendance->update(['approved_by' => null]);
+            $lateAttendance->update(['approved' => 0]); 
+
             return redirect('admin/globalLeave');
         }
 
@@ -154,14 +179,18 @@ class GlobalLeaveController extends Controller
             }
         
             // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
-            if(auth()->user()->roles[0]->title == "Admin")
+            if(auth()->user()->roles[0]->title == "Admin"  && !$request->has('pending'))
             {
                 $shortLeave->update(['approved_by' => auth()->user()->id]);
+                return redirect('admin/globalLeave');    
             }
             // Update the field 
             if($request->reason){
             $shortLeave->update(['reason' => $request->reason]);
             }
+
+            $shortLeave->update(['approved_by' => null]);
+            $shortLeave->update(['approved' => 0]); 
 
             return redirect('admin/globalLeave');    
 

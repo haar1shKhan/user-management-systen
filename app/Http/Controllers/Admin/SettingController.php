@@ -4,20 +4,25 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Config;
+
 
 class SettingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public $base_url = '/admin/settings';
+
     public function index()
-    {
-        //
+    {  
         $page_title = 'Settings';
-        $trash = false;
-        $data['page_title']=$page_title;
-        $data['trash']=$trash;
-        $data['url']='setting';
+
+        $data = array(
+            'page_title' => $page_title,
+            'url' =>  $this->base_url,
+        );
         
         return view('admin.settings.index',$data);
     }
@@ -59,7 +64,26 @@ class SettingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // $validation = $request->validate([
+        //     'store_name' => 'required',
+        //     'store_owner' => 'required',
+        //     'store_address' => 'required',
+        //     'store_email' => 'required|email',
+        //     'store_phone' => 'required',
+        //     'store_telephone' => 'required',
+        //     'store_Latitude' => 'required',
+        //     'store_longitude' => 'required',
+        // ]);
+
+        $data = $request->all();
+        unset($data['_method']);
+        unset($data["_token"]);
+        foreach ($data as $key => $value){
+            $setting = Setting::where('key','=', $key)->where('code','=', "settings")->firstOrFail();
+            $setting->value = $value;
+            $setting->save();
+        }
+        return redirect($this->base_url);
     }
 
     /**

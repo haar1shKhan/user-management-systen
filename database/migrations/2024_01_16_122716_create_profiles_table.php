@@ -33,12 +33,18 @@ return new class extends Migration
             $table->string('passport')->nullable();//
             $table->date('passport_issued_at')->nullable();//
             $table->date('passport_expires_at')->nullable();//
+            $table->string('passport_file')->nullable();
+
             $table->string('nid')->nullable();//
             $table->date('nid_issued_at')->nullable();//
             $table->date('nid_expires_at')->nullable();//
+            $table->string('nid_file')->nullable();
+
             $table->string('visa')->nullable();//
             $table->date('visa_issued_at')->nullable();//
             $table->date('visa_expires_at')->nullable();//
+            $table->string('visa_file')->nullable();
+
             $table->timestamps();
         });
     }

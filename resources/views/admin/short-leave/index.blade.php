@@ -34,6 +34,7 @@
         {{ session('status') }}
     </div>
 @endif
+
 <div class="container-fluid">
     <div class="row">
 

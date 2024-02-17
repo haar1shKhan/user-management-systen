@@ -58,6 +58,7 @@ class RolesController extends Controller
             $permission_title = $item->title;
 
             $str = preg_replace('/\W\w+\s*(\W*)$/','$1',$permission_title);
+            
             // $words =  array_splice($parts, 0, -1);
             // $category = "";
 
@@ -151,7 +152,7 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
    
         $role=Role::with('permissions')->find($id);

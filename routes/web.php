@@ -163,6 +163,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'lateAttendance.destroy',
     ]);
 
+
     Route::resource('localization/longLeave', App\Http\Controllers\Admin\localization\LocalizationLeaveController::class)->except([
         'show', // If you don't have a show method in your controller
         'create',

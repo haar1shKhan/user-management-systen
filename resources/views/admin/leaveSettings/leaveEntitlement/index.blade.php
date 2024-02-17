@@ -67,12 +67,12 @@
                                                 <div class="row">
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label" for="validationCustom04">Leave policy</label>
-                                                        <select name="leave_policy_id"  class="form-select" id="validationCustom04" >
+                                                        <label class="form-label" for="leave_policy">Leave policy</label>
+                                                        <select name="leave_policy_id"  class="form-select" id="leave_policy" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             @foreach ($leavePolicies as $policies)
-                                                             <option value="{{ $policies->id }}">
+                                                             <option data-days="{{ $policies->days }}" value="{{ $policies->id }}">
                                                                  {{ $policies->title }}
                                                              </option>
                                                             @endforeach
@@ -102,8 +102,8 @@
 
 
                                                     <div class="d-flex flex-column  col-md-4">
-                                                        <label class="form-label" for="validationCustom01">Days</label>
-                                                         <input class="form-control" id="validationCustom01"  name="days" type="number"  data-bs-original-title="" title="">
+                                                        <label class="form-label" for="days">Days</label>
+                                                         <input class="form-control" id="days"  name="days" type="number"  data-bs-original-title="" title="">
                                                          <div class="text-danger mt-1">
                                                              @error("days")
                                                                  {{ $message }}
@@ -429,6 +429,26 @@
 
 
         });
+
+        $('#leave_policy').change(function () {
+            var selectedLeaveType = $(this).find(':selected');
+            updateFormFields(selectedLeaveType);
+        });
+
+        function updateFormFields(selectedLeaveType) {
+
+            // Add logic to show/hide and update fields based on the selected leave type
+            var days = selectedLeaveType.data('days');
+            console.log(days);
+            // var advanceSalary = selectedLeaveType.data('advance-salary');
+            // var numberOfDays = selectedLeaveType.data('number-of-days');
+            // $('.days-field').text('Number of days: ' + days);
+            $('input[name="days"]').val(days);
+
+            // Add more conditions based on your dynamic leave type properties
+
+            // Show the relevant form fields
+        }
 </script>
     <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>

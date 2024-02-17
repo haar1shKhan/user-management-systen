@@ -16,6 +16,9 @@ form button.border-none {
     cursor: pointer;
     /* Additional styles as needed */
 }
+.file_view{
+    cursor: pointer;
+}
 </style>
 @endsection
 
@@ -39,7 +42,7 @@ form button.border-none {
 
         @if($user->profile->image)
             <div class="row mb-4 d-flex align-items-center">
-                <img src="{{ asset('storage/profile_images/'.$user->profile->image) }}" alt="Profile Picture" class="img-thumbnail rounded-circle" style="max-width: 150px; max-height: 150px;">
+                <img src="{{ asset('storage/profile_images/'.$user->profile->image) }}" alt="Profile Picture" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;">
                 <div class="col-md-8">
                     <h2>{{$user->first_name}} {{$user->last_name}} 
                             @if ($user->jobDetail->status == 'active')
@@ -69,7 +72,7 @@ form button.border-none {
             </div>
         @else
             <div class="row mb-4 d-flex align-items-center">
-            <img height="40px" width="40px" class="img-thumbnail rounded-circle" style="max-width: 150px; max-height: 150px;" src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">                
+            <img height="40px" width="40px" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;" src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">                
                 <div class="col-md-6">
                     <h2>{{$user->first_name}} {{$user->last_name}} 
                         @if ($user->jobDetail->status == 'active')
@@ -195,7 +198,18 @@ form button.border-none {
                 </tr>
                 <tr>
                     <th>File Attachment</th>
-                    <td>{{ $user->profile->visa_expires_at?? 'N/A' }}</td>
+                    <div class="modal fade" id="passport" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                            
+
+                                <embed src="{{ asset('storage/visa_files/'.$user->profile->passport_file) }}" width="800px" height="2100px" />
+
+                            
+                           </div>
+                        </div>
+                     </div>
+                    <td data-bs-toggle="modal" data-bs-target="#passport" class="file_view">{{ $user->profile->passport_file?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -220,7 +234,18 @@ form button.border-none {
                 </tr>
                 <tr>
                     <th>File Attachment</th>
-                    <td>{{ $user->profile->visa_expires_at?? 'N/A' }}</td>
+                    <div class="modal fade" id="nid" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                            
+
+                                <embed src="{{ asset('storage/nid_files/'.$user->profile->nid_file) }}" width="800px" height="2100px" />
+
+                            
+                           </div>
+                        </div>
+                     </div>
+                    <td data-bs-toggle="modal" data-bs-target="#nid" class="file_view">{{ $user->profile->nid_file?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -245,7 +270,19 @@ form button.border-none {
                 </tr>
                 <tr>
                     <th>File Attachment</th>
-                    <td>{{ $user->profile->visa_expires_at?? 'N/A' }}</td>
+
+                    <div class="modal fade" id="visa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                           <div class="modal-content">
+                            
+
+                                <embed src="{{ asset('storage/visa_files/'.$user->profile->visa_file) }}" width="800px" height="2100px" />
+
+                            
+                           </div>
+                        </div>
+                     </div>
+                    <td data-bs-toggle="modal" data-bs-target="#visa" class="file_view">{{ $user->profile->visa_file?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>

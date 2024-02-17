@@ -46,13 +46,13 @@
                             {{-- @can('permission_create') --}}
 
                             {{-- modal start --}}
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Apply Leave</button>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Add Policy</button>
 
                             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Add Policies</h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Add Policy</h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
@@ -127,8 +127,9 @@
                                                         <select name="gender"  class="form-select" id="validationCustom04" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
-                                                            <option   value="Male">Male</option>
-                                                            <option   value="Female">Female</option>
+                                                            <option   value="">Both</option>
+                                                            <option   value="male">Male</option>
+                                                            <option   value="female">Female</option>
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -143,6 +144,7 @@
                                                         <select name="marital_status"  class="form-select" id="validationCustom04" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
+                                                            <option   value="">Both</option>
                                                             <option   value="Bachelor">Bachelor</option>
                                                             <option   value="Married">Married</option>
                                                 
@@ -249,7 +251,6 @@
                                     <th class="col-8">Gender</th>
                                     <th class="col-8">Marital Status</th>
                                     <th class="col-8">Activate For</th>
-                                    <th class="col-8">Apply existing users</th>
 
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
@@ -292,9 +293,6 @@
                                             </td>
                                             <td>
                                                 <h6>{{$type->activate}}</h6>
-                                            </td>
-                                            <td>
-                                                <h6>{{$type->apply_existing_users ? "True" : "False"}}</h6>
                                             </td>
                                             <td>
                                                 <ul class="action">
@@ -365,8 +363,9 @@
                                                                                 <select name="role"  class="form-select" id="update_role-{{$type->id}}">
                         
                                                                                     <option selected="true" disabled value="">Choose...</option>
+                                                                                    
+                                                                                    <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
                                                                                     @foreach ($roles as $role)
-                                                                                        <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
                                                                                         <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->id }}">
                                                                                             {{ $role->title }}
                                                                                         </option>
@@ -385,8 +384,8 @@
                                                                                 <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
-                                                                                    <option  {{$type->gender=="Male"?"selected":""}} value="Male">Male</option>
-                                                                                    <option  {{$type->gender=="Female"?"selected":""}}  value="Female">Female</option>
+                                                                                    <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
+                                                                                    <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
                                                                         
                                                                                 </select>
                                                                                 <div class="text-danger mt-1">

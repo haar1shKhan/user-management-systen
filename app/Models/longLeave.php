@@ -14,7 +14,8 @@ class longLeave extends Model
         'reason',
         'approved',
         'user_id',
-        'policy_id',
+        'entitlement_id',
+        'leave_file',
         'approved_by',
     ];
 
@@ -26,9 +27,9 @@ class longLeave extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
-    public function policy()
+    public function entitlement()
     {
-        return $this->belongsTo(LeavePolicies::class, 'policy_id');
+        return $this->belongsTo(LeaveEntitlement::class, 'entitlement_id');
     }
 
 }

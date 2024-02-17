@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('from');
             $table->date('to');
             $table->longText('reason');
+            $table->string('leave_file')->nullable();
             $table->boolean('approved')->default(0);
             $table->timestamps();
         });

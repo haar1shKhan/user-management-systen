@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('long_leaves', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('policy_id')->nullable();
-            $table->foreign('policy_id')->references('id')->on('leave_policies')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('entitlement_id')->nullable();
+            $table->foreign('entitlement_id')->references('id')->on('leave_entitlements')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

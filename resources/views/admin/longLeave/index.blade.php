@@ -29,6 +29,12 @@ form button.border-none {
 
 @section('content')
 
+@if (session('status'))
+    <div class="alert alert-warning " role="alert">
+        {{ session('status') }}
+    </div>
+@endif
+
 <div class="container-fluid">
     <div class="row">
 
@@ -60,24 +66,37 @@ form button.border-none {
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal <span class="text-danger">{{$error??""}}</span></h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Apply Leave<span class="text-danger">{{$error??""}}</span></h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
 
-                                      <form action="{{route('admin.'.$url.".store")}}" method="POST" class="modal-content">
+                                      <form enctype="multipart/form-data" action="{{route('admin.'.$url.".store")}}" method="POST" class="modal-content">
                                         @csrf
 
                                        <div class="modal-body">
                                             <div class="">
-                                    
-                                                <h6>Vactions</h6>
-                        
+                                                            
                                                 <div class="">
                                                     <select name="policy_id" class="form-select" id="validationCustom04" required="">
                                                         <option selected="true" disabled value="">Choose...</option>
                                                         @foreach ($leaveEntitlement as $leaveType)
-                                                            <option value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" data-number-of-days="{{ $leaveType->days ?? $leaveType->policy->days }}">
+                                                            @if ($leaveType->policy->monthly)
+                                                                @php
+                                                                    // remaining = total - num of current month * (total/12)
+                                                                    $days = $leaveType->days?$leaveType->days:$leaveType->policy->days;
+                                                                    $remainingDays = $days - $leaveType->leave_taken;
+            
+                                                                    $remainingDaysMonthy = $remainingDays - ($currentMonth * 3);
+                                                                @endphp 
+                                                        @else
+                                                            @php
+                                                                $days = $leaveType->days?$leaveType->days:$leaveType->policy->days;
+                                                                $remainingDays = $days - $leaveType->leave_taken;  
+                                                            @endphp 
+                                                        @endif
+                                                            <option value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
+                                                            data-number-of-days="{{$leaveType->policy->monthly?$remainingDaysMonthy:$remainingDays}}">
                                                                 {{ $leaveType->policy->title }}
                                                             </option>
                                                         @endforeach
@@ -94,13 +113,13 @@ form button.border-none {
                                                     <div class="col-md-4">
                                                         <label class="col-form-label">Start Date</label>
                                                         <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date" name="startDate">
+                                                            <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="startDate" name="startDate">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <label class="col-form-label">End Date</label>
                                                         <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date" name="endDate">
+                                                            <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="endDate"  name="endDate">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
@@ -115,11 +134,11 @@ form button.border-none {
                                                     
                                                     <div class=" d-flex justify-content-around">
                                                         <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline2" type="radio" name="advance_salary">
+                                                        <input disabled class="form-check-input" id="radioinline2" type="radio" name="advance_salary">
                                                         <label class="form-check-label mb-0 small" for="radioinline2">Advance Salary</label>
                                                         </div>
                                                         <div class="form-check form-check-inline radio radio-primary">
-                                                        <input class="form-check-input" id="radioinline3" type="radio" name="monthly">
+                                                        <input disabled class="form-check-input" id="radioinline3" type="radio" name="monthly">
                                                         <label class="form-check-label mb-0 small" for="radioinline3">Monthly</label>
                                                         </div>
                                                     </div>
@@ -131,7 +150,7 @@ form button.border-none {
                                                             <div class="col">
                                                             <div class="mb-3 row">
                                                                 <div class="col-sm-12">
-                                                                <input class="form-control" type="file">
+                                                                <input class="form-control" name="leave_file" type="file">
                                                                 </div>
                                                             </div>
                                                             </div>
@@ -166,32 +185,77 @@ form button.border-none {
                         @endif
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="mt-4">
                             <h5 class="p-1 bg-success">Previous Vacation</h5>
-                    
+
                             <table class="table table-bordered table-striped" style="background-color: #f8f9fa;">
                                 <thead class="thead-light">
                                     <tr>
                                         <th class="small">Leave Year</th>
                                         <th class="small">leave Type</th>
-                                        <th class="small">Balance</th>
-                                        <th class="small">Vacation Days</th>
-                                        <th class="small">Ended Days</th>
+                                        <th class="small">Total Days</th>
+                                        <th class="small">Leave taken</th>
                                         <th class="small">Remaining Balance</th>
+                                        <th class="small">Expired Days</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="small">2023</td>
-                                        <td class="small">{{$totalHolidays}}</td>
-                                        <td class="small">{{$totalDays}}</td>
-                                        <td class="small">15</td>
-                                        <td class="small">{{$expiredHolidays}}</td>
-                                        <td class="small">{{$remainingHolidays}}</td>
-                                    </tr>
+
+                                  @foreach ($leaveEntitlement as $entitlement )
+                                        <tr>
+                                            <td class="small">{{$entitlement->leave_year}}</td>
+                                            <td class="small">{{$entitlement->policy->title}}</td>
+                                            <td class="small">{{$entitlement->days?$entitlement->days:$entitlement->policy->days}}</td>
+                                            <td class="small">{{$entitlement->leave_taken}}</td>
+                                            <td class="small">
+                                                @if ($entitlement->policy->monthly)
+                                                    @php
+                                                        // remaining = total - num of current month * (total/12)
+                                                        $days = $entitlement->days?$entitlement->days:$entitlement->policy->days;
+                                                        $remainingDays = $days - $entitlement->leave_taken;
+
+                                                        $remainingDaysMonthy = $remainingDays - ($currentMonth * 3);
+
+                                                    @endphp 
+                                                    {{$remainingDaysMonthy}}
+                                                    {{-- remainingDaysMonthy : {{$remainingDaysMonthy}}
+                                                    days : {{$days}}
+                                                    remainingDays : {{$remainingDays}} --}}
+                                                @else
+                                                    @php
+                                                         $days = $entitlement->days?$entitlement->days:$entitlement->policy->days;
+                                                        $remainingDays = $days - $entitlement->leave_taken;  
+                                                    @endphp 
+                                                    {{$remainingDays}}
+                                                @endif
+                                            </td>
+                                            <td class="small">
+                                                @if ($entitlement->policy->monthly)
+                                                @php
+                                                    // expired = num of current month * (total/12) - sum of taken days
+                                                    $days = $entitlement->days?$entitlement->days:$entitlement->policy->days;
+                                                    $remainingDays = $days - $entitlement->leave_taken;
+
+                                                    $expiredDays = $days - $remainingDaysMonthy - $entitlement->leave_taken
+                                                  
+                                                    
+                                                @endphp 
+                                                {{$expiredDays}}
+                                                {{-- remainingDaysMonthy : {{$remainingDaysMonthy}}
+                                                days : {{$days}}
+                                                remainingDays : {{$remainingDays}} --}}
+                                                @else
+                                                    0
+                                                @endif
+                                            </td>
+                                        </tr>
+                                  @endforeach
+
                                 </tbody>
                             </table>
+                                
+                           
                             
                         </div>
                     </div>
@@ -214,6 +278,7 @@ form button.border-none {
                                     {{-- @endcan --}}
                                     <th>{{ trans('global.id') }}</th>
                                     <th>{{ trans('admin/user.name') }}</th>
+                                    <th>Leave type</th>
                                     <th>Duration</th>
                                     <th>Reason</th>
                                     <th>status</th>
@@ -241,6 +306,7 @@ form button.border-none {
 
                                             <td>{{$list->id}}</td>
                                             <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
+                                            <td>{{$list->entitlement->policy->title}}</td>
                                             <td><span class="font-weight-bold">From: </span> {{$list->from}} <span class="font-weight-bold">To: </span> {{$list->to}}</td>
                                             <td>{{$list->reason}}</td>
                                             <td>
@@ -410,6 +476,7 @@ form button.border-none {
         $('#validationCustom04').change(function () {
             var selectedLeaveType = $(this).find(':selected');
             updateFormFields(selectedLeaveType);
+            dateValidation(selectedLeaveType);
         });
 
         function updateFormFields(selectedLeaveType) {
@@ -421,6 +488,7 @@ form button.border-none {
             var monthly = selectedLeaveType.data('monthly');
             var advanceSalary = selectedLeaveType.data('advance-salary');
             var numberOfDays = selectedLeaveType.data('number-of-days');
+
 
             $('.days-field').text('Number of days: ' + numberOfDays);
 
@@ -435,11 +503,38 @@ form button.border-none {
                 // Update fields for leave with advance salary
                 $('input[name="advance_salary"]').prop('checked', true);
             }
-
             // Add more conditions based on your dynamic leave type properties
 
             // Show the relevant form fields
         }
+
+        
+        function dateValidation(selectedLeaveType){
+            let endDate = "";
+            let startDate = "";
+
+            // console.log(endDate,startDate);
+            $('#startDate, #endDate').change(function () {
+            // This function will be triggered when either #startDate or #endDate changes
+                startDateInput = $("#startDate").val();
+                endDateInput = $("#endDate").val();
+                var numberOfDays = selectedLeaveType.data('number-of-days');
+
+                const startDate = new Date(startDateInput);
+                const endDate = new Date(endDateInput);
+
+                // Calculate the difference in milliseconds
+                const timeDifference = endDate - startDate;
+
+                // Convert milliseconds to days
+                const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+                $('.days-field').html((numberOfDays - daysDifference>0?'Number of days: ' +( numberOfDays - daysDifference):"<span class='text-danger'>Number of days: "+0+"</span>"));
+
+
+            });
+        }
+     
 
 
     </script>
