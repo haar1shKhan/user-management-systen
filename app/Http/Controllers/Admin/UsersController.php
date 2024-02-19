@@ -140,39 +140,39 @@ class UsersController extends Controller
         // $request->file('visa_file')->storeAs('public/visa_files', $visaFile);
         // }
 
-        $profile = new Profile([
-            // 'image' => $fileName ?? null,
-            // 'image' => $fileName ?? null,
-            // 'email' => $request->input('personal_email'),
-            // 'phone' => $request->input('phone'),
-            // 'mobile' => $request->input('mobile'),
-            // 'date_of_birth' => $request->input('date_of_birth'),
-            'gender' => $request->input('gender'),
-            // 'nationality' => $request->input('nationality'),
-            'marital_status' => $request->input('marital_status'),
-            // 'biography' => $request->input('biography'),
-            // 'religion' => $request->input('religion'),
-            // 'address' => $request->input('address'),
-            // 'address2' => $request->input('address2'),
-            // 'city' => $request->input('city'),
-            // 'province' => $request->input('province'),
-            // 'passport' => $request->input('passport'),
-            // 'passport_issued_at' => $request->input('passport_issued_at'),
-            // 'passport_expires_at' => $request->input('passport_expires_at'),
-            // 'passport_file' => $passport_file ?? null,
-            // 'nid' => $request->input('nid'),
-            // 'nid_issued_at' => $request->input('nid_issued_at'),
-            // 'nid_expires_at' => $request->input('nid_expires_at'),
-            // 'nid_file' => $nidFile ?? null,
-            // 'visa' => $request->input('visa'),
-            // 'visa_issued_at' => $request->input('visa_issued_at'),
-            // 'visa_expires_at' => $request->input('visa_expires_at'),
-            // 'visa_file' => $visa_file ?? null,
-            // 'country' => $request->input('country'),
-        ]);
+        // $profile = new Profile([
+        //     'image' => $fileName ?? null,
+        //     'image' => $fileName ?? null,
+        //     'email' => $request->input('personal_email'),
+        //     'phone' => $request->input('phone'),
+        //     'mobile' => $request->input('mobile'),
+        //     'date_of_birth' => $request->input('date_of_birth'),
+        //     'gender' => $request->input('gender'),
+        //     'nationality' => $request->input('nationality'),
+        //     'marital_status' => $request->input('marital_status'),
+        //     'biography' => $request->input('biography'),
+        //     'religion' => $request->input('religion'),
+        //     'address' => $request->input('address'),
+        //     'address2' => $request->input('address2'),
+        //     'city' => $request->input('city'),
+        //     'province' => $request->input('province'),
+        //     'passport' => $request->input('passport'),
+        //     'passport_issued_at' => $request->input('passport_issued_at'),
+        //     'passport_expires_at' => $request->input('passport_expires_at'),
+        //     'passport_file' => $passport_file ?? null,
+        //     'nid' => $request->input('nid'),
+        //     'nid_issued_at' => $request->input('nid_issued_at'),
+        //     'nid_expires_at' => $request->input('nid_expires_at'),
+        //     'nid_file' => $nidFile ?? null,
+        //     'visa' => $request->input('visa'),
+        //     'visa_issued_at' => $request->input('visa_issued_at'),
+        //     'visa_expires_at' => $request->input('visa_expires_at'),
+        //     'visa_file' => $visa_file ?? null,
+        //     'country' => $request->input('country'),
+        // ]);
         
          // Save the profile data and associate it with the user
-        $user->profile()->save($profile);
+        // $user->profile()->save($profile);
 
         // $jobDetail = new JobDetail([
         //     'hired_at' => $request->input('hired_at'),
@@ -197,40 +197,40 @@ class UsersController extends Controller
 
         //policies immidiatly after hiring
 
-        $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
-        if (count($leave_policies) > 0){
-            foreach ($leave_policies as $key => $value) {
+        // $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
+        // if (count($leave_policies) > 0){
+        //     foreach ($leave_policies as $key => $value) {
 
-                $role = $value->roles;
-                $gender = $value->gender;
-                $marital_status = $value->marital_status;
-                $user_role = Role::find($request->input('role'));
+        //         $role = $value->roles;
+        //         $gender = $value->gender;
+        //         $marital_status = $value->marital_status;
+        //         $user_role = Role::find($request->input('role'));
 
-                if ($role === NULL) {
-                    $role = $user_role->title;
+        //         if ($role === NULL) {
+        //             $role = $user_role->title;
                     
-                }
-                if ($gender === NULL) {
-                    $gender = $user->profile->gender;
+        //         }
+        //         if ($gender === NULL) {
+        //             $gender = $user->profile->gender;
                     
-                }
-                if ($marital_status === NULL) {
-                    $marital_status = $user->profile->marital_status;
-                }
+        //         }
+        //         if ($marital_status === NULL) {
+        //             $marital_status = $user->profile->marital_status;
+        //         }
                 
-                if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
-                    LeaveEntitlement::create(
-                        [
-                            'leave_policy_id' => $value->id,
-                            'leave_year' => "current",
-                            'days' => $value->days ,
-                            'user_id' => $user->id,
-                        ]
-                    );
+        //         if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
+        //             LeaveEntitlement::create(
+        //                 [
+        //                     'leave_policy_id' => $value->id,
+        //                     'leave_year' => "current",
+        //                     'days' => $value->days ,
+        //                     'user_id' => $user->id,
+        //                 ]
+        //             );
                     
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     
         return redirect('admin/users');
     }
@@ -281,9 +281,7 @@ class UsersController extends Controller
                 'first_name' => 'required',
                 'last_name' => 'required',
                 "supervisor_id" => 'required',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'required|confirmed',
-                'password_confirmation' => 'required',
+                // 'email' => 'required|email|unique:users,email',
                 'role' => 'required',
                 'date_of_birth' => 'required',
                 'phone' => 'required',
@@ -294,17 +292,17 @@ class UsersController extends Controller
                 'passport' => 'required',
                 'passport_issued_at' => 'required',
                 'passport_expires_at' => 'required',
-                'passport_file' => 'required | mimes:pdf',
+                // 'passport_file' => 'required | mimes:pdf',
                 
                 'nid' => 'required',
                 'nid_issued_at' => 'required',
                 'nid_expires_at' => 'required',
-                'nid_file' => 'required | mimes:pdf',
+                // 'nid_file' => 'required | mimes:pdf',
 
                 'visa' => 'required',
                 'visa_issued_at' => 'required',
                 'visa_expires_at' => 'required',
-                'visa_file' => 'required | mimes:pdf',
+                // 'visa_file' => 'required | mimes:pdf',
 
                 'hired_at' => 'required',
                 'address' => 'required',
@@ -369,31 +367,7 @@ class UsersController extends Controller
         }
 
 
-        $user->profile->update([
-            'email' => $request->input('personal_email'),
-            'phone' => $request->input('phone'),
-            'mobile' => $request->input('mobile'),
-            'date_of_birth' => $request->input('date_of_birth'),
-            'gender' => $request->input('gender'),
-            'nationality' => $request->input('nationality'),
-            'marital_status' => $request->input('marital_status'),
-            'biography' => $request->input('biography'),
-            'religion' => $request->input('religion'),
-            'address' => $request->input('address'),
-            'address2' => $request->input('address2'),
-            'city' => $request->input('city'),
-            'province' => $request->input('province'),
-            'passport' => $request->input('passport'),
-            'passport_issued_at' => $request->input('passport_issued_at'),
-            'passport_expires_at' => $request->input('passport_expires_at'),
-            'nid' => $request->input('nid'),
-            'nid_issued_at' => $request->input('nid_issued_at'),
-            'nid_expires_at' => $request->input('nid_expires_at'),
-            'visa' => $request->input('visa'),
-            'visa_issued_at' => $request->input('visa_issued_at'),
-            'visa_expires_at' => $request->input('visa_expires_at'),
-            'country' => $request->input('country'),
-        ]);
+        
 
         $user->jobDetail->update([
             'hired_at' => $request->input('hired_at'),

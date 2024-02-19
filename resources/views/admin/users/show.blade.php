@@ -45,15 +45,17 @@ form button.border-none {
                 <img src="{{ asset('storage/profile_images/'.$user->profile->image) }}" alt="Profile Picture" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;">
                 <div class="col-md-8">
                     <h2>{{$user->first_name}} {{$user->last_name}} 
+                        @if($user->jobDetail)       
                             @if ($user->jobDetail->status == 'active')
-                                <span class="text-success">(Active)</span>
+                            <span class="text-success">(Active)</span>
                             @elseif ($user->jobDetail->status == 'resigned')
-                                <span class="text-danger">(Resigned)</span>
+                            <span class="text-danger">(Resigned)</span>
                             @elseif ($user->jobDetail->status=='terminated')
-                                <span class="text-danger">(Terminated)</span>
+                            <span class="text-danger">(Terminated)</span>
                             @else
-                                <span class="text-muted">(Deceased)</span>
+                            <span class="text-muted">(Deceased)</span>
                             @endif
+                        @endif
                     </h2>
                     <h6>Employee ID: {{$user->id}}</h6>
                     <h6>Email: {{ $user->email }}</h6>
@@ -75,14 +77,16 @@ form button.border-none {
             <img height="40px" width="40px" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;" src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">                
                 <div class="col-md-6">
                     <h2>{{$user->first_name}} {{$user->last_name}} 
-                        @if ($user->jobDetail->status == 'active')
+                        @if($user->jobDetail)       
+                            @if ($user->jobDetail->status == 'active')
                             <span class="text-success">(Active)</span>
-                        @elseif ($user->jobDetail->status == 'resigned')
+                            @elseif ($user->jobDetail->status == 'resigned')
                             <span class="text-danger">(Resigned)</span>
-                        @elseif ($user->jobDetail->status=='terminated')
+                            @elseif ($user->jobDetail->status=='terminated')
                             <span class="text-danger">(Terminated)</span>
-                        @else
+                            @else
                             <span class="text-muted">(Deceased)</span>
+                            @endif
                         @endif
                 </h2>
                 <h6>Email: {{ $user->email }}</h6>

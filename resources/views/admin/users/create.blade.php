@@ -3,8 +3,8 @@
 @section('title', 'Default')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/prism.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/prism.css') }}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/select2.css')}}">
 @endsection
 
@@ -21,7 +21,7 @@
 @endsection
 
 @section('content')
-<div class="container-fluid">
+{{-- <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -110,7 +110,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> --}}
 <div class="container-fluid">
     <div class="row starter-main">
         <div class="col-sm-12">
@@ -140,6 +140,27 @@
                         </div>
                         
                         <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label" for="validationCustom01">First Name</label>
+                                <input class="form-control" id="validationCustom01" name="first_name"  type="text"  required="" data-bs-original-title="" title="">
+                                {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                <div class="text-danger mt-1">
+                                    @error("first_name")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label" for="validationCustom01">Last Name</label>
+                                <input class="form-control" id="validationCustom01" name="last_name"  type="text"  required="" data-bs-original-title="" title="">
+                                {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                <div class="text-danger mt-1">
+                                    @error("last_name")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="col-md-3">
                                 <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
@@ -152,11 +173,11 @@
                                      @endforeach
                         
                                 </select>
-                                
+                                <div class="text-danger mt-1">
                                     @error("role")
                                     {{$message}}    
                                     @enderror
-        
+                                </div>
                             </div>
 
                         </div>
@@ -164,8 +185,15 @@
 
                         <div class="row g-3">
 
-                                
-    
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }}</label>
+                                    <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  value="{{$user->email}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                    <div class="text-danger mt-1">
+                                        @error("email")
+                                        {{$message}}    
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
                                     <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{old('email')}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">

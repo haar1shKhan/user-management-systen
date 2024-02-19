@@ -56,11 +56,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'user.update',
         'destroy' => 'user.destroy',
     ]);
+
     
     Route::get('user/restore/{user}', [App\Http\Controllers\Admin\UsersController::class,'restore'])->name('user.restore');
     Route::delete('user/forceDelete/{user}', [App\Http\Controllers\Admin\UsersController::class,'forceDelete'])->name('user.forceDelete');
     Route::post('user/massAction', [App\Http\Controllers\Admin\UsersController::class,'massAction'])->name('user.massAction');
     
+    Route::resource('user-account', App\Http\Controllers\admin\UserAccountController::class)->names([
+        'index' => 'user-account',
+        'create' => 'user-account.create',
+        'show' => 'user-account.show',
+        'store' => 'user-account.store',
+        'edit' => 'user-account.edit',
+        'update' => 'user-account.update',
+        'destroy' => 'user-account.destroy',
+    ]);
+
     //Roles
     Route::resource('roles', App\Http\Controllers\Admin\RolesController::class)->except([
         'show', 

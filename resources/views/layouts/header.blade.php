@@ -81,7 +81,7 @@
       </div>
           </div>
           <ul class="profile-dropdown onhover-show-div">
-            <li><a href="#"><i data-feather="user"></i><span>Account </span></a></li>
+            <li><a href="{{route('admin.user-account')}}"><i data-feather="user"></i><span>Account </span></a></li>
             <li><a onclick="document.getElementById('logout-form').submit()" href="#"><i data-feather="log-out"> </i><span>Log out</span></a></li>
             <form id="logout-form" action="/logout" method="post">@csrf</form>
           </ul>

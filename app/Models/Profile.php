@@ -37,6 +37,7 @@ class Profile extends Model
         'visa_issued_at',
         'visa_expires_at',
         'visa_file',
+        'user_id'
     ];
 
     public function user()

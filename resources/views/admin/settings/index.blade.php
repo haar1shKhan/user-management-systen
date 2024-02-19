@@ -3,8 +3,7 @@
 @section('title', 'Default')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/image-cropper.css')}}">
 @endsection
 
 @section('style')
@@ -61,10 +60,106 @@
 @section('content')
 
     <div class="container-fluid">
+
         <div class="row">
 
             <!-- Zero Configuration  Starts-->
             <div class="col-sm-12 col-xxl-6">
+
+                <div class="modal fade open_meta_icon_modal" tabindex="-1" role="dialog" aria-labelledby="meta_icon_modal" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                       <div class="modal-content">
+                          <div class="modal-header">
+                             <h4 class="modal-title" id="meta_icon_modal">Meta Icon crop</h4>
+                             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="card-body">
+
+                            <div class="container-fluid">
+                                <div class="img-cropper">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-xl-9 col-md-12 docs-buttons">
+                                                            {{-- <div class="btn-group">
+                                                                <button class="btn btn-outline-primary" type="button" data-method="reset" title="Reset"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="$().cropper(&quot;reset&quot;)"><span class="fa fa-refresh"></span></span></button>
+                                                                <label class="btn btn-outline-primary btn-upload" for="inputImage" title="Upload image file">
+                                                                <input class="sr-only" id="inputImage" type="file" name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="Import image with Blob URLs"><span class="fa fa-upload"></span></span>
+                                                                </label>
+                                                                <button class="btn btn-outline-primary" type="button" data-method="destroy" title="Destroy"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="$().cropper(&quot;destroy&quot;)"><span class="fa fa-power-off"></span></span></button>
+                                                            </div> --}}
+                                                            <br>
+                                                            <!-- Show the cropped image in modal-->
+                                                            <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
+                                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                                        </div>
+                                                                        <div class="modal-body"></div>
+                                                                        <div class="modal-footer">
+                                                                            <button class="btn btn-primary" type="button" data-dismiss="modal">Close</button><a class="btn btn-outline-primary" id="download" href="javascript:void(0);" download="cropped.jpg') }}">Download</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.modal-->
+                                                        </div>
+                                                        <!-- /.docs-buttons-->
+                                                        <div class="col-xl-3 col-md-12 docs-toggles">
+                                                            <!-- <h3>Toggles:</h3>-->
+                                                            <div class="btn-group d-flex flex-nowrap" data-bs-toggle="buttons">
+                                                                <label class="btn btn-primary active">
+                                                                <input class="sr-only" id="aspectRatio0" type="radio" name="aspectRatio" value="1.7777777777777777"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="aspectRatio: 16 / 9">16:9</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="aspectRatio1" type="radio" name="aspectRatio" value="1.3333333333333333"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="aspectRatio: 4 / 3">4:3</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="aspectRatio2" type="radio" name="aspectRatio" value="1"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="aspectRatio: 1 / 1">1:1</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="aspectRatio3" type="radio" name="aspectRatio" value="0.6666666666666666"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="aspectRatio: 2 / 3">2:3</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="aspectRatio4" type="radio" name="aspectRatio" value="NaN"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="aspectRatio: NaN">Free</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="btn-group d-flex flex-nowrap" data-bs-toggle="buttons">
+                                                                <label class="btn btn-primary active">
+                                                                <input class="sr-only" id="viewMode0" type="radio" name="viewMode" value="0" checked=""><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="View Mode 0">VM0</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="viewMode1" type="radio" name="viewMode" value="1"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="View Mode 1">VM1</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="viewMode2" type="radio" name="viewMode" value="2"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="View Mode 2">VM2</span>
+                                                                </label>
+                                                                <label class="btn btn-outline-primary">
+                                                                <input class="sr-only" id="viewMode3" type="radio" name="viewMode" value="3"><span class="docs-tooltip" data-bs-toggle="tooltip" data-animation="false" title="View Mode 3">VM3</span>
+                                                                </label>
+                                                            </div>
+                                                            <!-- /.dropdown-->
+                                                            <!-- /.docs-toggles-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                        </div>
+                       </div>
+                    </div>
+                 </div>
+
+
                 <div class="card">
                     <div class="card-header">
                         <h5>Settings</h5>
@@ -106,7 +201,62 @@
                       
                             <div class="tab-pane fade " id="top-logo" role="tabpanel" aria-labelledby="top-home-tab">
                                 
-                                logo
+                                <div class="row my-4">
+                                    {{-- Meta icon start --}}
+                                    
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Icon</h5>
+                                        <div class="my-3">
+                                            <img class="img-100" id="site-icon-preview" src="{{asset(config('settings.site_icon'))}}"/>
+                                        </div>
+                                        <label for="site-icon" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-icon-preview" name="site-icon" style="display: none;" id="site-icon" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("meta_icon")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Logo</h5>
+                                        <div class="my-3">
+                                            <img class="img-100" id="site-logo-preview" src="{{asset(config('settings.site_icon'))}}"/>
+                                        </div>
+                                        <label for="site-logo" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-logo-preview" name="site-logo" style="display: none;" id="site-logo" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("meta_icon")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Icon</h5>
+                                        <img class="img-50" id="site-icon-preview3" src="{{asset(config('settings.site_icon'))}}"/>
+                                        <label for="site-icon3" class="btn btn-square btn-primary">Replace</label>
+                                        <input name="site-icon3" style="display: none;" id="site-icon3" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("meta_icon")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    
+                                    <div class="col-xl-9 col-md-12 docs-buttons">
+                                        <!-- Show the cropped image in modal-->
+                                        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
+                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                    </div>
+                                                    <div class="modal-body"></div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary" type="button" data-dismiss="modal">Close</button><a class="btn btn-outline-primary" id="download" href="javascript:void(0);" download="cropped.jpg') }}">Download</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-->
+                                    </div>                                   
+                                    {{-- Meta icon end --}}
+        
+                                </div>
 
                             </div>
 
@@ -295,6 +445,28 @@
 
 @section('script')
     <script>
+
+        let fileInput = $('.file-input');
+        fileInput.each(element => {
+            $(this).change(function(e){
+                let file = e.target.files[0];
+                let preview = $('#'+e.target.getAttribute("data-preview"));
+                var reader = new FileReader();
+
+                if (file) {
+                    
+                    reader.onload = function(e){
+                        preview.attr('src', reader.result);
+                    }
+                
+                    reader.readAsDataURL(file);
+                } else {
+                  preview.src = "";
+                }
+            }) 
+        });
+
+
         function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -313,6 +485,6 @@
         }
     }
     </script>
-    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+   <script src="{{asset('assets/js/image-cropper/cropper.js')}}"></script>
+   <script src="{{asset('assets/js/image-cropper/cropper-main.js')}}"></script>
 @endsection

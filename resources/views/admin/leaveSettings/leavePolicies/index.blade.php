@@ -127,7 +127,7 @@
                                                         <select name="gender"  class="form-select" id="validationCustom04" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
-                                                            <option   value="">Both</option>
+                                                            <option   value="">All</option>
                                                             <option   value="male">Male</option>
                                                             <option   value="female">Female</option>
                                                 
@@ -144,7 +144,7 @@
                                                         <select name="marital_status"  class="form-select" id="validationCustom04" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
-                                                            <option   value="">Both</option>
+                                                            <option   value="">All</option>
                                                             <option   value="Bachelor">Bachelor</option>
                                                             <option   value="Married">Married</option>
                                                 
@@ -366,7 +366,7 @@
                                                                                     
                                                                                     <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
                                                                                     @foreach ($roles as $role)
-                                                                                        <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->id }}">
+                                                                                        <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->title }}">
                                                                                             {{ $role->title }}
                                                                                         </option>
                                                                                      @endforeach
@@ -384,6 +384,7 @@
                                                                                 <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
+                                                                                    <option   value="">All</option>       
                                                                                     <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
                                                                                     <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
                                                                         
@@ -400,6 +401,7 @@
                                                                                 <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
+                                                                                    <option   value="">All</option>       
                                                                                     <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
                                                                                     <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">Married</option>
                                                                         
