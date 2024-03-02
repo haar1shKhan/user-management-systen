@@ -34,7 +34,7 @@ class UsersController extends Controller
             $data['trash'] = true;
         }
         
-        $data['page_title'] = 'Dashboard';
+        $data['page_title'] = 'User';
         $data['users'] = $users;
         return view('admin.users.index', $data);
     }
@@ -197,40 +197,40 @@ class UsersController extends Controller
 
         //policies immidiatly after hiring
 
-        // $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
-        // if (count($leave_policies) > 0){
-        //     foreach ($leave_policies as $key => $value) {
+        $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
+        if (count($leave_policies) > 0){
+            foreach ($leave_policies as $key => $value) {
 
-        //         $role = $value->roles;
-        //         $gender = $value->gender;
-        //         $marital_status = $value->marital_status;
-        //         $user_role = Role::find($request->input('role'));
+                $role = $value->roles;
+                $gender = $value->gender;
+                $marital_status = $value->marital_status;
+                $user_role = Role::find($request->input('role'));
 
-        //         if ($role === NULL) {
-        //             $role = $user_role->title;
+                if ($role === NULL) {
+                    $role = $user_role->title;
                     
-        //         }
-        //         if ($gender === NULL) {
-        //             $gender = $user->profile->gender;
+                }
+                if ($gender === NULL) {
+                    $gender = $user->profile->gender;
                     
-        //         }
-        //         if ($marital_status === NULL) {
-        //             $marital_status = $user->profile->marital_status;
-        //         }
+                }
+                if ($marital_status === NULL) {
+                    $marital_status = $user->profile->marital_status;
+                }
                 
-        //         if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
-        //             LeaveEntitlement::create(
-        //                 [
-        //                     'leave_policy_id' => $value->id,
-        //                     'leave_year' => "current",
-        //                     'days' => $value->days ,
-        //                     'user_id' => $user->id,
-        //                 ]
-        //             );
+                if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
+                    LeaveEntitlement::create(
+                        [
+                            'leave_policy_id' => $value->id,
+                            'leave_year' => "current",
+                            'days' => $value->days ,
+                            'user_id' => $user->id,
+                        ]
+                    );
                     
-        //         }
-        //     }
-        // }
+                }
+            }
+        }
     
         return redirect('admin/users');
     }

@@ -6,18 +6,24 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\LateAttendance;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class LateAttendanceController extends Controller
 {
      /**
      * Display a listing of the resource.
      */
+    public $base_url = "admin/lateAttendance";
+
     public function index()
     {
-        //
-        $lateAttendances = LateAttendance::where('user_id',auth()->user()->id)->with('user','approvedBy')->get();
-        // dd($lateAttendances);
-        $page_title = 'Late Attendance Application';
+        abort_if(Gate::denies('late_attendance_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $lateAttendances = LateAttendance::where('user_id',auth()->user()->id)->with('user','approvedBy')->orderBy('id', 'desc')->get();
+        $page_title = 'Late Attendance';
         $trash = false;
         $data['page_title']=$page_title;
         $data['trash']=$trash;
@@ -27,78 +33,113 @@ class LateAttendanceController extends Controller
         return view('admin.lateAttendance.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function store(Request $request)
+    {   
+        abort_if(Gate::denies('late_attendance_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $validation = $request->validate([
+            'date' => 'required',
+            'from' => 'required',
+            'to' => 'required',
+            'reason' => 'required',
+        ]);
 
+        $startTime = Carbon::parse($request->input('from'));
+        $endTime = Carbon::parse( $request->input('to'));
+        $user = User::find(auth()->user()->id);
+        $currentDate =  Carbon::now()->toDateString();
+
+        if ($startTime->gt($endTime)) {
+            $statusMessage = 'Start Time cannot be after End Time, please Insert Correct input.';
+            return redirect($this->base_url)->with('status', $statusMessage);
+        }
+    
+        if ($startTime->eq($endTime)) {
+            $statusMessage = 'Cannot have Late leave on same time';
+            return redirect($this->base_url)->with('status', $statusMessage);
+        }
+    
+
+        $existingLeave = lateAttendance::where('user_id', auth()->user()->id)
+        ->whereDate("created_at",$currentDate)
+        ->where(function ($query) use ($startTime, $endTime) {
+            $query->whereBetween('from', [$startTime, $endTime])
+                  ->orWhereBetween('to', [$startTime, $endTime])
+                  ->orWhere(function ($query) use ($startTime, $endTime) {
+                      $query->where('from', '<', $startTime)
+                            ->where('to', '>', $endTime);
+                  });
+        })
+        ->get(); // Use get() to retrieve multiple overlapping records
+
+    if ($existingLeave->count() > 0) {
+        $overlappingDates = $existingLeave->pluck('from', 'to')->toArray();
+
+        $statusMessage = 'You have overlapping leave time on ';
+        foreach ($overlappingDates as $toTime => $fromTime) {
+            $fromTimeFormatted = Carbon::parse($fromTime)->format('g:i A'); // 12-hour format
+            $toTimeFormatted = Carbon::parse($toTime)->format('g:i A');     // 12-hour format
+    
+            $statusMessage .= "{$fromTimeFormatted} to {$toTimeFormatted}, ";
+        }
+        $statusMessage = rtrim($statusMessage, ', '); // Remove trailing comma and space
+
+        return redirect($this->base_url)->with('status', $statusMessage);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-        $user = User::find(auth()->user()->id);
-        // dd($user);
-        // die;
         $lateAttendance = lateAttendance::create([
-            'date' => '1/1/21', // You may want to adjust this as needed
+            'date' => $request->input('date'),
             'from' => $request->input('from'),
             'to' => $request->input('to'),
             'reason' => $request->input('reason'),
         ]);
         $user->lateAttendance()->save($lateAttendance);
 
-        return redirect('admin/lateAttendance');
+        return redirect($this->base_url);
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
-        $lateAttendance = LateAttendance::findOrFail($id);
+        abort_if(Gate::denies('late_attendance_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $validation = $request->validate([
+            'date' => 'required',
+            'from' => 'required',
+            'to' => 'required',
+            'reason' => 'required',
+        ]);
 
-        // Check if the button clicked is for approval or rejection
-        if ($request->has('approve')) {
-            $lateAttendance->update(['approved' => 1]);
-        } elseif ($request->has('reject')) {
-            $lateAttendance->update(['approved' => -1]); // Assuming 2 represents rejection, adjust as needed
+        $startTime = Carbon::parse($request->input('from'));
+        $endTime = Carbon::parse( $request->input('to'));
+        $user = User::find(auth()->user()->id);
+        $currentDate =  Carbon::now()->toDateString();
+
+        if ($startTime->gt($endTime)) {
+            $statusMessage = 'Start Time cannot be after End Time, please Insert Correct input.';
+            return redirect($this->base_url)->with('status', $statusMessage);
         }
     
-        // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
-        if(auth()->user()->roles[0]->title == "Admin")
-        {
-            $lateAttendance->update(['approved_by' => auth()->user()->id]);
-        }
-        // Update the field 
-        if($request->reason){
-        $lateAttendance->update(['reason' => $request->reason]);
+        if ($startTime->eq($endTime)) {
+            $statusMessage = 'Cannot have Late leave on same time';
+            return redirect($this->base_url)->with('status', $statusMessage);
         }
 
-        return redirect('admin/lateAttendance');
+        $lateAttendance = LateAttendance::findOrFail($id);
+
+
+        // Update the field 
+     
+        $lateAttendance->update([
+            'date' => $request->input('date'),
+            'from' => $request->from,
+            'to' => $request->to,
+            'reason' => $request->reason
+        ]);
+        
+
+        return redirect($this->base_url);
     }
 
     /**
@@ -107,7 +148,24 @@ class LateAttendanceController extends Controller
     public function destroy(string $id)
     {
         //
+        abort_if(Gate::denies('late_attendance_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         LateAttendance::find($id)->delete();
-        return redirect('admin/lateAttendance');
+        return redirect($this->base_url);
+    }
+
+    public function massAction(Request $request)
+    {
+        abort_if(Gate::denies('late_attendance_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        
+        $massAction = $request['massAction'];
+
+        foreach ($massAction as $id) {
+            
+            LateAttendance::find($id)->delete();
+
+        }
+        return redirect($this->base_url);
+
     }
 }

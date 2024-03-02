@@ -16,8 +16,10 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{ trans('admin/user.addUser') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">{{ trans('admin/user.addUser') }}</li>
+    <li class="breadcrumb-item active">Create</li>
 @endsection
 
 @section('content')
@@ -187,7 +189,7 @@
 
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }}</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  value="{{$user->email}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                    <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                     <div class="text-danger mt-1">
                                         @error("email")
                                         {{$message}}    

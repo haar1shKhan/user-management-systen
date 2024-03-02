@@ -24,7 +24,8 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
     <li class="breadcrumb-item active">{{trans('admin/permission.permissions') }}</li>
 @endsection
 
@@ -40,8 +41,7 @@
 
                     @if(!$trash)
 
-                        <div class="d-flex justify-content-between">
-                            <h3>{{trans('admin/permission.permissionTable') }}</h3>
+                        <div class="d-flex justify-content-end">
                             <div>
 
                                 @can('permission_create')

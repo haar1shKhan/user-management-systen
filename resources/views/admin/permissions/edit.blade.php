@@ -15,8 +15,10 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{trans('admin/permission.editPermission') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">{{trans('admin/permission.editPermission') }}</li>
+    <li class="breadcrumb-item active">Edit</li>
 @endsection
 
 @section('content')
@@ -34,9 +36,9 @@
                         @method('PUT')
                         <div class="row g-3 ">
                             <div class="col-md-12 d-flex align-items-center">
-                                <label class="form-label" for="validationCustom01">{{trans('admin/permission.title') }} : </label>
+                                <label class="form-label" for="title">{{trans('admin/permission.title') }} : </label>
                                 <div class="d-flex flex-column mx-3">
-                                    <input class="form-control " id="validationCustom01" name="title" value="{{$permission->title}}" type="text" required="" data-bs-original-title="" title="">
+                                    <input class="form-control " id="title" name="title" value="{{$permission->title}}" type="text" required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("title")
@@ -44,9 +46,9 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <label class="form-label" for="validationCustom01">{{trans('admin/permission.slug') }} : </label>
+                                <label class="form-label" for="slug">{{trans('admin/permission.slug') }} : </label>
                                 <div class="d-flex flex-column mx-3">
-                                    <input class="form-control " id="validationCustom01" name="slug" value="{{$permission->slug}}" type="text" required="" data-bs-original-title="" title="">
+                                    <input class="form-control " id="slug" name="slug" value="{{$permission->slug}}" type="text" required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("slug")

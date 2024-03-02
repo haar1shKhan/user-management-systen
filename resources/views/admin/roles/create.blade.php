@@ -15,8 +15,10 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{trans('admin/role.addRole') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item ">{{trans('admin/role.addRole') }}</li>
+    <li class="breadcrumb-item active">Create</li>
 @endsection
 
 @section('content')
@@ -29,13 +31,13 @@
                     <a class="btn btn-primary" href={{"/admin"."/".$url.'s'}}>{{trans('global.back') }}</a>
                 </div>
                 <div class="card-body">
-                    <form action="{{route("admin.".$url.".store")}}" method="POST" class="needs-validation " novalidate="">
+                    <form action="{{route("admin.".$url.".store")}}" method="POST" class="needs-validation" novalidate="">
                         @csrf
                         <div class="row g-3 ">
                             <div class="col-md-12 d-flex align-items-center">
-                                <label class="form-label" for="validationCustom01">{{trans('admin/role.title') }}</label>
+                                <label class="form-label" for="title">{{trans('admin/role.title') }}</label>
                                 <div class="d-flex flex-column mx-3">
-                                    <input class="form-control " id="validationCustom01" name="title" type="text" required="" data-bs-original-title="" title="">
+                                    <input class="form-control " id="title" name="title" type="text">
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("title")
@@ -55,15 +57,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                            <?php print_r($categories)?>
                                 @foreach($categories as $category)
-                                    <div class="col">
+                                    <div class="col-4 my-4">
                                         <h6 class="permission-category">{{ $category }}</h6>
                                         @foreach($permissions as $permission)
-                                            @if (str_starts_with($permission->title, $category))
+                                            @if (str_starts_with($permission->slug, $category))
                                             
                                                 <div class="form-check checkbox checkbox-dark mb-0">
-                                                    <input class="form-check-input" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" data-bs-original-title="" title="">
+                                                    <input class="form-check-input" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" >
                                                     <label class="form-check-label" for={{"inline-".$permission->id}}>{{ $permission->title }}</label>
                                                 </div>
                                             @endif
@@ -74,7 +75,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-9 offset-md-10">
-                                <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">{{ trans('admin/role.saveRole') }}</button>
+                                <button class="btn btn-primary" type="submit" >{{ trans('admin/role.saveRole') }}</button>
                             </div>
                         </div>
                     </form>

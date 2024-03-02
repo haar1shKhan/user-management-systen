@@ -15,8 +15,10 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{trans('admin/permission.addPermission') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">{{trans('admin/permission.addPermission') }}</li>
+    <li class="breadcrumb-item active">Create</li>
 @endsection
 
 @section('content')
@@ -29,13 +31,13 @@
                     <a class="btn btn-primary" href={{"/admin"."/".$url.'s'}}>{{trans('global.back') }}</a>
                 </div>
                 <div class="card-body">
-                    <form action="{{route('admin.'.$url.".store")}}" method="POST" class="needs-validation d-flex  " novalidate="">
+                    <form action="{{route('admin.'.$url.".store")}}" method="POST" class="needs-validation d-flex needs-validation" novalidate="">
                         @csrf
                         <div class="row g-3 ">
                             <div class="col-md-12 d-flex align-items-center">
-                                <label class="form-label" for="validationCustom01">{{trans('admin/permission.title') }} : </label>
+                                <label class="form-label" for="title">{{trans('admin/permission.title') }} : </label>
                                 <div class="d-flex flex-column mx-3">
-                                    <input class="form-control " id="validationCustom01" name="title" type="text" required="" data-bs-original-title="" title="">
+                                    <input class="form-control " id="title" name="title" type="text" required >
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("title")
@@ -43,9 +45,9 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <label class="form-label" for="validationCustom01">{{trans('admin/permission.slug') }} : </label>
+                                <label class="form-label" for="slug">{{trans('admin/permission.slug') }} : </label>
                                 <div class="d-flex flex-column mx-3">
-                                    <input class="form-control " id="validationCustom01" name="slug" type="text" required="" data-bs-original-title="" title="">
+                                    <input class="form-control " id="slug" name="slug" type="text" required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("slug")
@@ -56,7 +58,7 @@
                             </div>
                         </div>
                      
-                        <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">{{trans('admin/permission.addPermission') }}</button>
+                        <button class="btn btn-primary" type="submit" >{{trans('admin/permission.addPermission') }}</button>
                     </form>
                 </div>
             </div>

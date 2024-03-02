@@ -40,8 +40,7 @@
                 <div class="card-header pb-0 card-no-border">
 
                     @if(!$trash)
-                    <div class="d-flex justify-content-between">
-                        <h3>{{trans('admin/leaveSettings/leaveEntitlement.leaveTypeTable') }}</h3>
+                    <div class="d-flex justify-content-end">
                         <div>
 
                             {{-- @can('permission_create') --}}
@@ -86,11 +85,11 @@
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <label class="form-label" for="validationCustom04">Leave Year</label>
-                                                        <select name="leave_year"  class="form-select" id="validationCustom04" >
+                                                        <label class="form-label" for="leave_year">Leave Year</label>
+                                                        <select name="leave_year"  class="form-select" id="leave_year" >
 
-                                                            <option   value="current">{{date("Y")}}</option>
-                                                            <option   value="next">{{date("Y", strtotime("+1 year"))}}</option>
+                                                            <option   value="{{date("Y")}}">{{date("Y")}}</option>
+                                                            <option   value="{{date("Y", strtotime("+1 year"))}}">{{date("Y", strtotime("+1 year"))}}</option>
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -234,8 +233,8 @@
                                                                         <div class="row">
 
                                                                             <div class="col-md-4">
-                                                                                <label class="form-label" for="validationCustom04">Leave policy</label>
-                                                                                <select name="leave_policy_id"  class="form-select" id="validationCustom04" >
+                                                                                <label class="form-label" for="leave_policy_id-{{$list->id}}">Leave policy</label>
+                                                                                <select name="leave_policy_id"  class="form-select" id="leave_policy_id-{{$list->id}}" >
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     @foreach ($leavePolicies as $policies)
@@ -253,12 +252,12 @@
                                                                             </div>
 
                                                                             <div class="col-md-4">
-                                                                                <label class="form-label" for="validationCustom04">Leave Year</label>
-                                                                                <select name="leave_year"  class="form-select" id="validationCustom04" >
+                                                                                <label class="form-label" for="leave_year-{{$list->id}}">Leave Year</label>
+                                                                                <select name="leave_year"  class="form-select" id="leave_year-{{$list->id}}" >
 
-                                                                                    <option {{$list->leave_year == "current"? "selected": ""}}   value="current">{{date("Y")}}</option>
-                                                                                    <option {{$list->leave_year == "next"? "selected": ""}}   value="next">{{date("Y", strtotime("+1 year"))}}</option>
-                                                                        
+                                                                                    <option {{ $list->leave_year == date('Y') ? 'selected' : '' }} value="{{ date('Y') }}">{{ date('Y') }}</option>
+                                                                                    <option {{ $list->leave_year == date('Y', strtotime('+1 year')) ? 'selected' : '' }} value="{{ date('Y', strtotime('+1 year')) }}">{{ date('Y', strtotime('+1 year')) }}</option>
+
                                                                                 </select>
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("leave_year")
@@ -269,8 +268,8 @@
 
 
                                                                             <div class="d-flex flex-column  col-md-4">
-                                                                                <label class="form-label" for="validationCustom01">Days</label>
-                                                                                <input class="form-control" id="validationCustom01" value="{{$list->days ?? $list->policy->days}}"  name="days" type="number"  data-bs-original-title="" title="">
+                                                                                <label class="form-label" for="days-{{$list->id}}">Days</label>
+                                                                                <input class="form-control" id="days-{{$list->id}}" value="{{$list->days ?? $list->policy->days}}"  name="days" type="number"  data-bs-original-title="" title="">
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("days")
                                                                                         {{ $message }}
@@ -279,21 +278,6 @@
                                                                             </div>
 
                                                                         </div>
-
-                                                                        {{-- <div class="row">
-                                                                            <div class="o-hidden">
-                                                                                <div class="mb-2">
-                                                                                    <div class="form-label">Default Placeholder</div>
-                                                                                    <select name="user_id[]" class="js-example-placeholder-multiple col-sm-12" multiple="multiple">
-                                                                                        @foreach ($users as $user)
-                                                                                        <option value="{{ $user->id }}">
-                                                                                            {{ $user->first_name}} {{ $user->last_name}}
-                                                                                        </option>
-                                                                                    @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div> --}}
                                                                         
                                                                     </div>
                                                             </div>

@@ -24,7 +24,7 @@ class LeavePoliciesController extends Controller
 
 
         $data['roles']=$roles;
-        $data['page_title'] = 'Leave Setting';
+        $data['page_title'] = 'Leave Manager';
         $data['leavePolicies'] = $leavePolicies;
         $data['trash'] = null;
         $data['url'] = 'leaveSettings';
@@ -50,7 +50,7 @@ class LeavePoliciesController extends Controller
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),
             'activate' => $request->input('activate'),
-            'apply_existing_users' => $request->has('existing_user'),
+            'apply_existing_users' => $request->has('existing_user'), 
         ]);
 
         // Save the leave policy
@@ -58,18 +58,54 @@ class LeavePoliciesController extends Controller
 
         $leavePolicy->save();
 
-        if($request->has('existing_user')){
-            $users = User::all();
-            foreach($users as $user){
-                LeaveEntitlement::create([
-                    'leave_policy_id' => $leavePolicy->id,
-                    'leave_year' => "current",
-                    'days' => $request->input('days'),
-                    'user_id' => $user->id,
-                ]);
-            }
+
+        if(!$request->has('existing_user')){
+            
+            return redirect("admin/leaveSettings/policies");
         }
 
+        $users = User::with("roles","profile")->get();
+
+        
+
+        if (count($users) > 0){
+            foreach ($users as $key => $user) {
+
+                $gender = $request->input('gender') ;
+                $role = $request->input('role') ;
+                $marital_status = $request->input('marital_status');
+
+               if(count($user->roles)>0){
+                    $user_role = Role::find($user->roles[0]->id);
+                }
+
+                if ($role === NULL) {
+                    $role = $user_role->title;
+                    
+                }
+                if ($gender === NULL) {
+                    $gender = $user->profile->gender;
+                    
+                }
+                if ($marital_status === NULL) {
+                    $marital_status = $user->profile->marital_status;
+                }
+
+                if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
+                    
+                    $leaveEntitlement = new LeaveEntitlement( [
+                        'leave_policy_id' => $leavePolicy->id,
+                        'leave_year' => date("Y"),
+                        'days' => $leavePolicy->days,
+                        'user_id' => $user->id,
+                    ]);
+
+                    $leaveEntitlement->save();
+                    
+                }
+            }
+        }
+        // die;
         return redirect("admin/leaveSettings/policies");
     }
 
@@ -92,6 +128,65 @@ class LeavePoliciesController extends Controller
             'activate' => $request->input('activate'),
             'apply_existing_users' => $request->has('existing_user'),
         ]);
+
+
+        // remove all policies if the existing_user is false
+        if(!$request->has('existing_user')){
+
+            $leaveEntitlement =LeaveEntitlement::where("leave_policy_id",$id)->get();
+
+            if(count($leaveEntitlement)> 0){
+                foreach($leaveEntitlement as $entitlement){
+
+                    $entitlement->delete();
+
+                }
+            }
+            
+            return redirect("admin/leaveSettings/policies");
+        }
+
+        // if the existing_user is true apply all the valid policies
+        $users = User::with("roles","profile")->get();
+        
+        if (count($users) > 0){
+            foreach ($users as $key => $user) {
+
+                $gender = $request->input('gender') ;
+                $role = $request->input('role') ;
+                $marital_status = $request->input('marital_status');
+
+               if(count($user->roles)>0){
+                    $user_role = Role::find($user->roles[0]->id);
+                }
+
+                if ($role === NULL) {
+                    $role = $user_role->title;
+                    
+                }
+                if ($gender === NULL) {
+                    $gender = $user->profile->gender;
+                    
+                }
+                if ($marital_status === NULL) {
+                    $marital_status = $user->profile->marital_status;
+                }
+
+                if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
+                    
+                    $leaveEntitlement = new LeaveEntitlement( [
+                        'leave_policy_id' => $id,
+                        'leave_year' => date("Y"),
+                        'days' => $request->input('days'),
+                        'user_id' => $user->id,
+                    ]);
+
+                    $leaveEntitlement->save();
+                    
+                }
+            }
+        }
+        // die;
 
         return redirect("admin/leaveSettings/policies");
 

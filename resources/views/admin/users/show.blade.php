@@ -19,6 +19,18 @@ form button.border-none {
 .file_view{
     cursor: pointer;
 }
+@media (min-width: 768px) {
+        h5.phone {
+            display: none; /* Hide h5 on larger screens */
+        }
+    }
+
+    /* Media query for screens smaller than 768 pixels (typical for phones) */
+    @media (max-width: 767px) {
+        h2.pc {
+            display: none; /* Hide h2 on smaller screens */
+        }
+    }
 </style>
 @endsection
 
@@ -27,24 +39,28 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item active">Users</li>
-<li class="breadcrumb-item">{{ $page_title }}</li>
+<li class="breadcrumb-item">System</li>
+<li class="breadcrumb-item">User Management</li>
+<li class="breadcrumb-item">User</li>
+<li class="breadcrumb-item active">{{ $page_title }}</li>
 @endsection
 
 @section('content')
 <div class="container card">
     <div class="card-body">
 
-        <div class="float-end mb-3 d-flex">
-            <a href="{{route('admin.user.edit',['user'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
-            <a href="{{ url('admin/users') }}" class="btn btn-primary">Back</a>
+        <div class="row ">
+            <div class=" mb-3  d-flex justify-content-end">
+                <a href="{{route('admin.user-profile.edit',['user_profile'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
+                <a href="{{ url('admin/users') }}" class="btn btn-primary">Back</a>
+            </div>
         </div>
 
         @if($user->profile->image)
             <div class="row mb-4 d-flex align-items-center">
                 <img src="{{ asset('storage/profile_images/'.$user->profile->image) }}" alt="Profile Picture" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;">
                 <div class="col-md-8">
-                    <h2>{{$user->first_name}} {{$user->last_name}} 
+                    <h2 class="pc">{{ucwords($user->first_name)}} {{ucwords($user->last_name)}}
                         @if($user->jobDetail)       
                             @if ($user->jobDetail->status == 'active')
                             <span class="text-success">(Active)</span>
@@ -57,13 +73,27 @@ form button.border-none {
                             @endif
                         @endif
                     </h2>
+                    <h5 class="phone my-2">{{ucwords($user->first_name)}} {{ucwords($user->last_name)}}
+                        @if($user->jobDetail)       
+                            @if ($user->jobDetail->status == 'active')
+                            <span class="text-success">(Active)</span>
+                            @elseif ($user->jobDetail->status == 'resigned')
+                            <span class="text-danger">(Resigned)</span>
+                            @elseif ($user->jobDetail->status=='terminated')
+                            <span class="text-danger">(Terminated)</span>
+                            @else
+                            <span class="text-muted">(Deceased)</span>
+                            @endif
+                        @endif
+                    </h5>
                     <h6>Employee ID: {{$user->id}}</h6>
                     <h6>Email: {{ $user->email }}</h6>
                     <h6>
-                     Role: @foreach($user->roles as $role)
+                        Role: @foreach($user->roles as $role)
                         {{ $role->title ?? 'N/A' }}
                         @endforeach
                     </h6>
+                    <h6>{{ $user->jobDetail->supervisor?"Reporting to: ".$user->jobDetail->supervisor->first_name." ".$user->jobDetail->supervisor->last_name:""}}</h6>
                 </div>
             </div>
             <div class="row mb-4">
@@ -74,7 +104,7 @@ form button.border-none {
             </div>
         @else
             <div class="row mb-4 d-flex align-items-center">
-            <img height="40px" width="40px" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;" src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">                
+            <img height="140px" width="150px" class="rounded-circle media profile-media" style="max-width: 150px; max-height: 150px;" src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">                
                 <div class="col-md-6">
                     <h2>{{$user->first_name}} {{$user->last_name}} 
                         @if($user->jobDetail)       
@@ -183,7 +213,12 @@ form button.border-none {
         </table>
         <div class="row my-4">
             <div class="col-md-10">
-                <h4>Passport</h4>
+                <h4>
+                    Passport
+                    @if(now()->greaterThan($user->profile->passport_expires_at))
+                        <span class="badge badge-danger">Expired</span>
+                    @endif
+                </h4>
             </div>
         </div>
         <table class="table table-bordered">
@@ -219,7 +254,12 @@ form button.border-none {
         </table>
         <div class="row my-4">
             <div class="col-md-10">
-                <h4>Emirates ID</h4>
+                    <h4>
+                        Emirates ID
+                        @if(now()->greaterThan($user->profile->nid_expires_at))
+                            <span class="badge badge-danger">Expired</span>
+                        @endif
+                    </h4>
             </div>
         </div>
         <table class="table table-bordered">
@@ -255,7 +295,12 @@ form button.border-none {
         </table>
         <div class="row my-4">
             <div class="col-md-10">
-                <h4>Visa <span class="badge badge-danger">Expired</span></h4>
+                <h4>
+                    Visa 
+                    @if(now()->greaterThan($user->profile->visa_expires_at))
+                        <span class="badge badge-danger">Expired</span>
+                    @endif
+                </h4>
             </div>
         </div>
         <table class="table table-bordered">

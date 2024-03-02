@@ -39,8 +39,7 @@
                 <div class="card-header pb-0 card-no-border">
 
                     @if(!$trash)
-                    <div class="d-flex justify-content-between">
-                        <h3>{{trans('admin/leaveSettings/leavePolicies.leaveTypeTable') }}</h3>
+                    <div class="d-flex justify-content-end">
                         <div>
 
                             {{-- @can('permission_create') --}}
@@ -65,8 +64,8 @@
 
                                                 <div class="row">
                                                     <div class="d-flex flex-column ">
-                                                        <label class="form-label" for="validationCustom01">Title</label>
-                                                        <input class="form-control" id="validationCustom01"  name="title" type="text" required="" data-bs-original-title="" title="">
+                                                        <label class="form-label" for="title">Title</label>
+                                                        <input class="form-control" id="title"  name="title" type="text" required >
                                                         <div class="text-danger mt-1">
                                                             @error("title")
                                                                 {{ $message }}
@@ -78,8 +77,8 @@
                                                 <div class="row d-flex align-items-end my-4">
 
                                                     <div class="d-flex flex-column  col-md-3">
-                                                       <label class="form-label" for="validationCustom01">Days</label>
-                                                        <input class="form-control" id="validationCustom01"  name="days" type="number" required="" data-bs-original-title="" title="">
+                                                       <label class="form-label" for="days">Days</label>
+                                                        <input class="form-control" id="days"  name="days" type="number" required >
                                                         <div class="text-danger mt-1">
                                                             @error("days")
                                                                 {{ $message }}
@@ -103,8 +102,8 @@
 
 
                                                     <div class="col-md-3">
-                                                        <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
-                                                        <select name="role"  class="form-select" id="validationCustom04">
+                                                        <label class="form-label" for="role">{{ trans('admin/user.role') }}</label>
+                                                        <select name="role"  class="form-select" id="role">
 
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             <option  value="">All</option>
@@ -123,8 +122,8 @@
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <label class="form-label" for="validationCustom04">Gender</label>
-                                                        <select name="gender"  class="form-select" id="validationCustom04" >
+                                                        <label class="form-label" for="gender">Gender</label>
+                                                        <select name="gender"  class="form-select" id="gender" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="">All</option>
@@ -140,8 +139,8 @@
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <label class="form-label" for="validationCustom04">Marital status</label>
-                                                        <select name="marital_status"  class="form-select" id="validationCustom04" >
+                                                        <label class="form-label" for="marital_status">Marital status</label>
+                                                        <select name="marital_status"  class="form-select" id="marital_status" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="">All</option>
@@ -163,8 +162,8 @@
 
                                                     <div class="col-md-3">
                                                     
-                                                        <label class="form-label" for="validationCustom04">Activate</label>
-                                                        <select name="activate"  class="form-select" id="validationCustom04" required="">
+                                                        <label class="form-label" for="activate">Activate</label>
+                                                        <select name="activate"  class="form-select" id="activate" required>
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="manual">Manually</option>
@@ -213,7 +212,7 @@
                             {{-- <a class="btn btn-danger" href="{{'/admin'.'/'.$url.'s?trash=1'}}">Trash</a> --}}
                             {{-- @can('permission_create') --}}
 
-                            <button class="btn btn-danger"  id="massActionButton" type="submit" data-bs-original-title="" title="">{{trans('global.deleteAll') }}</button>
+                            <button class="btn btn-danger"  id="massActionButton" type="submit" >{{trans('global.deleteAll') }}</button>
 
                             {{-- @endcan --}}
 
@@ -250,7 +249,8 @@
                                     <th class="col-8">Roles</th>
                                     <th class="col-8">Gender</th>
                                     <th class="col-8">Marital Status</th>
-                                    <th class="col-8">Activate For</th>
+                                    <th class="col-8">Activate</th>
+                                    <th class="col-8">Existing User</th>
 
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
@@ -286,13 +286,16 @@
                                                 <h6>{{$type->roles ?? "All" }}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->gender ?? "Both"}}</h6>
+                                                <h6>{{$type->gender ?? "All"}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->marital_status ?? "Both"}}</h6>
+                                                <h6>{{$type->marital_status ?? "All"}}</h6>
                                             </td>
                                             <td>
                                                 <h6>{{$type->activate}}</h6>
+                                            </td>
+                                            <td>
+                                                <h6>{{$type->apply_existing_users?"True":"False"}}</h6>
                                             </td>
                                             <td>
                                                 <ul class="action">
@@ -322,7 +325,7 @@
                                                                         <div class="row">
                                                                             <div class="d-flex flex-column ">
                                                                                 <label class="form-label" for="update_title-{{$type->id}}">Title</label>
-                                                                                <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required="" data-bs-original-title="" title="">
+                                                                                <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required >
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("title")
                                                                                         {{ $message }}
@@ -335,7 +338,7 @@
                         
                                                                             <div class="d-flex flex-column  col-md-3">
                                                                                <label class="form-label" for="update_days-{{$type->id}}">Days</label>
-                                                                                <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required="" data-bs-original-title="" title="">
+                                                                                <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
                                                                                 <div class="text-danger mt-1">
                                                                                     @error("days")
                                                                                         {{ $message }}
@@ -421,7 +424,7 @@
                                                                             <div class="col-md-3">
                                                                             
                                                                                 <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
-                                                                                <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required="">
+                                                                                <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required>
                                                 
                                                                                     <option selected="true" disabled value="">Choose...</option>
                                                                                     <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
@@ -455,7 +458,7 @@
                                                               </div>
                                                               <div class="modal-footer">
                                                                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                                                                <button class="btn btn-primary" type="submit">Add</button>
+                                                                <button class="btn btn-primary" type="submit">Update</button>
                                                              </div>
                                                               </form>
                         

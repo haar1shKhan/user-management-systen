@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Profile;
 
-class UserAccountController extends Controller
+class UserProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class UserAccountController extends Controller
     public function index()
     {
         //
-        $user = User::with('roles','profile','jobDetail')->find(auth()->user()->id);
+        $user = User::with('roles','profile')->find(auth()->user()->id);
 
         $data['user'] = $user;
-        $data['page_title'] = "User Account";
-        return view('admin.userAccount.index', $data);
+        $data['page_title'] = "User Profile";
+        return view('admin.user-profile.index', $data);
 
     }
 
@@ -60,9 +60,9 @@ class UserAccountController extends Controller
 
         $data['user'] = $user;
         $data['roles'] = $roles;
-        $data['page_title'] = "User Account";
+        $data['page_title'] = "Edit profile";
 
-        return view('admin.userAccount.edit', $data);
+        return view('admin.user-profile.edit', $data);
     }
 
     /**
@@ -71,9 +71,25 @@ class UserAccountController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $validation = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'gender' => 'required',
+            'marital_status' => 'required',
+            'religion' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'province' => 'required',
+            'country' => 'required',
+        ]);
+
         $user = User::find($id);
 
-
+        $user->update([
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+        ]);
 
         if($user->profile==NULL){
 
@@ -109,7 +125,7 @@ class UserAccountController extends Controller
     
             ]);
 
-            return redirect('/admin/user-account');
+            return redirect('/admin/user-profile.index');
 
         }
         
@@ -123,14 +139,24 @@ class UserAccountController extends Controller
             ]);
         }
 
+        if(empty($user->profile->date_of_birth)){
+            $user->profile->update([
+                'date_of_birth' => $request->input('date_of_birth'),
+            ]);
+        }
+
+        if(empty($user->profile->nationality)){
+            $user->profile->update([
+                'nationality' => $request->input('nationality'),
+            ]);
+        }
+
         $user->profile->update([
 
             'email' => $request->input('personal_email'),
             'phone' => $request->input('phone'),
             'mobile' => $request->input('mobile'),
-            'date_of_birth' => $request->input('date_of_birth'),
             'gender' => $request->input('gender'),
-            'nationality' => $request->input('nationality'),
             'marital_status' => $request->input('marital_status'),
             'biography' => $request->input('biography'),
             'religion' => $request->input('religion'),
@@ -142,7 +168,7 @@ class UserAccountController extends Controller
 
         ]);
 
-        return redirect('/admin/user-account');
+        return redirect('/admin/user-profile');
 
     }
 

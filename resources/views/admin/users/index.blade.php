@@ -24,8 +24,9 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
-    <li class="breadcrumb-item active">{{ trans('admin/user.user') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item active">{{ $page_title }}</li>
 @endsection
 
 @section('content')
@@ -42,31 +43,32 @@ form button.border-none {
 
 
                 <div class="card-header pb-0 card-no-border">
-
-                    <div class="d-flex justify-content-between">
+                    <div class="row">
                         @if($trash)
-                        <h3>{{ trans('global.trashTable') }}</h3>
-                        <div>
-                            <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
-                            <button class="btn btn-danger massActionButton"   type="submit"  onclick="setActionType('forceDestroyAll')" data-bs-original-title="" title="">{{ trans('global.deleteAll') }}</button>
-                            <button class="btn btn-success massActionButton"  onclick="setActionType('restoreAll')"  type="submit" data-bs-original-title="" title="">{{ trans('global.restoreAll') }}</button>
+                        <div class="d-flex justify-content-between">
+                            <h3>{{ trans('global.trashTable') }}</h3>
+                            <div>
+                                <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
+                                <button class="btn btn-danger massActionButton"   type="submit"  onclick="setActionType('forceDestroyAll')" data-bs-original-title="" title="">{{ trans('global.deleteAll') }}</button>
+                                <button class="btn btn-success massActionButton"  onclick="setActionType('restoreAll')"  type="submit" data-bs-original-title="" title="">{{ trans('global.restoreAll') }}</button>
+                            </div>
                         </div>
                         @else
-                        <h3>{{ trans('admin/user.userTable') }}</h3>
-                        <div>
-
-                            @can('user_create')
-
-                            <a class="btn btn-primary" href="{{ route('admin.user.create') }}">{{ trans('admin/user.addUser') }}</a>
-
-                            @endcan 
-
-                            @can('user_delete')
-
-                            <a class="btn btn-danger" href="/admin/users?trash=1">{{ trans('global.trash') }}</a>
-                            <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
-
-                            @endcan
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                    @can('user_create')
+                                    
+                                    <a class="btn btn-primary" href="{{ route('admin.user.create') }}">{{ trans('admin/user.addUser') }}</a>
+                                    
+                                    @endcan 
+                                    
+                                    @can('user_delete')
+                                    
+                                    <a class="btn btn-danger" href="/admin/users?trash=1">{{ trans('global.trash') }}</a>
+                                    <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
+                                    
+                                    @endcan
+                            </div>
 
                         </div>
                         @endif
@@ -119,7 +121,7 @@ form button.border-none {
 
                                             <td>{{$user->id}}</td>
                                             <td>
-                                               <h6><a style="color: black" href="{{route('admin.user.show',['user'=>$user->id])}}">{{$user->first_name}} {{$user->last_name}}</a></h6>
+                                               <h6><a style="color: black" href="{{route('admin.user.show',['user'=>$user->id])}}">{{ucwords($user->first_name)}} {{ucwords($user->last_name)}}</a></h6>
                                             </td>
                                             <td>{{$user->email}}</td>
                                             <td>

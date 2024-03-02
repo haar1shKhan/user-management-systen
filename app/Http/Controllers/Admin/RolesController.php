@@ -50,26 +50,41 @@ class RolesController extends Controller
 
         $permissions = Permission::all();
         
-        $categories = [];
+        // $categories = [];
         
-        foreach ($permissions as $item) {
+        // foreach ($permissions as $item) {
 
-            //$parts = explode('_', $item['slug']);
-            $permission_title = $item->title;
+        //     //$parts = explode('_', $item['slug']);
+        //     $permission_title = $item->title;
 
-            $str = preg_replace('/\W\w+\s*(\W*)$/','$1',$permission_title);
+        //     $str = preg_replace('/\W\w+\s*(\W*)$/','$1',$permission_title);
             
-            // $words =  array_splice($parts, 0, -1);
-            // $category = "";
+        //     // $words =  array_splice($parts, 0, -1);
+        //     // $category = "";
 
-            // foreach ($words as $value) {
-            //     $category .= $value." ";
-            // }
+        //     // foreach ($words as $value) {
+        //     //     $category .= $value." ";
+        //     // }
            
-            if (!in_array($str, $categories)) {
-                $categories[] = $str;
+        //     if (!in_array($str, $categories)) {
+        //         $categories[] = $str;
+        //     }
+        // }
+
+        $categories=[];
+
+        foreach ($permissions as $item) {
+            $parts = explode('_', $item['slug']);
+        
+            // Assuming the base name is the first part of the title
+            $baseName = $parts[0];
+        
+            // Add to the permissions array
+            if (!in_array($baseName, $categories)) {
+                $categories[] = $baseName;
             }
         }
+        
         $data['permissions'] = $permissions;
         $data['categories'] = $categories;
         $data['url'] = 'role';
@@ -152,7 +167,7 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request,string $id)
     {
    
         $role=Role::with('permissions')->find($id);
