@@ -198,14 +198,6 @@ form button.border-none {
                     <td>{{ $user->jobDetail->job_type ?? 'N/A' }}</td>
                 </tr>
                 <tr>
-                    <th>Education</th>
-                    <td>{{ $user->jobDetail->education ?? 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <th>Work Expirence</th>
-                    <td>{{ $user->jobDetail->work_experience ?? 'N/A' }}</td>
-                </tr>
-                <tr>
                     <th>Salary</th>
                     <td>{{ $user->jobDetail->salary ?? 'N/A' }}</td>
                 </tr>

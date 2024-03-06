@@ -126,24 +126,13 @@ class LeavePoliciesController extends Controller
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),
             'activate' => $request->input('activate'),
-            'apply_existing_users' => $request->has('existing_user'),
         ]);
 
 
-        // remove all policies if the existing_user is false
         if(!$request->has('existing_user')){
-
-            $leaveEntitlement =LeaveEntitlement::where("leave_policy_id",$id)->get();
-
-            if(count($leaveEntitlement)> 0){
-                foreach($leaveEntitlement as $entitlement){
-
-                    $entitlement->delete();
-
-                }
-            }
             
             return redirect("admin/leaveSettings/policies");
+
         }
 
         // if the existing_user is true apply all the valid policies

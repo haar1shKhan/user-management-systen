@@ -16,8 +16,6 @@ class JobDetail extends Model
         'source_of_hire',
         'job_type',
         'status',
-        'education',
-        'work_experience',
         'salary',
         'iban',
         'bank_name',

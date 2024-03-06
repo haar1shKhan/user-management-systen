@@ -250,7 +250,6 @@
                                     <th class="col-8">Gender</th>
                                     <th class="col-8">Marital Status</th>
                                     <th class="col-8">Activate</th>
-                                    <th class="col-8">Existing User</th>
 
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
@@ -293,9 +292,6 @@
                                             </td>
                                             <td>
                                                 <h6>{{$type->activate}}</h6>
-                                            </td>
-                                            <td>
-                                                <h6>{{$type->apply_existing_users?"True":"False"}}</h6>
                                             </td>
                                             <td>
                                                 <ul class="action">

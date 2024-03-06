@@ -15,17 +15,24 @@ use App\Http\Controllers\Admin\UsersController;
 |
 */
 
+Auth::routes(['register'=>false]);
+
 Route::get('/', function () {
-     return redirect()->route('admin.dashboard');
+    if(Gate::denies('dashboard_access')){
+        return redirect()->route('admin.longLeave');
+    }
+    return redirect()->route('admin.dashboard');
 })->name('/');
 
-Auth::routes(['register'=>false]);
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Http\Controllers\Admin')->group( function () {
 
     Route::get('/', function () {
+        if(Gate::denies('dashboard_access')){
+            return redirect()->route('admin.longLeave');
+        }
         return redirect()->route('admin.dashboard');
-   })->name('index');
+    })->name('index');
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
@@ -117,8 +124,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'store' => 'feedback.store',
     ]);
 
-    //passport
-    Route::resource('passport', App\Http\Controllers\Admin\PassportController::class)->except([
+    //passport DISABLED
+    /* Route::resource('passport', App\Http\Controllers\Admin\PassportController::class)->except([
         'show', // If you don't have a show method in your controller
     ])->names([
         'index' => 'passport',
@@ -127,7 +134,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'edit' => 'passport.edit',
         'update' => 'passport.update',
         'destroy' => 'passport.destroy',
-    ]);
+    ]); */
 
     Route::resource('change-password', App\Http\Controllers\Admin\changePasswordController::class)->except([
         'show', // If you don't have a show method in your controller
@@ -241,8 +248,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     ]);
 
 
-    
-    Route::get('maintanance/backup', [App\Http\Controllers\Admin\MaintananceController::class,'backup'])->name('backup');
-    Route::get('maintanance/error-log', [App\Http\Controllers\Admin\MaintananceController::class,'error'])->name('error.log');
+    //DISABLED
+    /* Route::get('maintanance/backup', [App\Http\Controllers\Admin\MaintananceController::class,'backup'])->name('backup');
+    Route::get('maintanance/error-log', [App\Http\Controllers\Admin\MaintananceController::class,'error'])->name('error.log'); */
 });
 

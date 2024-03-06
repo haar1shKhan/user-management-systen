@@ -57,7 +57,7 @@ form button.border-none {
               <form>
                 <div class="row mb-2">
                   <div class="profile-title">
-                    @if ($user->profile->image)   
+                    @if (!empty($user->profile->image))   
                     <div class="media">
                         <img height="90px" width="100px" class=" rounded-circle" alt="" src="{{ asset('storage/profile_images/'.$user->profile->image) }}">
                         <div class="media-body">

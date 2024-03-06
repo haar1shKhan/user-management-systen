@@ -20,7 +20,6 @@ class LeavePolicies extends Model
         'gender',
         'marital_status',
         'activate',
-        'apply_existing_users',
     ];
 
     // Relationships

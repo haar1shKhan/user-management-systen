@@ -86,10 +86,6 @@ class UserProfileController extends Controller
 
         $user = User::find($id);
 
-        $user->update([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-        ]);
 
         if($user->profile==NULL){
 
@@ -98,14 +94,9 @@ class UserProfileController extends Controller
                 $fileName = $user->id . '.' . $request->image->extension();
                 $request->file('image')->storeAs('public/profile_images', $fileName);
         
-                // Update profile data with the new image
-                $user->profile->update([
-                    'image' => $fileName,
-                    'user_id' => $user->id,
-                ]);
             }
     
-                Profile::create([
+            Profile::create([
     
                 'email' => $request->input('personal_email'),
                 'phone' => $request->input('phone'),
@@ -125,7 +116,7 @@ class UserProfileController extends Controller
     
             ]);
 
-            return redirect('/admin/user-profile.index');
+            return redirect('/admin/user-profile');
 
         }
         
@@ -150,6 +141,7 @@ class UserProfileController extends Controller
                 'nationality' => $request->input('nationality'),
             ]);
         }
+        
 
         $user->profile->update([
 
@@ -165,8 +157,11 @@ class UserProfileController extends Controller
             'city' => $request->input('city'),
             'province' => $request->input('province'),
             'country' => $request->input('country'),
+            'image' => $fileName,
+
 
         ]);
+           // Update profile data with the new image
 
         return redirect('/admin/user-profile');
 

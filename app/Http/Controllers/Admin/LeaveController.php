@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,6 +8,8 @@ use App\Models\LeavePolicies;
 use App\Models\LeaveEntitlement;
 use App\Models\longLeave;
 use Carbon\Carbon;
+use App\Mail\LeaveRequestMail;
+use Mail;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -217,6 +219,17 @@ class LeaveController extends Controller
         'reason' => $request->input("comment"),
         // Other leave-related data
     ]);
+
+    $data =[
+        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+        'leave_type' => $userEntitlement->policy->title,
+        'start_date' => date("d/m/Y", strtotime($startDate)),
+        'end_date' => date("d/m/Y", strtotime($endDate)),
+        'reason' => $request->input("comment"),
+        'admin' => config('settings.store_owmer'),
+    ];
+
+    Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));
 
     return redirect($this->base_url);
 

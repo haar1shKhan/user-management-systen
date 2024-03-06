@@ -2,9 +2,10 @@
     <div>
         <div class="logo-wrapper">
             <a href="{{ route('/') }}">
-                <img class="img-fluid for-light" src="{{ asset('assets/images/logo/logo.png') }}" alt="">
-                {{-- <img class="img-fluid for-light" src="{{asset(config('settings.site_logo'))}}" alt=""> --}}
-                <img class="img-fluid for-dark" src="{{ asset('assets/images/logo/logo_dark.png') }}" alt="">
+                {{-- <img class="img-fluid for-light" src="{{ asset('assets/images/logo/logo.png') }}" alt=""> --}}
+                <img class="img-fluid for-light" src="{{asset(config('settings.site_logo'))}}" alt="">
+                <img class="img-fluid  for-dark" src="{{asset(config('settings.site_logo'))}}" alt="">
+                {{-- <img class="img-fluid for-dark" src="{{ asset('assets/images/logo/logo_dark.png') }}" alt=""> --}}
             </a>
             <div class="back-btn">
                 <i class="fa fa-angle-left"></i>
@@ -38,6 +39,7 @@
                         </div>
                     </li>
 
+                    @can("dashboard_access")      
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.dashboard') }}">
                             <svg class="stroke-icon">
@@ -49,7 +51,9 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
+                    @endcan
 
+                    @can('leave_management_access')    
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
@@ -61,20 +65,28 @@
 
                             <span>Leave management</span></a>
                         <ul class="sidebar-submenu">
+                            @can('long_leave_access')
                             <li>
                                 <a class="" href="{{ route('admin.longLeave') }}">Request for Leave</a>
                             </li>
+                            @endcan
+                            @can('late_attendance_access')
                             <li>
                                 <a class="" href="{{ route('admin.lateAttendance') }}">Late Attendance</a>
                             </li>
+                            @endcan
+                            @can('short_leave_access')
                             <li>
                                 <a class="" href="{{ route('admin.short-leave') }}">Short Leave</a>
                             </li>
+                            @endcan
                             {{-- <li><a class="" href="{{ route('admin.break') }}">Break</a></li> --}}
 
                         </ul>
                     </li>
+                    @endcan
 
+                    @can('leave_request_access')       
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.globalLeave') }}">
                             <svg class="stroke-icon">
@@ -86,7 +98,9 @@
                             <span>Leave Requests</span>
                         </a>
                     </li>
+                    @endcan
 
+                    @can("leave_manager_access")   
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
@@ -99,15 +113,22 @@
                             <span>Leave Manager</span>
                         </a>
                         <ul class="sidebar-submenu">
+                            @can('leave_policy_access')
                             <li>
                                 <a href="{{ route('admin.leaveSettings.leavePolicies') }}">Leave Policies</a>
                             </li>
+                            @endcan
+                            @can('leave_entitlement_access')
                             <li>
                                 <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}">Leave Entitlement</a>
                             </li>
+                            @endcan
                         </ul>
                     </li>
+                    @endcan
 
+
+                    @can('system_access')
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
@@ -118,12 +139,14 @@
                             </svg>
                             <span>System</span>
                         </a>
-
+                            
                         <ul class="sidebar-submenu">
+                            @can('setting_access')
                             <li>
                                 <a href="{{ route('admin.settings') }}">Settings</a>
                             </li>
-
+                            @endcan
+                            @can('user_management_access')
                             <li>
                                 <a class="submenu-title" href="#">
                                     User management
@@ -132,23 +155,34 @@
                                     </span>
                                 </a>
                                 <ul class="nav-sub-childmenu submenu-content">
+                                    @can('user_access')
                                     <li><a class="lan-5" href="{{ route('admin.users') }}">Users</a></li>
+                                    @endcan
+                                    @can('role_access')
                                     <li><a class="" href="{{ route('admin.roles') }}">Roles</a></li>
+                                    @endcan
+                                    @can('permission_access')
                                     <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
+                                    @endcan
                                 </ul>
                             </li>
-                            <li><a class="submenu-title" href="#">Maintanance<span class="sub-arrow"><i
+                            @endcan
+
+                            {{-- MAINTANANCE PAGES DISABLED --}}
+                            {{-- <li><a class="submenu-title" href="#">Maintanance<span class="sub-arrow"><i
                                             class="fa fa-angle-right"></i></span></a>
                                 <ul class="nav-sub-childmenu submenu-content">
                                     <li><a href="{{ route('admin.backup') }}">Backup</a></li>
                                     <li><a href="{{ route('admin.error.log') }}">Error Log</a></li>
                                 </ul>
-                            </li>
-                            {{-- <li><a href="{{ route('admin.datatable-ext-autofill') }}">Ex. Data Tables</a></li> --}}
+                            </li> --}}
                         </ul>
                     </li>
+                    @endcan
 
-                    <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"
+
+                    {{-- DISBALED --}}
+                    {{-- <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"
                             href="{{ route('admin.passport') }}">
                             <svg class="stroke-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-form') }}"></use>
@@ -157,7 +191,7 @@
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-form') }}"></use>
                             </svg>
                             <span>Passport Application</span></a>
-                    </li>
+                    </li>  --}}
 
 
 

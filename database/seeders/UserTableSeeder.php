@@ -17,7 +17,14 @@ class UserTableSeeder extends Seeder
                 'last_name'               => 'Due',
                 'email'              => 'admin@admin.com',
                 'password'           => bcrypt('password'),
-                #'approved'           => 1,
+                'email_verified_at'        => '2022-06-28 21:44:12',
+            ],
+            [
+                'id'                 => 2,
+                'first_name'               => 'Sam',
+                'last_name'               => 'Due',
+                'email'              => 'empolyee@empolyee.com',
+                'password'           => bcrypt('password'),
                 'email_verified_at'        => '2022-06-28 21:44:12',
             ],
         ];

@@ -19,12 +19,11 @@
 @section('breadcrumb-items')
     <li class="breadcrumb-item">System</li>
     <li class="breadcrumb-item">User Management</li>
-    <li class="breadcrumb-item">{{ trans('admin/user.addUser') }}</li>
-    <li class="breadcrumb-item active">Create</li>
+    <li class="breadcrumb-item active">Create User</li>
 @endsection
 
 @section('content')
-{{-- <div class="container-fluid">
+<div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -33,7 +32,8 @@
 					<span>Please Make sure fill all the filed before click on next button</span>
 				</div>
 				<div class="card-body">
-					<form class="form-wizard" id="regForm" action="#" method="POST">
+					<form class="form-wizard" id="regForm" action="{{route("admin.user.store")}}" method="POST" enctype="multipart/form-data">
+                        @csrf
 						<div class="tab">
                             <div class="row g-2">
 							    <div class="mb-3 col-md-6">
@@ -55,7 +55,7 @@
 							</div>
                             <div class="mb-3">
 								<label for="email">Email address</label>
-								<input class="form-control" type="email" id="email" value="{{old('email')}}" required>
+								<input class="form-control" type="email" id="email" name="email" value="{{old('email')}}" required>
                                 @error("email")
                                 <div class="invalid-feedback">{{$message}}</div>
                                 @enderror
@@ -88,13 +88,11 @@
 							</div>
 						</div>
 						<div class="tab">
-<<<<<<< HEAD
                             <h5 class="my-3">User personal Details</h5>
 							<div class="row g-3">
 							    <div class="mb-3 col-md-4">
                                     <label class="form-label" for="role">Role</label>
                                     <select name="role" class="form-select" id="role" required>
-                                        <option selected>Choose a Role...</option>
                                         @foreach ($roles as $key => $role)
                                             <option value="{{ $role->id }}" @if (old('role') == $role->id) selected @endif>
                                                 {{ $role->title }}
@@ -102,131 +100,9 @@
                                          @endforeach
 
                                     </select>
-=======
-							<div class="mb-3">
-								<label class="control-label">Country</label>
-								<input class="form-control mt-1" type="text" placeholder="Country" required="required">
-							</div>
-							<div class="mb-3">
-								<label class="control-label">State</label>
-								<input class="form-control mt-1" type="text" placeholder="State" required="required">
-							</div>
-							<div class="mb-3">
-								<label class="control-label">City</label>
-								<input class="form-control mt-1" type="text" placeholder="City" required="required">
-							</div>
-						</div>
-						<div>
-							<div class="text-end btn-mb">
-								<button class="btn btn-secondary" id="prevBtn" type="button" onclick="nextPrev(-1)">Previous</button>
-								<button class="btn btn-primary" id="nextBtn" type="button" onclick="nextPrev(1)">Next</button>
-							</div>
-						</div>
-						<!-- Circles which indicates the steps of the form:-->
-						<div class="text-center"><span class="step"></span><span class="step"></span><span class="step"></span><span class="step"></span></div>
-						<!-- Circles which indicates the steps of the form:-->
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> --}}
-<div class="container-fluid">
-    <div class="row starter-main">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5>{{ trans('admin/user.addUser') }}</h5>
-                    <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
-                </div>
-                <div class="card-body">
-                    
-                    <form action="{{route("admin.user.store")}}" method="POST" class="needs-validation @if(count($errors)>0)was-validated @endif" enctype="multipart/form-data" novalidate="">
-                        @csrf
-
-                        <h5 class="my-3">User personal Detail</h5>
-
-                        <div class="row my-4">
-
-                            <div class="col-md-6">
-                                <label class="col-sm-3 col-form-label">Profile picture</label>
-                                <input name="image" class="form-control" type="file">
-                                @error("image")
-                                <div class="invalid-feedback"> {{$message}} </div> 
-                                @enderror
-                            </div>
-
-
-                        </div>
-                        
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <label class="form-label" for="validationCustom01">First Name</label>
-                                <input class="form-control" id="validationCustom01" name="first_name"  type="text"  required="" data-bs-original-title="" title="">
-                                {{-- <div class="valid-feedback">Looks good!</div> --}}
-                                <div class="text-danger mt-1">
-                                    @error("first_name")
-                                    {{$message}}    
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label class="form-label" for="validationCustom01">Last Name</label>
-                                <input class="form-control" id="validationCustom01" name="last_name"  type="text"  required="" data-bs-original-title="" title="">
-                                {{-- <div class="valid-feedback">Looks good!</div> --}}
-                                <div class="text-danger mt-1">
-                                    @error("last_name")
-                                    {{$message}}    
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
-                                <select name="role"  class="form-select" id="validationCustom04" required="">
-                                    <option selected="true"  value="2">Choose...</option>
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}">
-                                            {{ $role->title }}
-                                        </option>
-                                     @endforeach
-                        
-                                </select>
-                                <div class="text-danger mt-1">
->>>>>>> 2e871a24ec3e841efa1b2bea68bd1fcf722d1355
                                     @error("role")
                                      <div class="invalid-feedback">{{$message}}</div>   
                                     @enderror
-<<<<<<< HEAD
-=======
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <div class="row g-3">
-
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }}</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
-                                    <div class="text-danger mt-1">
-                                        @error("email")
-                                        {{$message}}    
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{old('email')}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
-                                    
-                                        @error("personal_email")
-                                        {{$message}}    
-                                        @enderror
-            
-    
->>>>>>> 2e871a24ec3e841efa1b2bea68bd1fcf722d1355
                                 </div>
 							    <div class="mb-3 col-md-4">
                                     <label for="date_of_birth" class="form-label">Date of birth</label>
@@ -241,7 +117,7 @@
                                     <label class="form-label" for="gender">Gender</label>
                                     <select name="gender"  class="form-select" id="gender" required>
 
-                                        <option selected disabled>Choose a gender...</option>
+                                        <option selected value="">Choose a gender...</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                         
@@ -257,7 +133,7 @@
 							    <div class="mb-3 col-md-4">
                                     <label class="form-label" for="marital_status">Marital status</label>
                                     <select name="marital_status"  class="form-select" id="marital_status" required>
-                                        <option selected disabled>Choose...</option>
+                                        <option selected value="">Choose...</option>
                                         <option value="Bachelor">Bachelor</option>
                                         <option value="Married">Married</option>
                                     </select>
@@ -275,8 +151,8 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="religion">Religion</label>
-                                    <input class="form-control" id="religion" type="text" name="religion" value="{{old('religion')}}"  required>
+                                    <label class="form-label" for="religion">Religion (optional)</label>
+                                    <input class="form-control" id="religion" type="text" name="religion" value="{{old('religion')}}">
                                 
                                     @error("religion")  
                                     <div class="invalid-feedback">{{$message}}</div>   
@@ -331,9 +207,9 @@
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label" for="source_of_hire">Source Of Hiring</label>
-                                    <select name="source_of_hire" class="form-select" id="source_of_hire" required>
-                                        <option selected disabled>Choose...</option>
+                                    <label class="form-label" for="source_of_hire">Source Of Hiring (optional)</label>
+                                    <select name="source_of_hire" class="form-select" id="source_of_hire" >
+                                        <option selected value="">Choose...</option>
                                         <option value="direct">Direct</option>
                                         <option value="refaral">Refaral</option>
                                         <option value="online">Online</option>
@@ -346,7 +222,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="job_type">Job Type</label>
                                     <select name="job_type" class="form-select" id="job_type" required>
-                                        <option selected disabled>Choose...</option>
+                                        <option selected value="">Choose...</option>
                                         <option   value="full_time">Full time</option>
                                         <option   value="part_time">Part time</option>
                                         <option   value="contract">Contract</option>
@@ -383,7 +259,7 @@
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="supervisor_id">Reporting to</label>
-                                    <select id="supervisor_id" name="supervisor_id" class="js-example-basic-single">
+                                    <select id="supervisor_id" name="supervisor_id" class="js-example-basic-single" required>
                                         @foreach ($supervisors as $supervisors)
                                         <option value="{{ $supervisors->id }}">
                                             {{ $supervisors->first_name}} {{ $supervisors->last_name}}
@@ -594,13 +470,11 @@
                             <h5 class="my-3">Bank Details</h5>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="validationCustom04">Payment method</label>
-                                    <select name="payment_method"  class="form-select" id="validationCustom04" required="">
-
-                                        <option selected="true" disabled value="">Choose...</option>
-                                        <option   value="cash">cash</option>
-                                        <option   value="bank_transfer">Bank Transfer</option>
-
+                                    <label class="form-label" for="payment_method">Payment method</label>
+                                    <select name="payment_method"  class="form-select" id="payment_method" required>
+                                        <option selected="true" value="">Choose...</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
                                     </select>
                                     <div class="text-danger mt-1">
                                         @error("payment_method")
@@ -608,27 +482,27 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">Bank Name</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="bank_name" value="{{old('bank_name')}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                <div class="col-md-6 mb-3 bank_name">
+                                    <label class="form-label" for="bank_name">Bank Name</label>
+                                    <input class="form-control" id="bank_name" type="text" name="bank_name" value="{{old('bank_name')}}">
                                     <div class="text-danger mt-1">
                                         @error("bank_name")
                                         {{$message}}    
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">Bank Account Number</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="bank_account_number" value="{{old('bank_account_number')}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                <div class="col-md-6 mb-3 bank_account_number">
+                                    <label class="form-label" for="bank_account_number">Bank Account Number</label>
+                                    <input class="form-control" id="bank_account_number" type="text" name="bank_account_number" value="{{old('bank_account_number')}}">
                                     <div class="text-danger mt-1">
                                         @error("bank_account_number")
                                         {{$message}}    
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">IBAN</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="iban" value="{{old('iban')}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                <div class="col-md-6 mb-3 iban">
+                                    <label class="form-label" for="iban">IBAN</label>
+                                    <input class="form-control" id="iban" type="text" name="iban" value="{{old('iban')}}">
                                     <div class="text-danger mt-1">
                                         @error("iban")
                                         {{$message}}    
@@ -659,74 +533,7 @@
 		</div>
 	</div>
 </div>
-<div class="container-fluid">
-    <div class="row starter-main">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <h5>{{ trans('admin/user.addUser') }}</h5>
-                    <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
-                </div>
-                <div class="card-body">
-                    
-                    <form action="{{route("admin.user.store")}}" method="POST" class="needs-validation @if(count($errors)>0)was-validated @endif" enctype="multipart/form-data" novalidate="">
-                        @csrf
 
-                        <h5 class="my-3">User personal Detail</h5>
-
-                        
-
-                        
-
-                        <div class="row">
-
-                            <div class="col-md-9">
-
-                                <div class="row">
-                                    <div class="o-hidden">
-                                        <div class="mb-2">
-                                            <div class="form-label">Reporting To</div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-9">
-                                
-                                    
-        
-                            </div>
-
-                        </div>
-
-
-                       
-
-                        
-
-
-                    <h5 class="my-3">User Password</h5>
-
-
-                         
-
-
-                        <div class="row">
-                            <div class="col-md-9 offset-md-10">
-                                <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">{{ trans('admin/user.addUser') }}</button>
-                            </div>
-                        </div>
-                     </form>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-</div>
     <script type="text/javascript">
         var session_layout = '{{ session()->get('layout') }}';
     </script>
@@ -740,6 +547,21 @@
 <script src="{{asset('assets/js/select2/select2-custom.js')}}"></script>
 <script src="{{asset('assets/js/form-wizard/form-wizard.js')}}"></script>
 <script type="text/javascript">
+    $('.bank_account_number').css('display','none')
+    $('.bank_name').css('display','none')
+    $('.iban').css('display','none')
+    $('#payment_method').change( e => {
+        let value = $('#payment_method').val();
+        if (value === 'Cash') {
+            $('.bank_account_number').css('display','none')
+            $('.bank_name').css('display','none')
+            $('.iban').css('display','none')
+        }else{
+            $('.bank_account_number').css('display','block')
+            $('.bank_name').css('display','block')
+            $('.iban').css('display','block')
+        }
+    });
     $('#image').change( e => {
         var reader = new FileReader();
         reader.onload = function(){

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('marital_status')->nullable();
             $table->enum('activate', ['manual', 'immediately_after_hiring']);
-            $table->boolean('apply_existing_users')->default(false);
             $table->timestamps();
         });
     }

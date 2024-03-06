@@ -11,6 +11,8 @@ use App\Models\LateAttendance;
 use App\Models\longLeave;
 use App\Models\User;
 use Carbon\Carbon;
+use illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class GlobalLeaveController extends Controller
@@ -22,7 +24,8 @@ class GlobalLeaveController extends Controller
 
     public function index()
     {
-        //
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $longLeaves = LongLeave::orderBy('id', 'desc')->get();
         $shortLeave = ShortLeave::orderBy('id', 'desc')->get();
         $lateAttendances = LateAttendance::orderBy('id', 'desc')->get();
@@ -74,7 +77,8 @@ class GlobalLeaveController extends Controller
 
     public function update(Request $request, string $id)
     {
-        //
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         if(auth()->user()->roles[0]->title != "Admin"){
             return redirect('admin/globalLeave');
         }
@@ -209,6 +213,7 @@ class GlobalLeaveController extends Controller
 
     public function massAction(Request $request)
     {
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $massAction = $request['massAction'];
         

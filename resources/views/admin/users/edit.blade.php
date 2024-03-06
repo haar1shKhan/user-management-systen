@@ -361,26 +361,6 @@
                         <div class="row">
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Education</label>
-                                <input class="form-control" id="validationCustom" type="text" name="education" value="{{$user->jobDetail->education ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
-                                <div class="text-danger mt-1">
-                                    @error("education")
-                                    {{$message}}    
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Work experience</label>
-                                <input class="form-control" id="validationCustom" type="number" name="work_experience" value="{{$user->jobDetail->work_experience ?? 0}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
-                                <div class="text-danger mt-1">
-                                    @error("work_experience")
-                                    {{$message}}    
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3 mb-3">
                                 <label class="form-label" for="validationCustomEmail">Salary</label>
                                 <input class="form-control" id="validationCustom" type="number" name="salary" value="{{$user->jobDetail->salary ?? 0}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">

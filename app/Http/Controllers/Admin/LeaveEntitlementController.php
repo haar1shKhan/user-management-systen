@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\LeaveEntitlement;
 use App\Models\LeavePolicies;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class LeaveEntitlementController extends Controller
 {
@@ -16,7 +17,8 @@ class LeaveEntitlementController extends Controller
      */
     public function index()
     {
-        //
+        abort_if(Gate::denies('leave_entitlement_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $leaveEntitlement = LeaveEntitlement::with("policy","user")->get();
         $leavePolicies = LeavePolicies::get();
         $users = User::get();
@@ -44,7 +46,7 @@ class LeaveEntitlementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort_if(Gate::denies('leave_entitlement_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
           // Create a new LeaveEntitlement instance
           $users = $request->input("user_id");
 
@@ -86,7 +88,7 @@ class LeaveEntitlementController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort_if(Gate::denies('leave_entitlement_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $leaveEntitlement = LeaveEntitlement::findOrFail($id);
 
         $leaveEntitlement -> update([
@@ -105,16 +107,17 @@ class LeaveEntitlementController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort_if(Gate::denies('leave_entitlement_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         LeaveEntitlement::find($id)->delete();
-
+        
         return redirect('admin/leaveSettings/leaveEntitlement');
-
+        
     }
-
-
+    
+    
     public function massAction(Request $request)
     {
+        abort_if(Gate::denies('leave_entitlement_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $massAction = $request['massAction'];
 
         foreach ($massAction as $id) {
