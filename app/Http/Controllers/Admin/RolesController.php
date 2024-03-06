@@ -167,7 +167,11 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
+<<<<<<< HEAD
+    public function update(Request $request, string $id)
+=======
     public function update(Request $request,string $id)
+>>>>>>> 2e871a24ec3e841efa1b2bea68bd1fcf722d1355
     {
    
         $role=Role::with('permissions')->find($id);

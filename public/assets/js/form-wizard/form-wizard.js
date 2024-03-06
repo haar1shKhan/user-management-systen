@@ -32,9 +32,15 @@ function validateForm() {
   x = document.getElementsByClassName("tab");
   y = x[currentTab].getElementsByTagName("input");
   for (i = 0; i < y.length; i++) {
-    if (y[i].value == "") {
+    let confirm_password = document.getElementById('password_confirmation')
+    if (y[i].type === "password" && confirm_password.value != "" && y[i].value != confirm_password.value) {
+      confirm_password.value = "";
+    }
+    if (y[i].required && y[i].value == "") {
       y[i].className += " invalid";
       valid = false;
+      document.getElementById('regForm').classList.add('needs-validation')
+      document.getElementById('regForm').classList.add('was-validated')
     }
   }
   if (valid) {
