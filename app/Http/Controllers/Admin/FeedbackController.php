@@ -32,13 +32,13 @@ class FeedbackController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
+    {
     // Validate the incoming request data if needed
 
     $reqType = $request->input('requestType');
-    $address = $request->input('address');
+    $subject = $request->input('address');
     $chooseFile = $request->file('chooseFile');
-    $topic = $request->input('topic');
+    $message = $request->input('topic');
 
     // Check if a file is provided
     // if ($chooseFile) {
@@ -52,15 +52,15 @@ class FeedbackController extends Controller
     //     $attachmentData = null; // No attachment provided
     // }
 
-    $mailData = [
+    $data = [
+        'subject' => $subject,
         'reqType' => $reqType,
-        'address' => $address,
-        'topic' => $topic,
+        'message' => $message,
         // 'attachments' => $attachmentData,
     ];
 
     // Send email with attachment
-    Mail::to('haarishkhan13@gmail.com')->send(new FeedbackMail($mailData));
+    Mail::to('haarishkhan13@gmail.com')->send(new FeedbackMail($data));
 
     // Optionally, you can check if the email was sent successfully
     // if (count(Mail::failures()) > 0) {

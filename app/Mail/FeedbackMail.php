@@ -14,15 +14,19 @@ class FeedbackMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $mailData;
+    public $subject;
+    public $slot;
+    public $reqType;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($mailData)
+    public function __construct($data)
     {
         //
-        $this->mailData = $mailData;
+        $this->subject = $data['subject'];
+        $this->slot = $data['message'];
+        $this->reqType = $data['reqType'];
     }
 
     /**
@@ -31,7 +35,7 @@ class FeedbackMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Feedback Mail',
+            subject: 'New '.$this->reqType.' - '.$this->subject,
         );
     }
 

@@ -211,6 +211,7 @@ class GlobalLeaveController extends Controller
     {
 
         $massAction = $request['massAction'];
+        
         if($request->action_type == "accept_all"){
 
             foreach ($massAction as $id) {

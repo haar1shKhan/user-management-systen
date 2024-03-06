@@ -1,16 +1,27 @@
-@component('vendor.mail.html.layout')
+<x-mail::layout>
+{{-- Header --}}
+<x-slot:header>
+<x-mail::header :url="config('app.url')">
+{{ config('app.name') }}
+</x-mail::header>
+</x-slot:header>
 
-@component('vendor.mail.html.header',["url"=>""])
-{{$mailData['reqType']}}
-@endcomponent
+{{-- Body --}}
+{{ $slot }}
 
-@component("vendor.mail.html.message")
-{{$mailData['topic']}}
-@endcomponent
+{{-- Subcopy --}}
+@isset($subcopy)
+<x-slot:subcopy>
+<x-mail::subcopy>
+{{ $subcopy }}
+</x-mail::subcopy>
+</x-slot:subcopy>
+@endisset
 
-@component('vendor.mail.html.footer')
-{{$mailData['address']}}
-@endcomponent
-
-
-@endcomponent
+{{-- Footer --}}
+<x-slot:footer>
+<x-mail::footer>
+© {{ date('Y') }} {{ config('app.name') }}. @lang('All rights reserved.')
+</x-mail::footer>
+</x-slot:footer>
+</x-mail::layout>
