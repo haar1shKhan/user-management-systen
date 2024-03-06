@@ -15,7 +15,9 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">User</li>
     <li class="breadcrumb-item active">{{ trans('admin/user.editUser') }}</li>
 @endsection
 

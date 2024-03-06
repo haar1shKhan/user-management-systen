@@ -15,8 +15,10 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{trans('admin/role.editRole') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">{{trans('admin/role.editRole') }}</li>
+    <li class="breadcrumb-item active">Edit</li>
 @endsection
 
 @section('content')
@@ -34,8 +36,8 @@
                         @method('PUT')
                         <div class="row g-3 ">
                             <div class="col-md-6 d-flex align-items-center">
-                                <label class="form-label" for="validationCustom01">{{trans('admin/role.title') }}</label>
-                                <input class="form-control mx-3" id="validationCustom01" name="title" type="text" value="{{$role->title}}" required="" data-bs-original-title="" title="">
+                                <label class="form-label" for="title">{{trans('admin/role.title') }}</label>
+                                <input class="form-control mx-3" id="title" name="title" type="text" value="{{$role->title}}" required >
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
                                     @error("title")
@@ -62,7 +64,7 @@
                                             @if (str_starts_with($permission->slug, strtolower($category)))
                                             
                                                 <div class="form-check checkbox checkbox-dark mb-0">
-                                                    <input class="form-check-input select" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" data-bs-original-title="" title=""
+                                                    <input class="form-check-input select" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" 
                                                         @if ($role->permissions->pluck('id')->contains($permission->id))
                                                             checked
                                                         @endif
@@ -78,7 +80,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-9 offset-md-10">
-                                <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">{{trans('admin/role.saveRole') }}</button>
+                                <button class="btn btn-primary" type="submit" >{{trans('admin/role.saveRole') }}</button>
                             </div>
                         </div>
                     </form>

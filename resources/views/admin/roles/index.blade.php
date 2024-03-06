@@ -24,7 +24,9 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
+    {{-- <li class="breadcrumb-item">{{ $page_title }}</li> --}}
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
     <li class="breadcrumb-item active">{{trans('admin/role.roles') }}</li>
 @endsection
 
@@ -41,21 +43,22 @@
                 <div class="card-header pb-0 card-no-border">
 
                     @if(!$trash)
-                    <div class="d-flex justify-content-between">
-                        <h3>{{trans('admin/role.roleTable') }}</h3>
-                        <div>
-                            @can('role_create')
+                    <div class="row">
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                @can('role_create')
+                                    
+                                <a class="btn btn-primary" href="{{'/admin'.'/'.$url.'s/create'}}">{{trans('admin/role.addRole') }}</a>
                                 
-                             <a class="btn btn-primary" href="{{'/admin'.'/'.$url.'s/create'}}">{{trans('admin/role.addRole') }}</a>
-                            
-                            @endcan
+                                @endcan
 
-                            @can('role_delete')
+                                @can('role_delete')
 
-                              <a class="btn btn-danger" href="{{'/admin'.'/'.$url.'s?trash=1'}}">{{trans('global.trash') }}</a>
-                              <button class="btn btn-danger massActionButton"  onclick="setActionType('destroyAll')"  type="submit" data-bs-original-title="" title="">{{trans('global.deleteAll') }}</button>
-                              
-                            @endcan
+                                <a class="btn btn-danger" href="{{'/admin'.'/'.$url.'s?trash=1'}}">{{trans('global.trash') }}</a>
+                                <button class="btn btn-danger massActionButton"  onclick="setActionType('destroyAll')"  type="submit" data-bs-original-title="" title="">{{trans('global.deleteAll') }}</button>
+                                
+                                @endcan
+                            </div>
                         </div>
                     </div>
                     @else

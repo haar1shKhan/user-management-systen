@@ -3,8 +3,7 @@
 @section('title', 'Default')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/image-cropper.css')}}">
 @endsection
 
 @section('style')
@@ -54,34 +53,41 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item active">{{ $page_title }}</li>
     {{-- <li class="breadcrumb-item active">{{trans('admin/permission.permissions') }}</li> --}}
 @endsection
 
 @section('content')
 
     <div class="container-fluid">
-        <div class="row">
+
+        <form  enctype="multipart/form-data" action="{{route("admin.setting.update",['setting'=>'1'])}}" method="POST" class="row">
+            @method("PUT")
+            @csrf
 
             <!-- Zero Configuration  Starts-->
-            <div class="col-sm-12 col-xxl-6">
+            <div class=" col-xxl-12">
+
                 <div class="card">
-                    <div class="card-header">
-                        <h5>Settings</h5>
+                    <div class="card-header d-flex justify-content-end">
+                            <div class="">
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-tabs border-tab nav-primary" id="top-tab" role="tablist">
 
 
                             <li class="nav-item">
-                                <a class="nav-link active" id="profile-top-tab" data-bs-toggle="tab" href="#top-store"
+                                <a class="nav-link active" id="profile-store-tab" data-bs-toggle="tab" href="#top-store"
                                     role="tab" aria-controls="top-store" aria-selected="true"><i
-                                        class="icofont icofont-man-in-glasses"></i>Store</a>
+                                        class="icofont icofont-ui-home"></i>Store</a>
                             </li>
 
 
                             <li class="nav-item">
-                                <a class="nav-link " id="top-home-tab" data-bs-toggle="tab" href="#top-logo"
+                                <a class="nav-link " id="profile-logo-tab" data-bs-toggle="tab" href="#top-logo"
                                     role="tab" aria-controls="top-home" aria-selected="false">
                                     <i class="icofont icofont-layout"></i>
                                     logo
@@ -90,29 +96,84 @@
 
 
                             <li class="nav-item">
-                                <a class="nav-link" id="contact-top-tab" data-bs-toggle="tab" href="#top-email" role="tab" aria-controls="top-email" aria-selected="false">
+                                <a class="nav-link" id="profile-email-tab" data-bs-toggle="tab" href="#top-email" role="tab" aria-controls="top-email" aria-selected="false">
                                     <i class="icofont icofont-email"></i>Mail
                                 </a>
                             </li>
 
 
                         </ul>
-                        <form action="{{route("admin.setting.update",['setting'=>'1'])}}" method="POST">
-                            @method("PUT")
-                            @csrf
 
+                        <div>
                         <div class="tab-content" id="top-tabContent">
 
                       
-                            <div class="tab-pane fade " id="top-logo" role="tabpanel" aria-labelledby="top-home-tab">
+                            <div class="tab-pane fade " id="top-logo" role="tabpanel" aria-labelledby="profile-logo-tab">
                                 
-                                logo
+                                <div class="row my-4">
+                                    {{-- Meta icon start --}}
+                                    
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Icon</h5>
+                                        <div class="my-3">
+                                            <img class="img-100" id="site-icon-preview" src="{{asset(config('settings.site_icon'))}}"/>
+                                        </div>
+                                        <label for="site_icon" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-icon-preview" name="site_icon" style="display: none;" id="site_icon" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("meta_icon")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Logo</h5>
+                                        <div class="my-3">
+                                            <img class="img-100" id="site-logo-preview" src="{{asset(config('settings.site_logo'))}}"/>
+                                        </div>
+                                        <label for="site_logo" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-logo-preview" name="site_logo" style="display: none;" id="site_logo" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("site_logo")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <h5>Site Email</h5>
+                                        <div class="my-3">
+                                            <img class="img-100" id="site-email-preview" src="{{asset(config('settings.site_email'))}}"/>
+                                        </div>
+                                        <label for="site_email" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-email-preview" name="site_email" style="display: none;" id="site_email" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("site_email")
+                                        <div class="invalid-feedback"> {{$message}} </div> 
+                                        @enderror
+                                    </div>
+                                    
+                                    <div class="col-xl-9 col-md-12 docs-buttons">
+                                        <!-- Show the cropped image in modal-->
+                                        <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
+                                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                    </div>
+                                                    <div class="modal-body"></div>
+                                                    <div class="modal-footer">
+                                                        <button class="btn btn-primary" type="button" data-dismiss="modal">Close</button><a class="btn btn-outline-primary" id="download" href="javascript:void(0);" download="cropped.jpg') }}">Download</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /.modal-->
+                                    </div>                                   
+                                    {{-- Meta icon end --}}
+        
+                                </div>
 
                             </div>
 
 
                             <div class="tab-pane fade show active" id="top-store" role="tabpanel"
-                                aria-labelledby="profile-top-tab">
+                                aria-labelledby="profile-store-tab">
                                     
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_name">Store Name</label>
@@ -214,7 +275,7 @@
 
 
                             <div class="tab-pane fade" id="top-email" role="tabpanel"
-                                aria-labelledby="contact-top-tab">
+                                aria-labelledby="profile-email-tab">
                                    
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_name">SMTP Hostname</label>
@@ -258,7 +319,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <label class="form-label" for="store_owner">SMTP Timeout {{ config('mail.mailers.smtp.password') }}</label>
+                                            <label class="form-label" for="store_owner">SMTP Timeout</label>
                                             <input class="form-control" id="store_owner" name="mail_smtp_timeout" value="{{ Config::get('settings.mail_smtp_timeout') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
@@ -270,19 +331,12 @@
 
                                     </div>
 
-                                    <div class="row mt-2">
-                                        <div class="col-md-9 offset-md-10">
-                                            <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">Submit</button>
-                                        </div>
-                                    </div>
-
                             </div>
 
-                        </form>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
             <!-- Zero Configuration  Ends-->
 
         </div>
@@ -295,6 +349,28 @@
 
 @section('script')
     <script>
+
+        let fileInput = $('.file-input');
+        fileInput.each(element => {
+            $(this).change(function(e){
+                let file = e.target.files[0];
+                let preview = $('#'+e.target.getAttribute("data-preview"));
+                var reader = new FileReader();
+
+                if (file) {
+                    
+                    reader.onload = function(e){
+                        preview.attr('src', reader.result);
+                    }
+                
+                    reader.readAsDataURL(file);
+                } else {
+                  preview.src = "";
+                }
+            }) 
+        });
+
+
         function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -313,6 +389,6 @@
         }
     }
     </script>
-    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+   <script src="{{asset('assets/js/image-cropper/cropper.js')}}"></script>
+   <script src="{{asset('assets/js/image-cropper/cropper-main.js')}}"></script>
 @endsection

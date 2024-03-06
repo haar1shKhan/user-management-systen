@@ -3,8 +3,8 @@
 @section('title', 'Default')
 
 @section('css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/animate.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/prism.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/prism.css') }}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/select2.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/date-picker.css')}}">
 @endsection
@@ -17,12 +17,14 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">Dashboard</li>
-    <li class="breadcrumb-item active">{{ trans('admin/user.addUser') }}</li>
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item">User Management</li>
+    <li class="breadcrumb-item">{{ trans('admin/user.addUser') }}</li>
+    <li class="breadcrumb-item active">Create</li>
 @endsection
 
 @section('content')
-<div class="container-fluid">
+{{-- <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="card">
@@ -86,6 +88,7 @@
 							</div>
 						</div>
 						<div class="tab">
+<<<<<<< HEAD
                             <h5 class="my-3">User personal Details</h5>
 							<div class="row g-3">
 							    <div class="mb-3 col-md-4">
@@ -99,9 +102,131 @@
                                          @endforeach
 
                                     </select>
+=======
+							<div class="mb-3">
+								<label class="control-label">Country</label>
+								<input class="form-control mt-1" type="text" placeholder="Country" required="required">
+							</div>
+							<div class="mb-3">
+								<label class="control-label">State</label>
+								<input class="form-control mt-1" type="text" placeholder="State" required="required">
+							</div>
+							<div class="mb-3">
+								<label class="control-label">City</label>
+								<input class="form-control mt-1" type="text" placeholder="City" required="required">
+							</div>
+						</div>
+						<div>
+							<div class="text-end btn-mb">
+								<button class="btn btn-secondary" id="prevBtn" type="button" onclick="nextPrev(-1)">Previous</button>
+								<button class="btn btn-primary" id="nextBtn" type="button" onclick="nextPrev(1)">Next</button>
+							</div>
+						</div>
+						<!-- Circles which indicates the steps of the form:-->
+						<div class="text-center"><span class="step"></span><span class="step"></span><span class="step"></span><span class="step"></span></div>
+						<!-- Circles which indicates the steps of the form:-->
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> --}}
+<div class="container-fluid">
+    <div class="row starter-main">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5>{{ trans('admin/user.addUser') }}</h5>
+                    <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
+                </div>
+                <div class="card-body">
+                    
+                    <form action="{{route("admin.user.store")}}" method="POST" class="needs-validation @if(count($errors)>0)was-validated @endif" enctype="multipart/form-data" novalidate="">
+                        @csrf
+
+                        <h5 class="my-3">User personal Detail</h5>
+
+                        <div class="row my-4">
+
+                            <div class="col-md-6">
+                                <label class="col-sm-3 col-form-label">Profile picture</label>
+                                <input name="image" class="form-control" type="file">
+                                @error("image")
+                                <div class="invalid-feedback"> {{$message}} </div> 
+                                @enderror
+                            </div>
+
+
+                        </div>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label" for="validationCustom01">First Name</label>
+                                <input class="form-control" id="validationCustom01" name="first_name"  type="text"  required="" data-bs-original-title="" title="">
+                                {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                <div class="text-danger mt-1">
+                                    @error("first_name")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label" for="validationCustom01">Last Name</label>
+                                <input class="form-control" id="validationCustom01" name="last_name"  type="text"  required="" data-bs-original-title="" title="">
+                                {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                <div class="text-danger mt-1">
+                                    @error("last_name")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
+                                <select name="role"  class="form-select" id="validationCustom04" required="">
+                                    <option selected="true"  value="2">Choose...</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}">
+                                            {{ $role->title }}
+                                        </option>
+                                     @endforeach
+                        
+                                </select>
+                                <div class="text-danger mt-1">
+>>>>>>> 2e871a24ec3e841efa1b2bea68bd1fcf722d1355
                                     @error("role")
                                      <div class="invalid-feedback">{{$message}}</div>   
                                     @enderror
+<<<<<<< HEAD
+=======
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row g-3">
+
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }}</label>
+                                    <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                    <div class="text-danger mt-1">
+                                        @error("email")
+                                        {{$message}}    
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
+                                    <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{old('email')}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                    
+                                        @error("personal_email")
+                                        {{$message}}    
+                                        @enderror
+            
+    
+>>>>>>> 2e871a24ec3e841efa1b2bea68bd1fcf722d1355
                                 </div>
 							    <div class="mb-3 col-md-4">
                                     <label for="date_of_birth" class="form-label">Date of birth</label>

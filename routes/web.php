@@ -56,11 +56,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'user.update',
         'destroy' => 'user.destroy',
     ]);
+
     
     Route::get('user/restore/{user}', [App\Http\Controllers\Admin\UsersController::class,'restore'])->name('user.restore');
     Route::delete('user/forceDelete/{user}', [App\Http\Controllers\Admin\UsersController::class,'forceDelete'])->name('user.forceDelete');
     Route::post('user/massAction', [App\Http\Controllers\Admin\UsersController::class,'massAction'])->name('user.massAction');
     
+    Route::resource('user-profile', App\Http\Controllers\admin\UserProfileController::class)->names([
+        'index' => 'user-profile',
+        'create' => 'user-profile.create',
+        'show' => 'user-profile.show',
+        'store' => 'user-profile.store',
+        'edit' => 'user-profile.edit',
+        'update' => 'user-profile.update',
+        'destroy' => 'user-profile.destroy',
+    ]);
+
     //Roles
     Route::resource('roles', App\Http\Controllers\Admin\RolesController::class)->except([
         'show', 
@@ -118,6 +129,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'passport.destroy',
     ]);
 
+    Route::resource('change-password', App\Http\Controllers\Admin\changePasswordController::class)->except([
+        'show', // If you don't have a show method in your controller
+    ])->names([
+        'index' => 'change-password',
+        'create' => 'change-password.create',
+        'store' => 'change-password.store',
+        'edit' => 'change-password.edit',
+        'update' => 'change-password.update',
+        'destroy' => 'change-password.destroy',
+    ]);
+
     //Leave
     Route::resource('longLeave', App\Http\Controllers\Admin\LeaveController::class)->except([
         'show', // If you don't have a show method in your controller
@@ -162,6 +184,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'lateAttendance.update',
         'destroy' => 'lateAttendance.destroy',
     ]);
+
+    Route::post('lateAttendance/massAction', [App\Http\Controllers\Admin\LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
+
 
 
     Route::resource('localization/longLeave', App\Http\Controllers\Admin\localization\LocalizationLeaveController::class)->except([

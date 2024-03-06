@@ -55,8 +55,8 @@ form button.border-none {
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom01">{{ trans('admin/passport.passportNumber') }}</label>
-                                    <input class="form-control" id="validationCustom01" name="passportNumber" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="passportNumber">{{ trans('admin/passport.passportNumber') }}</label>
+                                    <input class="form-control" id="passportNumber" name="passportNumber" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("passportNumber")
@@ -66,8 +66,8 @@ form button.border-none {
                                 </div>
                            
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom02">{{ trans('admin/passport.employeeNumber') }}</label>
-                                    <input class="form-control" id="validationCustom02" name="address" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="employeeNumber">{{ trans('admin/passport.employeeNumber') }}</label>
+                                    <input class="form-control" id="employeeNumber" name="employeeNumber" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("employeeNumber")
@@ -79,8 +79,8 @@ form button.border-none {
                             <div class="row my-3">
 
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom03">{{ trans('admin/passport.employeeName') }}</label>
-                                    <input class="form-control" id="validationCustom03" name="passportNumber" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="employeeName">{{ trans('admin/passport.employeeName') }}</label>
+                                    <input class="form-control" id="employeeName" name="employeeName" type="text"  required>
                                     <div class="text-danger mt-1">
                                         @error("employeeName")
                                         {{$message}}    
@@ -89,8 +89,8 @@ form button.border-none {
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom04">{{ trans('admin/role.role') }}</label>
-                                    <input class="form-control" id="validationCustom04" name="passportNumber" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="role">{{ trans('admin/role.role') }}</label>
+                                    <input class="form-control" id="role" name="role" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("role")
@@ -100,8 +100,8 @@ form button.border-none {
                                 </div>
                            
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom05">{{ trans('admin/passport.partSection') }}</label>
-                                    <input class="form-control" id="validationCustom05" name="address" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="partSection">{{ trans('admin/passport.partSection') }}</label>
+                                    <input class="form-control" id="partSection" name="partSection" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("partSection")
@@ -114,8 +114,8 @@ form button.border-none {
                             <div class="row my-3">
 
                                 <div class="col-md-2">
-                                    <label class="form-label" for="validationCustom06">{{ trans('admin/passport.numberOfDays') }}</label>
-                                    <input class="form-control" id="validationCustom06" name="numberOfDays" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="numberOfDays">{{ trans('admin/passport.numberOfDays') }}</label>
+                                    <input class="form-control" id="numberOfDays" name="numberOfDays" type="text"  required>
                                     <div class="text-danger mt-1">
                                         @error("numberOfDays")
                                         {{$message}}    
@@ -124,8 +124,8 @@ form button.border-none {
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom07">{{ trans('admin/passport.returnDate') }}</label>
-                                    <input class="form-control" id="validationCustom07" name="returnDate" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="returnDate">{{ trans('admin/passport.returnDate') }}</label>
+                                    <input class="form-control" id="returnDate" name="returnDate" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("returnDate")
@@ -135,8 +135,8 @@ form button.border-none {
                                 </div>
                            
                                 <div class="col-md-2">
-                                    <label class="form-label" for="validationCustom08">{{ trans('admin/passport.replyStatus') }}</label>
-                                    <input class="form-control" id="validationCustom08" disabled name="replyStatus" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="replyStatus">{{ trans('admin/passport.replyStatus') }}</label>
+                                    <input class="form-control" id="replyStatus" disabled name="replyStatus" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("replyStatus")
@@ -146,8 +146,8 @@ form button.border-none {
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label class="form-label" for="validationCustom08">{{ trans('admin/passport.clearanceForm') }}</label>
-                                    <input class="form-control" id="validationCustom08" disabled name="clearanceForm" type="text"  required="" data-bs-original-title="" title="">
+                                    <label class="form-label" for="clearanceForm">{{ trans('admin/passport.clearanceForm') }}</label>
+                                    <input class="form-control" id="clearanceForm" disabled name="clearanceForm" type="text"  required>
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("clearanceForm")
@@ -171,8 +171,8 @@ form button.border-none {
                                 <div class="row" id="passportExchangeFields">
 
                                         <div class="col-md-3">
-                                            <label class="form-label" for="validationCustom09">{{ trans('admin/passport.passportExchange') }}</label>
-                                            <input class="form-control" id="validationCustom09" name="passportNumber" type="text"  required="" data-bs-original-title="" title="">
+                                            <label class="form-label" for="passportExchange">{{ trans('admin/passport.passportExchange') }}</label>
+                                            <input class="form-control" id="passportExchange" name="passportNumber" type="text"  required>
                                             <div class="text-danger mt-1">
                                                 @error("passportExchange")
                                                 {{$message}}    
@@ -181,8 +181,8 @@ form button.border-none {
                                         </div>
                                         
                                         <div class="col-md-3">
-                                            <label class="form-label" for="validationCustom10">{{ trans('admin/passport.passportNameExchange') }}</label>
-                                            <input class="form-control" id="validationCustom10" name="passportNumber" type="text"  required="" data-bs-original-title="" title="">
+                                            <label class="form-label" for="passportNameExchange">{{ trans('admin/passport.passportNameExchange') }}</label>
+                                            <input class="form-control" id="passportNameExchange" name="passportNumber" type="text"  required>
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("passportNameExchange")
@@ -192,8 +192,8 @@ form button.border-none {
                                         </div>
                                 
                                         <div class="col-md-3">
-                                            <label class="form-label" for="validationCustom11">{{ trans('admin/passport.relationship') }}</label>
-                                            <input class="form-control" id="validationCustom11" name="address" type="text"  required="" data-bs-original-title="" title="">
+                                            <label class="form-label" for="relationship">{{ trans('admin/passport.relationship') }}</label>
+                                            <input class="form-control" id="relationship" name="address" type="text"  required>
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("relationship")
@@ -207,8 +207,8 @@ form button.border-none {
                                 <div class="row my-3">
                                     <div class="col-md-8">
                                         <div>
-                                            <label class="form-label" for="exampleFormControlTextarea14">{{ trans('admin/passport.reason')}}</label>
-                                            <textarea name="reason" class="form-control btn-square" id="exampleFormControlTextarea14" rows="8"></textarea>
+                                            <label class="form-label" for="reason">{{ trans('admin/passport.reason')}}</label>
+                                            <textarea name="reason" class="form-control btn-square" id="reason" rows="8"></textarea>
                                           </div>
                                         {{-- <div class="valid-feedback">Looks good!</div> --}}
                                         <div class="text-danger mt-1">

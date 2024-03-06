@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         if (Schema::hasTable('settings')) {
+            
             foreach (Setting::all() as $setting) {
                 Config::set($setting->code.'.'.$setting->key, $setting->value);
             }

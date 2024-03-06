@@ -79,10 +79,47 @@ class SettingController extends Controller
         unset($data['_method']);
         unset($data["_token"]);
         foreach ($data as $key => $value){
-            $setting = Setting::where('key','=', $key)->where('code','=', "settings")->firstOrFail();
+            $setting = Setting::where('key','=', $key)->where('code','=', "settings")->first();
+            // echo '<pre>';
+            // echo  $key;
+            // echo "<br>";
+            // echo  $setting;
+            // echo "<br>";
+            // echo  $value;
+            // echo "<br>";
+            // echo "<br>";
+            if ($key == "site_icon") {
+                $fileName = 'site_icon.' . $request->site_icon->extension();
+                $request->file('site_icon')->storeAs('public/site_images', $fileName);
+        
+                // Update profile data with the new image
+                $setting->value = "storage/site_images/".$fileName;
+                $setting->save();
+                continue; 
+            }
+            if ($key == "site_logo") {
+                $fileName = 'site_logo.' . $request->site_logo->extension();
+                $request->file('site_logo')->storeAs('public/site_images', $fileName);
+        
+                // Update profile data with the new image
+                $setting->value = 'storage/site_images/'. $fileName;
+                $setting->save();
+                continue;
+            }
+            if ($key == "site_email") {
+                $fileName = 'site_email.' . $request->site_email->extension();
+                $request->file('site_email')->storeAs('public/site_images', $fileName);
+        
+                // Update profile data with the new image
+                $setting->value = "storage/site_images/".$fileName;
+                $setting->save();
+                continue;
+            }
+
             $setting->value = $value;
             $setting->save();
         }
+        // die;
         return redirect($this->base_url);
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\LeaveEntitlement;
+use App\Models\Role;
 
 class LeavePolicies extends Model
 {
@@ -26,5 +27,10 @@ class LeavePolicies extends Model
     public function leaveEntitlements()
     {
         return $this->hasMany(LeaveEntitlement::class);
+    }
+
+    public function Roles()
+    {
+        return $this->hasMany(Role::class);
     }
   }

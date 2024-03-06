@@ -30,7 +30,7 @@
 
 @section('content')
 @if (session('status'))
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-warning" role="alert">
         {{ session('status') }}
     </div>
 @endif
@@ -47,19 +47,18 @@
 
                 <div class="card-header pb-0 card-no-border">
 
-                    <div class="d-flex justify-content-between">
-                        
-                        <h3>Short Leave History</h3>
+                    <div class="row">  
+                        <div class="d-flex justify-content-end">
                         <div>
 
                             @can('short_leave_create')
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Apply</button>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Apply Leave</button>
                            
                             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">Apply Short Leave</h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
@@ -69,9 +68,15 @@
 
                                        <div class="modal-body">
                                             <div class="">
-                                    
-                                                <h6>Vactions</h6>
-                        
+
+                                                     <div>
+                                                         <div class="col-md-4">
+                                                             <label class="col-form-label">Date</label>
+                                                             <div class="col-sm-12">
+                                                                 <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="date" name="date" required>
+                                                             </div>
+                                                         </div>   
+                                                    </div>
                         
                                                     <div class="row" id="shortLeaveFields">
                                                         <div class="col-md-4">
@@ -89,7 +94,6 @@
                                                     </div>
                                                     
 
-                        
                                                    <div class="row">
                                                        <div class="col">
                                                        <div>
@@ -118,6 +122,7 @@
                             <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
                             @endcan
 
+                        </div>
                         </div>
                     </div>
                         
@@ -171,7 +176,7 @@
                                             <td>{{$list->id}}</td>
 
                                             <td>
-                                                {{$list->user->first_name}} {{$list->user->last_name}}
+                                                {{ucwords($list->user->first_name)}} {{ucwords($list->user->last_name)}}
                                             </td>
                                             <td>
                                                 {{ date('d/m/Y', strtotime($list->date)) }}
@@ -193,7 +198,7 @@
                                               
                                             </td>
                                             <td>
-                                                  {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                                                {{ucwords(optional($list->approvedBy)->first_name) . ' ' . ucwords(optional($list->approvedBy)->last_name) ?? 'Not Approved' }}
                                             </td>
 
                                             <td>
@@ -206,24 +211,51 @@
                                                         </button>
                                                     </li>
                                                     <div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-dialog modal-lg" role="document">
                                                             <form action="{{ route('admin.'.$url.'.update', ['short_leave' => $list->id]) }}" method="POST" class="modal-content">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Update Title</h5>
+                                                                    <h5 class="modal-title">Update Short Leave</h5>
                                                                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    <div class="d-flex flex-column mx-3">
-                                                                        <label class="form-label" for="exampleFormControlTextarea4">Reason</label>
-                                                                        <textarea class="form-control" name="reason" id="exampleFormControlTextarea4" rows="3" required>{{ $list->reason }}</textarea>
-                                                                        <div class="text-danger mt-1">
-                                                                            @error("reason")
-                                                                                {{ $message }}
-                                                                            @enderror
+                                                                    <div class="">
+
+                                                                        <div>
+                                                                            <div class="col-md-4">
+                                                                                <label class="col-form-label">Date</label>
+                                                                                <div class="col-sm-12">
+                                                                                    <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="date" name="date" required>
+                                                                                </div>
+                                                                            </div>   
+                                                                       </div>
+
+                                                                        <div class="row" id="shortLeaveFields">
+                                                                            <div class="col-md-4">
+                                                                                <label class="col-form-label">From</label>
+                                                                                <div class="col-sm-12">
+                                                                                    <input class="form-control digits" value="{{$list->from}}" type="time" name="from" required>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-4">
+                                                                                <label class="col-form-label">To</label>
+                                                                                <div class="col-sm-12">
+                                                                                    <input class="form-control digits" value="{{$list->to}}" type="time" name="to" required>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
+                                            
+                                                                       <div class="row">
+                                                                           <div class="col">
+                                                                           <div>
+                                                                               <label class="form-label" for="reason">Reason</label>
+                                                                               <textarea class="form-control" name="reason" id="reason" rows="3" required>{{$list->reason}}</textarea>
+                                                                           </div>
+                                                                           </div>
+                                                                       </div>
+                                                                       
+                                                                 </div>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>

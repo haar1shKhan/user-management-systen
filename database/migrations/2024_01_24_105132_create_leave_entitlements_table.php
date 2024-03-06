@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('leave_entitlements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('leave_policy_id')->constrained('leave_policies')->onDelete('cascade');
-            $table->enum('leave_year', ['current', 'next']);
+            $table->year('leave_year');
             $table->integer('days')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->integer('leave_taken')->default(0);

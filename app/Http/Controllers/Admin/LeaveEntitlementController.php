@@ -20,9 +20,8 @@ class LeaveEntitlementController extends Controller
         $leaveEntitlement = LeaveEntitlement::with("policy","user")->get();
         $leavePolicies = LeavePolicies::get();
         $users = User::get();
-        $users = User::get();
 
-        $data['page_title'] = 'Leave Setting';
+        $data['page_title'] = 'Leave Manager';
         $data['leaveEntitlement'] = $leaveEntitlement;
         $data['leavePolicies'] = $leavePolicies;
         $data['users'] = $users;
