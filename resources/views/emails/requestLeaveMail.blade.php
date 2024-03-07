@@ -9,13 +9,13 @@
 {{-- Body --}}
 ## Hi {{ $admin }},
                         
-#### {{ $username }} has requested {{$leave_type}},
+#### {{ $username }} has requested {{$leave_type}} {{$date ? "on " .$date: "" }},
     
     
 | Type          | {{$leave_type}}  |
-| -             |-                   |
-| Start Date:   | {{$start_date}}  |
-| End Date:     | {{$end_date}}    |
+| -             |-                 |
+| From:         | {{$start_date}}  |
+| To:           | {{$end_date}}    |
 | Reason        | {{$reason}}      |
     
     

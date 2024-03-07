@@ -1,8 +1,11 @@
 <?php
 
+namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Admin\UsersController;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,26 +21,31 @@ use App\Http\Controllers\Admin\UsersController;
 Auth::routes(['register'=>false]);
 
 Route::get('/', function () {
-    if(Gate::denies('dashboard_access')){
-        return redirect()->route('admin.longLeave');
-    }
-    return redirect()->route('admin.dashboard');
+    return redirect()->route('admin.index');
 })->name('/');
 
 
 Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Http\Controllers\Admin')->group( function () {
 
     Route::get('/', function () {
-        if(Gate::denies('dashboard_access')){
-            return redirect()->route('admin.longLeave');
+        if(Gate::denies('leave_management_access')){
+            return redirect()->route('admin.dashboard');
         }
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.longLeave');
     })->name('index');
+
+    /*-------------
+    |  DASHBOARD  |
+    -------------*/
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
-    Route::resource('short-leave', App\Http\Controllers\Admin\ShortLeaveController::class)->except([
-        'show', // If you don't have a show method in your controller
+    /*---------------
+    |  SHORT LEAVE  |
+    ---------------*/
+
+    Route::resource('short-leave', ShortLeaveController::class)->except([
+        'show',
     ])->names([
         'index' => 'short-leave',
         'create' => 'short-leave.create',
@@ -46,13 +54,51 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         'update' => 'short-leave.update',
         'destroy' => 'short-leave.destroy',
     ]);
-    Route::post('short-leave/mass-delete', [App\Http\Controllers\Admin\ShortLeaveController::class,'massDelete'])->name('user.massDelete');
-
-});
-
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-
+    Route::post('short-leave/mass-delete', [ShortLeaveController::class,'massDelete'])->name('user.massDelete');
     
+    /*-------------------
+    |  LATE ATTENDANCE  |
+    -------------------*/
+    
+    Route::resource('late-attendance', LateAttendanceController::class)->except([
+        'show', 
+    ])->names([
+        'index' => 'lateAttendance',
+        'create' => 'lateAttendance.create',
+        'store' => 'lateAttendance.store',
+        'edit' => 'lateAttendance.edit',
+        'update' => 'lateAttendance.update',
+        'destroy' => 'lateAttendance.destroy',
+    ]);
+    Route::post('lateAttendance/massAction', [LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
+
+    /*---------------
+    |  GLOBAL LEAVE  |
+    ----------------*/
+
+    Route::resource('globalLeave', GlobalLeaveController::class)->except([
+        'show', 
+    ])->names([
+        'index' => 'globalLeave',
+        'create' => 'globalLeave.create',
+        'store' => 'globalLeave.store',
+        'edit' => 'globalLeave.edit',
+        'update' => 'globalLeave.update',
+        'destroy' => 'globalLeave.destroy',
+    ]);
+
+    Route::post('globalLeave/massAction', [GlobalLeaveController::class,'massAction'])->name('globalLeave.massAction');
+ 
+    /*------------
+    |  FEEDBACK  |
+    ------------*/
+    
+    Route::get('feedback', [FeedbackController::class, 'show'])->name('feedback');
+    Route::post('feedback', [FeedbackController::class, 'send'])->name('feedback.send');
+    
+    /*---------
+    |  USERS  |
+    ---------*/
 
     Route::resource('users', UsersController::class)->names([
         'index' => 'users',
@@ -63,24 +109,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'user.update',
         'destroy' => 'user.destroy',
     ]);
-
+    Route::get('user/restore/{user}', [UsersController::class,'restore'])->name('user.restore');
+    Route::delete('user/forceDelete/{user}', [UsersController::class,'forceDelete'])->name('user.forceDelete');
+    Route::post('user/massAction', [UsersController::class,'massAction'])->name('user.massAction');
     
-    Route::get('user/restore/{user}', [App\Http\Controllers\Admin\UsersController::class,'restore'])->name('user.restore');
-    Route::delete('user/forceDelete/{user}', [App\Http\Controllers\Admin\UsersController::class,'forceDelete'])->name('user.forceDelete');
-    Route::post('user/massAction', [App\Http\Controllers\Admin\UsersController::class,'massAction'])->name('user.massAction');
-    
-    Route::resource('user-profile', App\Http\Controllers\Admin\UserProfileController::class)->names([
-        'index' => 'user-profile',
-        'create' => 'user-profile.create',
-        'show' => 'user-profile.show',
-        'store' => 'user-profile.store',
-        'edit' => 'user-profile.edit',
-        'update' => 'user-profile.update',
-        'destroy' => 'user-profile.destroy',
-    ]);
+    /*---------
+    |  ROLES  |
+    ---------*/
 
-    //Roles
-    Route::resource('roles', App\Http\Controllers\Admin\RolesController::class)->except([
+    Route::resource('roles', RolesController::class)->except([
         'show', 
     ])->names([
         'index' => 'roles',
@@ -94,14 +131,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         abort(404);
     });
 
-    Route::get('roles/restore/{role}', [App\Http\Controllers\Admin\RolesController::class,'restore'])->name('role.restore');
-    Route::delete('roles/forceDelete/{role}', [App\Http\Controllers\Admin\RolesController::class,'forceDelete'])->name('role.forceDelete');
-    Route::post('roles/massAction', [App\Http\Controllers\Admin\RolesController::class,'massAction'])->name('role.massAction');
+    Route::get('roles/restore/{role}', [RolesController::class,'restore'])->name('role.restore');
+    Route::delete('roles/forceDelete/{role}', [RolesController::class,'forceDelete'])->name('role.forceDelete');
+    Route::post('roles/massAction', [RolesController::class,'massAction'])->name('role.massAction');
 
-
-    //Permissions
-    Route::resource('permissions', App\Http\Controllers\Admin\PermissionController::class)->except([
-        'show', // If you don't have a show method in your controller
+    /*---------------
+    |  PERMISSIONS  |
+    ---------------*/
+    
+    Route::resource('permissions', PermissionController::class)->except([
+        'show',
     ])->names([
         'index' => 'permissions',
         'create' => 'permission.create',
@@ -110,19 +149,34 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'update' => 'permission.update',
         'destroy' => 'permission.destroy',
     ]);
-    Route::post('permissions/massAction', [App\Http\Controllers\Admin\PermissionController::class,'massAction'])->name('permission.massAction');
+    Route::post('permissions/massAction', [PermissionController::class,'massAction'])->name('permission.massAction');
+    
+    /*------------
+    |  SETTINGS  |
+    ------------*/
 
-    //feedback
-    Route::resource('feedback', App\Http\Controllers\Admin\FeedbackController::class)->except([
-        'create', // If you don't have a show method in your controller
-        'edit', // If you don't have a show method in your controller
-        'update', // If you don't have a show method in your controller
-        'destroy', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'feedback',
-        'show' => 'feedback.show',
-        'store' => 'feedback.store',
-    ]);
+    Route::get('settings', [SettingController::class, 'index'])->name('settings');
+    Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+    /*-------------------
+    |  CHANGE PASSWORD  |
+    -------------------*/
+
+    Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change-password');
+    Route::put('change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');
+
+    /*----------------
+    |  USER PROFILE  |
+    ----------------*/
+
+    Route::get('account/profile', [UserProfileController::class, 'index'])->name('account.profile');
+    Route::get('account/profile/edit', [UserProfileController::class, 'edit'])->name('account.profile.edit');
+    Route::put('account/profile/update', [UserProfileController::class, 'update'])->name('account.profile.update');
+
+});
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+   
 
     //passport DISABLED
     /* Route::resource('passport', App\Http\Controllers\Admin\PassportController::class)->except([
@@ -136,19 +190,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'passport.destroy',
     ]); */
 
-    Route::resource('change-password', App\Http\Controllers\Admin\changePasswordController::class)->except([
-        'show', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'change-password',
-        'create' => 'change-password.create',
-        'store' => 'change-password.store',
-        'edit' => 'change-password.edit',
-        'update' => 'change-password.update',
-        'destroy' => 'change-password.destroy',
-    ]);
-
     //Leave
-    Route::resource('longLeave', App\Http\Controllers\Admin\LeaveController::class)->except([
+    Route::resource('longLeave', LeaveController::class)->except([
         'show', // If you don't have a show method in your controller
     ])->names([
         'index' => 'longLeave',
@@ -159,57 +202,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'longLeave.destroy',
     ]);
 
-    Route::post('longLeave/massAction', [App\Http\Controllers\Admin\LeaveController::class,'massAction'])->name('longLeave.massAction');
+    Route::post('longLeave/massAction', [LeaveController::class,'massAction'])->name('longLeave.massAction');
 
-    //Leave
-    Route::resource('globalLeave', App\Http\Controllers\Admin\GlobalLeaveController::class)->except([
-        'show', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'globalLeave',
-        'create' => 'globalLeave.create',
-        'store' => 'globalLeave.store',
-        'edit' => 'globalLeave.edit',
-        'update' => 'globalLeave.update',
-        'destroy' => 'globalLeave.destroy',
-    ]);
-
-    Route::post('globalLeave/massAction', [App\Http\Controllers\Admin\GlobalLeaveController::class,'massAction'])->name('globalLeave.massAction');
-    // Route::update('globalLeave/updateLongLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLongLeave'])->name('globalLeave.updateLongLeave');
-    // Route::update('globalLeave/updateLateAttendance/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateLateAttendance'])->name('globalLeave.updateLateAttendance');
-    // Route::update('globalLeave/updateShortLeave/{globalLeave}', [App\Http\Controllers\Admin\GlobalLeaveController::class,'updateShortLeave'])->name('globalLeave.updateShortLeave');
-
-
-    
-
-    Route::resource('lateAttendance', App\Http\Controllers\Admin\LateAttendanceController::class)->except([
-        'show', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'lateAttendance',
-        'create' => 'lateAttendance.create',
-        'store' => 'lateAttendance.store',
-        'edit' => 'lateAttendance.edit',
-        'update' => 'lateAttendance.update',
-        'destroy' => 'lateAttendance.destroy',
-    ]);
-
-    Route::post('lateAttendance/massAction', [App\Http\Controllers\Admin\LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
-
-
-
-    Route::resource('localization/longLeave', App\Http\Controllers\Admin\localization\LocalizationLeaveController::class)->except([
-        'show', // If you don't have a show method in your controller
-        'create',
-        'edit',
-    ])->names([
-        'index' => 'localization.longLeave',
-        'store' => 'localization.longLeave.store',
-        'update' => 'localization.longLeave.update',
-        'destroy' => 'localization.longLeave.destroy',
-    ]);
-
-    Route::post('localization/longLeave/massAction', [App\Http\Controllers\Admin\localization\LocalizationLeaveController::class,'massAction'])->name('localization.longLeave.massAction');
-
-    Route::resource('leaveSettings/policies', App\Http\Controllers\Admin\LeavePoliciesController::class)->except([
+    Route::resource('leaveSettings/policies', LeavePoliciesController::class)->except([
         'show', // If you don't have a show method in your controller
         'create',
         'edit',
@@ -220,9 +215,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'leaveSettings.leavePolicies.destroy',
     ]);
 
-    Route::post('leaveSettings/policies/massAction', [App\Http\Controllers\Admin\LeavePoliciesController::class,'massAction'])->name('leaveSettings.policies.massAction');
+    Route::post('leaveSettings/policies/massAction', [LeavePoliciesController::class,'massAction'])->name('leaveSettings.policies.massAction');
     
-    Route::resource('leaveSettings/leaveEntitlement', App\Http\Controllers\Admin\LeaveEntitlementController::class)->except([
+    Route::resource('leaveSettings/leaveEntitlement', LeaveEntitlementController::class)->except([
         'show', // If you don't have a show method in your controller
         'create',
         'edit',
@@ -233,23 +228,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'leaveSettings.leaveEntitlement.destroy',
     ]);
 
-    Route::post('leaveSettings/leaveEntitlement/massAction', [App\Http\Controllers\Admin\LeaveEntitlementController::class,'massAction'])->name('leaveSettings.leaveEntitlement.massAction');
+    Route::post('leaveSettings/leaveEntitlement/massAction', [LeaveEntitlementController::class,'massAction'])->name('leaveSettings.leaveEntitlement.massAction');
     
 
-    Route::resource('settings', App\Http\Controllers\Admin\SettingController::class)->except([
-        'show', // If you don't have a show method in your controller
-        'create',
-        'edit',
-        'destroy'
-    ])->names([
-        'index' => 'settings',
-        'store' => 'setting.store',
-        'update' => 'setting.update',
-    ]);
+    
 
 
     //DISABLED
-    /* Route::get('maintanance/backup', [App\Http\Controllers\Admin\MaintananceController::class,'backup'])->name('backup');
-    Route::get('maintanance/error-log', [App\Http\Controllers\Admin\MaintananceController::class,'error'])->name('error.log'); */
+    /* Route::get('maintanance/backup', [MaintananceController::class,'backup'])->name('backup');
+    Route::get('maintanance/error-log', [MaintananceController::class,'error'])->name('error.log'); */
 });
 

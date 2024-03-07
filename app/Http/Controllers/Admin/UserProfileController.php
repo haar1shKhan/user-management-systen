@@ -15,52 +15,32 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        //
-        $user = User::with('roles','profile')->find(auth()->user()->id);
+        $user_id = auth()->user()->id;
+        $user = User::with('roles','profile')->find($user_id);
 
-        $data['user'] = $user;
-        $data['page_title'] = "User Profile";
+        $data = [
+            'user' => $user,
+            'page_title' => 'My Profile',
+        ];
+
         return view('admin.user-profile.index', $data);
 
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-     
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit()
     {
-        //
-        $user = User::with('roles','profile','jobDetail')->find(auth()->user()->id);
+        $user_id = auth()->user()->id;
+        $user = User::with('roles','profile')->find($user_id);
         $roles = Role::all();
 
-        $data['user'] = $user;
-        $data['roles'] = $roles;
-        $data['page_title'] = "Edit profile";
+        $data = [
+            'user' => $user,
+            'roles' => $roles, 
+            'page_title' => "Edit profile",
+        ];
 
         return view('admin.user-profile.edit', $data);
     }
@@ -68,9 +48,8 @@ class UserProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
         $validation = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -84,20 +63,12 @@ class UserProfileController extends Controller
             'country' => 'required',
         ]);
 
-        $user = User::find($id);
+        $user_id = auth()->user()->id;
+        $user = User::findOrFail($user_id);
 
-
-        if($user->profile==NULL){
-
-            if ($request->hasFile('image')) {
-
-                $fileName = $user->id . '.' . $request->image->extension();
-                $request->file('image')->storeAs('public/profile_images', $fileName);
-        
-            }
-    
-            Profile::create([
-    
+        if($user->profile == NULL){
+            
+            $profile = Profile::create([
                 'email' => $request->input('personal_email'),
                 'phone' => $request->input('phone'),
                 'mobile' => $request->input('mobile'),
@@ -113,18 +84,25 @@ class UserProfileController extends Controller
                 'province' => $request->input('province'),
                 'country' => $request->input('country'),
                 'user_id' => $user->id,
-    
             ]);
 
-            return redirect('/admin/user-profile');
+            if ($request->hasFile('image')) {
+                $fileName = $user->id . '.' . $request->image->extension();
+                $request->file('image')->storeAs('public/profile_images', $fileName);
+
+                $profile->update([
+                    'image' => $fileName,
+                ]);
+            }
+
+            return redirect()->route('admin.account.profile');
 
         }
         
         if ($request->hasFile('image')) {
             $fileName = $user->id . '.' . $request->image->extension();
             $request->file('image')->storeAs('public/profile_images', $fileName);
-    
-            // Update profile data with the new image
+
             $user->profile->update([
                 'image' => $fileName,
             ]);
@@ -142,9 +120,7 @@ class UserProfileController extends Controller
             ]);
         }
         
-
         $user->profile->update([
-
             'email' => $request->input('personal_email'),
             'phone' => $request->input('phone'),
             'mobile' => $request->input('mobile'),
@@ -157,21 +133,8 @@ class UserProfileController extends Controller
             'city' => $request->input('city'),
             'province' => $request->input('province'),
             'country' => $request->input('country'),
-            'image' => $fileName,
-
-
         ]);
-           // Update profile data with the new image
 
-        return redirect('/admin/user-profile');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.account.profile');
     }
 }

@@ -17,6 +17,7 @@ class FeedbackMail extends Mailable
     public $subject;
     public $slot;
     public $reqType;
+    public $file;
 
     /**
      * Create a new message instance.
@@ -27,6 +28,7 @@ class FeedbackMail extends Mailable
         $this->subject = $data['subject'];
         $this->slot = $data['message'];
         $this->reqType = $data['reqType'];
+        $this->file = $data['attachment'];
     }
 
     /**
@@ -56,11 +58,8 @@ class FeedbackMail extends Mailable
      */
     public function attachments(): array
     {
-        // Assuming $this->mailData['attachments'] is an array containing 'path' and 'name'.
         return [
-            // Attachment::fromStorage('/path/to/file')
-            // ->as('name.pdf')
-            // ->withMime('application/pdf'),
+            Attachment::fromStorage($this->file),
         ];
     }
 }

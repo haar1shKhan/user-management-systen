@@ -39,19 +39,18 @@ div .pending i{
 }
 
 .act li{
-    /* padding: 8px 4px;
-    text-align: center; */
     margin: 0px 4px;
     text-align: center;
 
 }
-/* .act li:hover{
-    padding: 8px 4px;
-    background-color: rgb(233, 227, 227);
-    text-align: center;
-    border-radius: 50%;
-} */
-
+.action-btn{
+    height: 40px;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+}
 
 </style>
 @endsection
@@ -162,8 +161,10 @@ div .pending i{
                                             <td>{{ date('d/m/Y', strtotime($list->to)) }}</td>
                                             <td>{{$list->reason}}</td>
                                             <td class="action"> 
-                                                <a class="pdf" href="{{ asset('storage/leave_files/'.$list->leave_file) }}" target="_blank">
-                                                <i class="icofont icofont-file-pdf"></i></a>
+                                                <div class="row" style="height: 110px; align-items: center">
+                                                        <a class="pdf" href="{{ asset('storage/leave_files/'.$list->leave_file) }}" target="_blank">
+                                                        <i class="icofont icofont-file-pdf"></i></a>
+                                                    </div>
                                             </td>
                                             <td>
                                                 @if ($list->approved==0)
@@ -263,132 +264,73 @@ div .pending i{
                                              </div>
                                             
 
-                                            <td >
+                                            <td style="min-width: 125px;" >
                                                 
                                                  
                                                 <ul class="d-flex justify-content-center align-items-center" >
 
-                                                    <li data-bs-toggle="modal" data-bs-target="#file{{$list->id}}" class="eye mx-1">
-                                                        <button type="submit" class="border-none">
-                                                            <span><i class="icon-eye"></i></span>
-                                                        </button>
-                                                    </li>
-                                                    {{-- <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                        <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                        <input type="hidden" name="type" value="longLeave">
-                                                    
-                                                        <li class="edit mx-1">
-                                                            <button type="submit"  name="approve" class="border-none d-flex justify-content-between align-items-center">
-                                                                <span><i class="icon-check"></i></span>
-                                                            </button>
-                                                        </li>
-                                                    </form>
+                                                        <div class="row">
 
-                                                    <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                        <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                        <input type="hidden" name="type" value="longLeave">
-                                                    
-                                                        <li class="pending mx-1">
-                                                            <button type="submit" name="pending" class="border-none d-flex justify-content-between align-items-center">
-                                                                <span><i class="icon-minus"></i></span>
-                                                            </button>
-                                                        </li>
-                                                    </form> 
-                                                
-                                                    <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                    
-                                                        <!-- Add a hidden input field for user ID -->
-                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                        <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                        <input type="hidden" name="type" value="longLeave">
-                                                    
-                                                        <li class="delete mx-1">
-                                                            <button type="submit"  name="reject" class="border-none d-flex justify-content-between align-items-center">
-                                                                <span><i class="icon-close"></i></span>
-                                                            </button>
-                                                        </li>
-                                                    </form> --}}
-
-                                                    <li class="d-flex justify-content-center align-items-center dropdown icon-dropdown" >
-                                                            <button class="btn dropdown-toggle actionDropDown" id="{{$list->id}}" type="button"
-                                                            aria-haspopup="true"  data-bs-toggle="dropdown" aria-expanded="false">
-                                                                <i class="icon-more-alt"></i>
-                                                            </button>
-
-                                                            <div class="dropdown-menu " aria-labelledby="{{$list->id}}">
-                                                                    <ul class="action d-flex flex-column justify-content-around">
-
-                                                                    
-                    
-                                                                        <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                                            @csrf
-                                                                            @method('PUT')
-                                                                        
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                                            <input type="hidden" name="type" value="longLeave">
-                                                                        
-                                                                            <li class="edit">
-                                                                                <button type="submit"  name="approve" class="border-none d-flex justify-content-between align-items-center my-2 mx-3">
-                                                                                    <span>Approve</span>
-                                                                                    <span><i class="icon-check"></i></span>
-                                                                                </button>
-                                                                            </li>
-                                                                        </form>
-                    
-                                                                        <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                                            @csrf
-                                                                            @method('PUT')
-                                                                        
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                                            <input type="hidden" name="type" value="longLeave">
-                                                                        
-                                                                            <li class="pending">
-                                                                                <button type="submit" name="pending" class="border-none d-flex justify-content-between align-items-center my-2 mx-3">
-                                                                                    <span>Pending</span>
-                                                                                    <span><i class="icon-minus"></i></span>
-                                                                                </button>
-                                                                            </li>
-                                                                        </form>
-                                                                        
-                                                                    
-                                                                        
-                                                                    
-                                                                        <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
-                                                                            @csrf
-                                                                            @method('PUT')
-                                                                        
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                                            <input type="hidden" name="type" value="longLeave">
-                                                                        
-                                                                            <li class="delete">
-                                                                                <button type="submit"  name="reject" class="border-none d-flex justify-content-between align-items-center my-2 mx-3">
-                                                                                    <span>Reject</span>
-                                                                                    <span><i class="icon-close"></i></span>
-                                                                                </button>
-                                                                            </li>
-                                                                        </form>
-                    
-                                                                    </ul>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <li data-bs-toggle="modal" data-bs-target="#file{{$list->id}}" class="eye mx-1">
+                                                                    <button type="submit" class="border-none">
+                                                                        <span><i class="icon-eye"></i></span>
+                                                                    </button>
+                                                                </li>
                                                             </div>
-                                                        </li>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
+                                                                    <input type="hidden" name="type" value="longLeave">
+                                                                
+                                                                    <li class="edit">
+                                                                        <button type="submit"  name="approve" class="border-none">
+                                                                            <span><i class="icon-check"></i></span>
+                                                                        </button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
+                                                                    <input type="hidden" name="type" value="longLeave">
+                                                                
+                                                                    <li class="pending">
+                                                                        <button type="submit" name="pending" class="border-none">
+                                                                            <span><i class="icofont icofont-clock-time "></i></span>
+                                                                        </button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">    
+                                                                <form class="" action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
+                                                                    <input type="hidden" name="type" value="longLeave">
+                                                                
+                                                                    <li class="delete">
+                                                                        <button type="submit"  name="reject" class="border-none">
+                                                                            <span><i class="icon-close"></i></span>
+                                                                        </button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
                                                 </ul>
                                             </td>
                                             {{-- @endcan --}}
@@ -483,10 +425,59 @@ div .pending i{
     
                                                 {{-- @can('user_edit' || 'user_delete') --}}
     
-                                                <td>
-                                                    <ul class="act d-flex justify-content-even">    
+                                                <td style="min-width: 125px;">
+                                                    <ul class="d-flex justify-content-center align-items-center">    
                                                         
-                                                        <li class="">
+                                                        <div class="row">
+
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <li class="">
+                                                                    <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                         @csrf
+                                                                         @method('PUT')
+        
+                                                                         <!-- Add a hidden input field for user ID -->
+                                                                         <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                         <input type="hidden" name="type" value="lateAttendances">
+        
+        
+                                                                         <button class="border-none" type="submit" name="approve"><i class="icon-check text-success font-weight-bold"></i></button>
+                                                                    </form>
+                                                                </li>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <li class="mx-1">
+                                                                    <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                    
+                                                                        <!-- Add a hidden input field for user ID -->
+                                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                        <input type="hidden" name="type" value="lateAttendances">
+        
+                                                                        <button class="border-none" type="submit" name="pending"><i class="icofont icofont-clock-time text-warning font-weight-bold"></i></button>
+                                                                     </form>
+                                                                </li>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">    
+                                                                <li class="">
+                                                                    <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                        @csrf
+                                                                        @method('PUT')
+                                                                    
+                                                                        <!-- Add a hidden input field for user ID -->
+                                                                        <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                        <input type="hidden" name="type" value="lateAttendances">
+            
+                                                                    
+                                                                            <button class="border-none" type="submit" name="reject"><i class="icon-close text-danger font-weight-bold"></i></button>
+                                                                        </form>
+                                                                    </li> 
+                                                            </div>
+
+                                                        </div>
+
+                                                        {{-- <li class="">
                                                             <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
                                                                  @csrf
                                                                  @method('PUT')
@@ -525,7 +516,7 @@ div .pending i{
                                                         
                                                                 <button class="border-none" type="submit" name="reject"><i class="icon-close text-danger font-weight-bold"></i></button>
                                                             </form>
-                                                        </li>
+                                                        </li> --}}
                                                         
                                                       </ul>
                                                 </td>
@@ -596,7 +587,7 @@ div .pending i{
                                                 <td>
                                                     {{ucwords($list->user->first_name)}} {{ucwords($list->user->last_name)}}
                                                 </td>
-                                                <td>{{ date('d/m/Y', strtotime($list->date)) }}</td>
+                                                <td>{{date('d/m/Y', strtotime($list->date)) }}</td>
                                                 <td>{{date ('h:i a',strtotime($list->from))}}</td>
                                                 <td>{{date ('h:i a',strtotime($list->to))}}</td>
                                                 <td>
@@ -618,8 +609,60 @@ div .pending i{
     
                                                 {{-- @can('user_edit' || 'user_delete') --}}
     
-                                                <td>
-                                                    <ul class="action">
+                                                <td style="min-width: 125px;">
+                                                    <ul class="d-flex justify-content-center align-items-center" >
+
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="type" value="shortLeave">
+        
+                                                                
+                                                                    <li class="edit">
+                                                                        <button class="border-none" type="submit" name="approve"><i class="icon-check"></i></button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">
+                                                                <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="type" value="shortLeave">
+                                                                
+                                                                    <li class="pending">
+                                                                        <button class="border-none" type="submit" name="pending"><i class="icofont icofont-clock-time"></i></i></button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+                                                            <div class="col-md-6 b-primary mx-2 my-2 action-btn">    
+                                                                <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                
+                                                                    <!-- Add a hidden input field for user ID -->
+                                                                    <input type="hidden" name="user_id" value="{{ $list->user->id }}">
+                                                                    <input type="hidden" name="type" value="shortLeave">
+        
+                                                                
+                                                                    <li class="delete">
+                                                                        <button class="border-none" type="submit" name="reject"><i class="icon-close"></i></button>
+                                                                    </li>
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
+                                                </ul>
+
+                                                    {{-- <ul class="action">
                                                         
                                                         <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
                                                             @csrf
@@ -662,7 +705,7 @@ div .pending i{
                                                             </li>
                                                         </form>
                                                         
-                                                      </ul>
+                                                      </ul> --}}
                                                 </td>
                                                 {{-- @endcan --}}
     

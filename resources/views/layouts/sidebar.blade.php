@@ -2,10 +2,8 @@
     <div>
         <div class="logo-wrapper">
             <a href="{{ route('/') }}">
-                {{-- <img class="img-fluid for-light" src="{{ asset('assets/images/logo/logo.png') }}" alt=""> --}}
                 <img class="img-fluid for-light" src="{{asset(config('settings.site_logo'))}}" alt="">
                 <img class="img-fluid  for-dark" src="{{asset(config('settings.site_logo'))}}" alt="">
-                {{-- <img class="img-fluid for-dark" src="{{ asset('assets/images/logo/logo_dark.png') }}" alt=""> --}}
             </a>
             <div class="back-btn">
                 <i class="fa fa-angle-left"></i>
@@ -139,7 +137,6 @@
                             </svg>
                             <span>System</span>
                         </a>
-                            
                         <ul class="sidebar-submenu">
                             @can('setting_access')
                             <li>
@@ -167,7 +164,6 @@
                                 </ul>
                             </li>
                             @endcan
-
                             {{-- MAINTANANCE PAGES DISABLED --}}
                             {{-- <li><a class="submenu-title" href="#">Maintanance<span class="sub-arrow"><i
                                             class="fa fa-angle-right"></i></span></a>
@@ -179,8 +175,6 @@
                         </ul>
                     </li>
                     @endcan
-
-
                     {{-- DISBALED --}}
                     {{-- <li class="sidebar-list"><a class="sidebar-link sidebar-title link-nav"
                             href="{{ route('admin.passport') }}">
@@ -192,11 +186,6 @@
                             </svg>
                             <span>Passport Application</span></a>
                     </li>  --}}
-
-
-
-
-
                     <li class="sidebar-main-title">
                         <div>
                             <h6>Support</h6>
@@ -211,16 +200,6 @@
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-email') }}"></use>
                             </svg><span>Feedback</span></a>
                     </li>
-                    <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.feedback') }}">
-                            <svg class="stroke-icon">
-                                <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-email') }}"></use>
-                            </svg>
-                            <svg class="fill-icon">
-                                <use href="{{ asset('assets/svg/icon-sprite.svg#fill-email') }}"></use>
-                            </svg><span>Raise Support</span></a>
-                    </li>
-
                 </ul>
             </div>
             <div class="right-arrow" id="right-arrow"><i data-feather="arrow-right"></i></div>

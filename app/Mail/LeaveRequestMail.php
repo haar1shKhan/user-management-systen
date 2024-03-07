@@ -26,6 +26,7 @@ class LeaveRequestMail extends Mailable
     public $leave_type;
     public $start_date;
     public $end_date;
+    public $date;
     public $reason;
     public $admin;
 
@@ -35,6 +36,7 @@ class LeaveRequestMail extends Mailable
         $this->leave_type = $data['leave_type'];
         $this->start_date = $data['start_date'];
         $this->end_date = $data['end_date'];
+        $this->date = $data['date'];
         $this->reason = $data['reason'];
         $this->admin = ucfirst(config('settings.store_owner'));
     }

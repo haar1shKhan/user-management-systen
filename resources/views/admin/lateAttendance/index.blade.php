@@ -232,7 +232,7 @@
 
                                                          <div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
                                                              <div class="modal-dialog modal-lg" role="document">
-                                                                 <form action="{{ route('admin.'.$url.'.update', ['lateAttendance' => $list->id]) }}" method="POST" class="modal-content">
+                                                                 <form action="{{ route('admin.'.$url.'.update', ['late_attendance' => $list->id]) }}" method="POST" class="modal-content">
                                                                      @csrf
                                                                      @method('PUT')
                                                                      <div class="modal-header">
@@ -287,7 +287,7 @@
                                                     @endcan
 
                                                     @can("late_attendance_delete")  
-                                                        <form action="{{route('admin.'.$url.'.destroy',['lateAttendance'=>$list->id])}}" method="post">
+                                                        <form action="{{route('admin.'.$url.'.destroy',['late_attendance'=>$list->id])}}" method="post">
                                                             @csrf
                                                             @method('DELETE')
                                                             <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>

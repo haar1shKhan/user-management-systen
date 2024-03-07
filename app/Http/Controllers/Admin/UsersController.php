@@ -34,8 +34,9 @@ class UsersController extends Controller
             $data['trash'] = true;
         }
         
-        $data['page_title'] = 'User';
+        $data['page_title'] = 'Users';
         $data['users'] = $users;
+
         return view('admin.users.index', $data);
     }
 
@@ -45,19 +46,15 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
         $roles = Role::all();
         $supervisors = User::all();
 
-
-
-        $data['roles']=$roles;
+        $data['roles'] = $roles;
         $data["supervisors"] = $supervisors;
 
-      
-        return view('admin/users/create',$data);
-
+        return view('admin/users/create', $data);
     }
 
     /**
@@ -65,7 +62,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-
+        // dd($request->all());
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -112,13 +109,13 @@ class UsersController extends Controller
         }
 
         if($request->nid_file){
-        $nidFile = $user->id . '.' . $request->nid_file->extension(); 
-        $request->file('nid_file')->storeAs('public/nid_files', $nidFile);
+            $nidFile = $user->id . '.' . $request->nid_file->extension(); 
+            $request->file('nid_file')->storeAs('public/nid_files', $nidFile);
         }
 
         if($request->visa_file){
-        $visaFile = $user->id . '.' . $request->visa_file->extension(); 
-        $request->file('visa_file')->storeAs('public/visa_files', $visaFile);
+            $visaFile = $user->id . '.' . $request->visa_file->extension(); 
+            $request->file('visa_file')->storeAs('public/visa_files', $visaFile);
         }
 
         $profile = new Profile([
@@ -218,7 +215,6 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
         $user = User::with('roles','profile','jobDetail')->find($id);
         $data['page_title'] = 'User Detail';
         $data['user'] = $user;
@@ -231,7 +227,6 @@ class UsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
         abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $user=User::with('roles')->findOrFail($id);
@@ -255,47 +250,28 @@ class UsersController extends Controller
     {   
             $user = User::findOrFail($id);
 
-            $validation = $request->validate([
+            $request->validate([
                 'first_name' => 'required',
                 'last_name' => 'required',
-                "supervisor_id" => 'required',
-                // 'email' => 'required|email|unique:users,email',
+                'email' => 'required | email',
+                'phone' => 'required',
+                'password' => 'required',
+                'password_confirmation' => 'required',
                 'role' => 'required',
                 'date_of_birth' => 'required',
-                'phone' => 'required',
                 'gender' => 'required',
                 'marital_status' => 'required',
                 'nationality' => 'required',
-                'religion' => 'required',
-                'passport' => 'required',
-                'passport_issued_at' => 'required',
-                'passport_expires_at' => 'required',
-                // 'passport_file' => 'required | mimes:pdf',
-                
-                'nid' => 'required',
-                'nid_issued_at' => 'required',
-                'nid_expires_at' => 'required',
-                // 'nid_file' => 'required | mimes:pdf',
-
-                'visa' => 'required',
-                'visa_issued_at' => 'required',
-                'visa_expires_at' => 'required',
-                // 'visa_file' => 'required | mimes:pdf',
-
                 'hired_at' => 'required',
-                'address' => 'required',
-                'city' => 'required',
-                'source_of_hire' => 'required',
+                'joined_at' => 'required',
                 'job_type' => 'required',
                 'status' => 'required',
                 'salary' => 'required',
-                'province' => 'required',
+                'supervisor_id' => 'required',
+                'address' => 'required',
+                'city' => 'required',
                 'country' => 'required',
-                'bank_name' => 'required',
-                'bank_account_number' => 'required',
-                'iban' => 'required',
                 'payment_method' => 'required',
-                'image' => 'image|mimes:jpeg,png,jpg',
             ]);
           
             $user->update([
@@ -308,8 +284,7 @@ class UsersController extends Controller
         if ($request->hasFile('image')) {
             $fileName = $user->id . '.' . $request->image->extension();
             $request->file('image')->storeAs('public/profile_images', $fileName);
-    
-            // Update profile data with the new image
+
             $user->profile->update([
                 'image' => $fileName,
             ]);
@@ -317,8 +292,7 @@ class UsersController extends Controller
         if ($request->hasFile('passport_file')) {
             $fileName = $user->id . '.' . $request->passport_file->extension();
             $request->file('passport_file')->storeAs('public/passport_files', $fileName);
-    
-            // Update profile data with the new image
+
             $user->profile->update([
                 'passport_file' => $fileName,
             ]);
@@ -326,8 +300,7 @@ class UsersController extends Controller
         if ($request->hasFile('nid_file')) {
             $fileName = $user->id . '.' . $request->nid_file->extension();
             $request->file('nid_file')->storeAs('public/nid_files', $fileName);
-    
-            // Update profile data with the new image
+
             $user->profile->update([
                 'nid_file' => $fileName,
             ]);
@@ -336,14 +309,10 @@ class UsersController extends Controller
             $fileName = $user->id . '.' . $request->visa_file->extension();
             $request->file('visa_file')->storeAs('public/visa_files', $fileName);
     
-            // Update profile data with the new image
             $user->profile->update([
                 'visa_file' => $fileName,
             ]);
-        }
-
-
-        
+        }    
 
         $user->jobDetail->update([
             'hired_at' => $request->input('hired_at'),
@@ -357,18 +326,12 @@ class UsersController extends Controller
             'bank_name' => $request->input('bank_name'),
             'bank_account_number' => $request->input('bank_account_number'),
             'payment_method' => $request->input('payment_method'),
-            'supervisor_id' => $request->input('supervisor_id'), // Assuming supervisor is a user ID
-            // 'recived_email_notification' => $request->input('recived_email_notification') ?? false,
-            // 'supervisor' => $request->input('supervisor'), // Assuming supervisor is a user ID
+            'supervisor_id' => $request->input('supervisor_id'), 
         ]);
-
-        
-        
 
         $user->roles()->sync([$request->input('role')]);
 
-        return redirect('admin/users');
-        
+        return redirect('admin/users');       
     }
 
     /**
@@ -393,8 +356,8 @@ class UsersController extends Controller
 
             User::withTrashed()->find($id)->restore();
             
-        }
-        return redirect('admin/users?trash=1');
+            }
+            return redirect('admin/users?trash=1');
         }
 
         if($actionType == 'forceDestroyAll'){
@@ -422,24 +385,19 @@ class UsersController extends Controller
         }
 
         return redirect('admin/users');
-
     }
 
     public function restore(string $id)
     {
-        //
         User::withTrashed()->find($id)->restore();
         return redirect('admin/users?trash=1');
-
     }
  
     public function forceDelete(string $id)
     {
-        //
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         User::withTrashed()->find($id)->forceDelete();
         return redirect('admin/users?trash=1');
-
     }
 }

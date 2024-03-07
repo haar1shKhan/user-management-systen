@@ -52,14 +52,14 @@ class User extends Authenticatable
         'two_factor_expires_at' => 'datetime',
     ];
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 
     public function lateAttendance()
@@ -77,12 +77,8 @@ class User extends Authenticatable
         return $this->hasOne(JobDetail::class);
     }
     
-    
-
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
     }
-
-    
 }

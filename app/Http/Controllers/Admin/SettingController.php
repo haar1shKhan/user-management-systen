@@ -13,62 +13,29 @@ class SettingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $base_url = '/admin/settings';
 
     public function index()
     {  
-        $page_title = 'Settings';
-
-        $data = array(
-            'page_title' => $page_title,
-            'url' =>  $this->base_url,
-        );
+        $data = [
+            'page_title' => 'Settings',
+        ];
         
-        return view('admin.settings.index',$data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        return view('admin.settings.index', $data);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         $data = $request->all();
         unset($data['_method']);
         unset($data["_token"]);
+
         foreach ($data as $key => $value){
+
             $setting = Setting::where('key','=', $key)->where('code','=', "settings")->first();
+
             if ($key == "site_icon") {
                 $fileName = 'site_icon.' . $request->site_icon->extension();
                 $request->file('site_icon')->storeAs('public/site_images', $fileName);
@@ -78,6 +45,7 @@ class SettingController extends Controller
                 $setting->save();
                 continue; 
             }
+
             if ($key == "site_logo") {
                 $fileName = 'site_logo.' . $request->site_logo->extension();
                 $request->file('site_logo')->storeAs('public/site_images', $fileName);
@@ -87,6 +55,7 @@ class SettingController extends Controller
                 $setting->save();
                 continue;
             }
+
             if ($key == "mail_logo") {
                 $fileName = 'mail_logo.' . $request->mail_logo->extension();
                 $request->file('mail_logo')->storeAs('public/site_images', $fileName);
@@ -100,15 +69,7 @@ class SettingController extends Controller
             $setting->value = $value;
             $setting->save();
         }
-        // die;
-        return redirect($this->base_url);
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('admin.settings');
     }
 }

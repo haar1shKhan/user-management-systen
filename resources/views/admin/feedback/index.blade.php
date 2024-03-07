@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Default')
+@section('title', '{{ $page_title }}')
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
@@ -20,12 +20,11 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-title')
-    <h3>{{ trans('admin/feedback.feedback') }}</h3>
+    <h3>{{ $page_title }}</h3>
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
-    <li class="breadcrumb-item active">{{ trans('admin/feedback.feedbackForm') }}</li>
+    <li class="breadcrumb-item active">{{ $page_title }}</li>
 @endsection
 
 @section('content')
@@ -37,20 +36,18 @@ form button.border-none {
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5>{{ trans('admin/feedback.feedbackForm') }}</h5>
+                    <h5>Feedback Form</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{route("admin.feedback.store")}}" method="POST" class="needs-validation" novalidate="">
+                    <form enctype="multipart/form-data" action="{{route("admin.feedback.send")}}" method="POST" class="needs-validation" novalidate="">
                         @csrf
                             <div class="row my-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" for="validationCustom04">{{ trans('admin/feedback.TypeOfRequest') }}</label>
-                                    <select name="requestType"  class="form-select" id="validationCustom04" required="">
-
+                                    <label class="form-label" for="reqType">Type of Request</label>
+                                    <select name="reqType"  class="form-select" id="reqType" required="">
                                         <option selected="true" disabled value="">Choose...</option>
                                         <option   value="complaint">Complaint</option>
                                         <option   value="suggestion">Suggestion</option>
-                            
                                     </select>
                                     <div class="text-danger mt-1">
                                         @error("requestType")
@@ -61,9 +58,8 @@ form button.border-none {
                             </div>
                             <div class="row my-3">
                                 <div class="col-md-6">
-                                    <label class="form-label" for="validationCustom01">{{ trans('admin/feedback.address') }}</label>
-                                    <input class="form-control" id="validationCustom01" name="address" type="text"  required="" data-bs-original-title="" title="">
-                                    {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                    <label class="form-label" for="subject">Subject</label>
+                                    <input class="form-control" id="subject" name="subject" type="text"  required="" data-bs-original-title="" title="">
                                     <div class="text-danger mt-1">
                                         @error("address")
                                         {{$message}}    
@@ -73,11 +69,10 @@ form button.border-none {
                             </div>
                             <div class="row my-3">
                                 <div class="col-md-6">
-                                    <label class="col-sm-3 col-form-label">{{ trans('admin/feedback.chooseFile')}}</label>
-                                    <input name="chooseFile" class="form-control" type="file">
-                                    {{-- <div class="valid-feedback">Looks good!</div> --}}
+                                    <label class="col-sm-3 col-form-label">Choose File</label>
+                                    <input name="file" class="form-control" type="file">
                                     <div class="text-danger mt-1">
-                                        @error("chooseFile")
+                                        @error("file")
                                         {{$message}}    
                                         @enderror
                                     </div>
@@ -86,10 +81,9 @@ form button.border-none {
                             <div class="row my-3">
                                 <div class="col-md-6">
                                     <div>
-                                        <label class="form-label" for="exampleFormControlTextarea14">{{ trans('admin/feedback.topic')}}</label>
+                                        <label class="form-label" for="exampleFormControlTextarea14">Describe your issue.</label>
                                         <textarea name="topic" class="form-control btn-square" id="exampleFormControlTextarea14" rows="8"></textarea>
                                       </div>
-                                    {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
                                         @error("topic")
                                         {{$message}}    
