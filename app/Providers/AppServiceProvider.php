@@ -32,7 +32,6 @@ class AppServiceProvider extends ServiceProvider
             foreach (Setting::all() as $setting) {
                 Config::set($setting->code.'.'.$setting->key, $setting->value);
             }
-            //Config::set('mail.mailers.smtp.password', Config::get('settings.mail_smtp_password'));
         }
 
     }

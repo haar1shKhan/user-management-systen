@@ -64,30 +64,11 @@ class SettingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // $validation = $request->validate([
-        //     'store_name' => 'required',
-        //     'store_owner' => 'required',
-        //     'store_address' => 'required',
-        //     'store_email' => 'required|email',
-        //     'store_phone' => 'required',
-        //     'store_telephone' => 'required',
-        //     'store_Latitude' => 'required',
-        //     'store_longitude' => 'required',
-        // ]);
-
         $data = $request->all();
         unset($data['_method']);
         unset($data["_token"]);
         foreach ($data as $key => $value){
             $setting = Setting::where('key','=', $key)->where('code','=', "settings")->first();
-            // echo '<pre>';
-            // echo  $key;
-            // echo "<br>";
-            // echo  $setting;
-            // echo "<br>";
-            // echo  $value;
-            // echo "<br>";
-            // echo "<br>";
             if ($key == "site_icon") {
                 $fileName = 'site_icon.' . $request->site_icon->extension();
                 $request->file('site_icon')->storeAs('public/site_images', $fileName);
@@ -106,9 +87,9 @@ class SettingController extends Controller
                 $setting->save();
                 continue;
             }
-            if ($key == "site_email") {
-                $fileName = 'site_email.' . $request->site_email->extension();
-                $request->file('site_email')->storeAs('public/site_images', $fileName);
+            if ($key == "mail_logo") {
+                $fileName = 'mail_logo.' . $request->mail_logo->extension();
+                $request->file('mail_logo')->storeAs('public/site_images', $fileName);
         
                 // Update profile data with the new image
                 $setting->value = "storage/site_images/".$fileName;

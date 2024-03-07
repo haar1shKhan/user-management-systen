@@ -70,7 +70,6 @@ class LeavePoliciesController extends Controller
 
         if (count($users) > 0){
             foreach ($users as $key => $user) {
-
                 $gender = $request->input('gender') ;
                 $role = $request->input('role') ;
                 $marital_status = $request->input('marital_status');

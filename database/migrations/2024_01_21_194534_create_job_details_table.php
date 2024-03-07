@@ -20,13 +20,10 @@ return new class extends Migration
             $table->enum('source_of_hire', ['direct', 'refaral', 'online'])->nullable();
             $table->enum('job_type', ['part_time', 'full_time', 'contract','internship','freelance'])->nullable();
             $table->enum('status', ['active', 'terminated', 'resigned','deceased'])->nullable();
-            $table->string('education');
-            $table->integer('work_experience');
             $table->integer('salary');
-            
-            $table->string('iban');
-            $table->string('bank_name');
-            $table->string('bank_account_number');
+            $table->string('iban')>nullable();
+            $table->string('bank_name')>nullable();
+            $table->string('bank_account_number')>nullable();
             $table->enum('payment_method', ['cash', 'bank_transfer'])->nullable();
             $table->boolean('recived_email_notification')->default(0);
 

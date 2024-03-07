@@ -69,7 +69,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::delete('user/forceDelete/{user}', [App\Http\Controllers\Admin\UsersController::class,'forceDelete'])->name('user.forceDelete');
     Route::post('user/massAction', [App\Http\Controllers\Admin\UsersController::class,'massAction'])->name('user.massAction');
     
-    Route::resource('user-profile', App\Http\Controllers\admin\UserProfileController::class)->names([
+    Route::resource('user-profile', App\Http\Controllers\Admin\UserProfileController::class)->names([
         'index' => 'user-profile',
         'create' => 'user-profile.create',
         'show' => 'user-profile.show',

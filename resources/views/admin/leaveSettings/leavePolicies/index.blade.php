@@ -104,8 +104,6 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" for="role">{{ trans('admin/user.role') }}</label>
                                                         <select name="role"  class="form-select" id="role">
-
-                                                            <option selected="true" disabled value="">Choose...</option>
                                                             <option  value="">All</option>
                                                             @foreach ($roles as $role)
                                                                 <option value="{{ $role->title }}">
@@ -124,8 +122,6 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" for="gender">Gender</label>
                                                         <select name="gender"  class="form-select" id="gender" >
-                        
-                                                            <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="">All</option>
                                                             <option   value="male">Male</option>
                                                             <option   value="female">Female</option>
@@ -141,8 +137,6 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" for="marital_status">Marital status</label>
                                                         <select name="marital_status"  class="form-select" id="marital_status" >
-                        
-                                                            <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="">All</option>
                                                             <option   value="Bachelor">Bachelor</option>
                                                             <option   value="Married">Married</option>

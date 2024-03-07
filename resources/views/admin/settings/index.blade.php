@@ -138,11 +138,11 @@
                                     <div class="col-md-3 mb-3">
                                         <h5>Site Email</h5>
                                         <div class="my-3">
-                                            <img class="img-100" id="site-email-preview" src="{{asset(config('settings.site_email'))}}"/>
+                                            <img class="img-100" id="site-email-preview" src="{{asset(config('settings.mail_logo'))}}"/>
                                         </div>
-                                        <label for="site_email" class="btn btn-square btn-primary">Replace</label>
-                                        <input class="file-input" data-preview="site-email-preview" name="site_email" style="display: none;" id="site_email" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
-                                        @error("site_email")
+                                        <label for="mail_logo" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-email-preview" name="mail_logo" style="display: none;" id="mail_logo" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("mail_logo")
                                         <div class="invalid-feedback"> {{$message}} </div> 
                                         @enderror
                                     </div>
