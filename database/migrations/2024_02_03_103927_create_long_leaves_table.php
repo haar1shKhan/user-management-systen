@@ -16,8 +16,10 @@ return new class extends Migration
             $table->date('from');
             $table->date('to');
             $table->longText('reason');
+            $table->boolean('salary')->default(0);
             $table->string('leave_file')->nullable();
             $table->boolean('approved')->default(0);
+            $table->text('reject_reason')->nullable();
             $table->timestamps();
         });
     }

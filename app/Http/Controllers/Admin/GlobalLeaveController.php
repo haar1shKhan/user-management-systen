@@ -43,38 +43,6 @@ class GlobalLeaveController extends Controller
         return view('admin.globalLeave.index',$data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
     public function update(Request $request, string $id)
     {
         abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -119,8 +87,17 @@ class GlobalLeaveController extends Controller
                     $totalDays = $userEntitlement->leave_taken - $numberOfDays;
                     $userEntitlement->update(['leave_taken'=>$totalDays]);
                 }
+
+                $reject_reason = NULL;
+
+                if ($request->has('reject_reason')) {
+                    $reject_reason = $request->input('reject_reason');
+                }
                 
-                $longLeave->update(['approved' => -1]); //-1 represents rejection,
+                $longLeave->update([
+                    'approved' => -1,
+                    'reject_reason' => $reject_reason,
+                ]); //-1 represents rejection,
             }
             
             // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->enum('job_type', ['part_time', 'full_time', 'contract','internship','freelance'])->nullable();
             $table->enum('status', ['active', 'terminated', 'resigned','deceased'])->nullable();
             $table->integer('salary');
-            $table->string('iban')>nullable();
-            $table->string('bank_name')>nullable();
-            $table->string('bank_account_number')>nullable();
+            $table->string('iban')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('bank_account_number')->nullable();
             $table->enum('payment_method', ['cash', 'bank_transfer'])->nullable();
             $table->boolean('recived_email_notification')->default(0);
 
