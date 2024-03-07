@@ -9,14 +9,15 @@ use App\Models\LateAttendance;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
-
+use App\Mail\LeaveRequestMail;
+use Mail;
 
 class LateAttendanceController extends Controller
 {
      /**
      * Display a listing of the resource.
      */
-    public $base_url = "admin/lateAttendance";
+    public $base_url = "admin/late-attendance";
 
     public function index()
     {
@@ -61,7 +62,7 @@ class LateAttendanceController extends Controller
     
 
         $existingLeave = lateAttendance::where('user_id', auth()->user()->id)
-        ->whereDate("created_at",$currentDate)
+        ->whereDate("date", $request->input('date'))
         ->where(function ($query) use ($startTime, $endTime) {
             $query->whereBetween('from', [$startTime, $endTime])
                   ->orWhereBetween('to', [$startTime, $endTime])
@@ -94,6 +95,18 @@ class LateAttendanceController extends Controller
             'reason' => $request->input('reason'),
         ]);
         $user->lateAttendance()->save($lateAttendance);
+
+        $data =[
+            "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+            "date" => date("d/m/Y", strtotime($request->input('date'))),
+            'leave_type' => "Late Attendance",
+            'start_date' => $request->input('from'),
+            'end_date' =>$request->input('to'),
+            'reason' => $request->input("reason"),
+            'admin' => config('settings.store_owmer'),
+        ];
+    
+        Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));
 
         return redirect($this->base_url);
 

@@ -167,10 +167,8 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Role $role)
     {
-   
-        $role=Role::with('permissions')->find($id);
         $role->title = $request['title'];
         $role->save();
 
@@ -187,24 +185,25 @@ class RolesController extends Controller
     
     public function restore(string $id)
     {
-        
         Role::withTrashed()->find($id)->restore();
         return redirect('admin/roles?trash=1');
-
     }
     
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Role $role)
     {
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        
-        Role::find($id)->delete();
+
+        if(!$role->id === 1)
+        {
+            $role->delete();
+        }
+
         return redirect('admin/roles');
-
-
     }
+
     public function massAction(Request $request)
     {
         $massAction = $request['massAction'];
@@ -238,8 +237,12 @@ class RolesController extends Controller
             abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
             
             foreach ($massAction as $id) {
-                
-                Role::find($id)->delete();
+
+                $role = Role::find($id);
+        
+                if(!$role->id === 1){
+                    Role::find($id)->delete();
+                }
             }
             return redirect('admin/roles');
         }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
-class changePasswordController extends Controller
+class ChangePasswordController extends Controller
 {
     //
     public function index(Request $request){
@@ -15,23 +15,25 @@ class changePasswordController extends Controller
         return view('admin.changePassword.index');
     }
 
-    public function update(Request $request, string $id){
-        // dd($request->all());
+    public function update(Request $request){
         $validation = $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|confirmed',
-            'new_password_confirmation' => 'required',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user=User::findOrFail($id);
-
+        $user_id = auth()->user()->id;
+        $user = User::findOrFail($user_id);
+        
         if (Hash::check($request->current_password, $user->password)){
            $user->update(['password'=> bcrypt($request->new_password)]);
-           return redirect("/admin/change-password");
+           return redirect()->route('admin.account.profile');
         }
-        // dd("false");
-        $statusMessage = "Current password is incorrect.";
-        return redirect("/admin/change-password")->withErrors(['current_password' => $statusMessage]);
+
+        $status = [
+            'current_password' => "Current password is incorrect."
+        ];
+        
+        return redirect()->route('admin.change-password')->withErrors($status);
         
     }
 }

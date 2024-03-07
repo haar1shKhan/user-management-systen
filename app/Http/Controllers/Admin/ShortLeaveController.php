@@ -9,7 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
-
+use App\Mail\LeaveRequestMail;
+use Mail;
 
 class ShortLeaveController extends Controller
 {
@@ -26,20 +27,12 @@ class ShortLeaveController extends Controller
         $shortLeave = ShortLeave::where('user_id',auth()->user()->id)->with('user','approvedBy')->orderBy('id', 'desc')->get();
         $page_title = 'Short Leave';
         $trash = false;
-        $data['page_title']=$page_title;
-        $data['shortLeave']=$shortLeave;
-        $data['trash']=$trash;
-        $data['url']='short-leave';
+        $data['page_title'] = $page_title;
+        $data['shortLeave'] = $shortLeave;
+        $data['trash'] = $trash;
+        $data['url'] = 'short-leave';
  
         return view('admin.short-leave.index',$data);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -50,7 +43,6 @@ class ShortLeaveController extends Controller
         abort_if(Gate::denies('short_leave_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $validation = $request->validate([
-            'date' => 'required',
             'from' => 'required',
             'to' => 'required',
             'reason' => 'required',
@@ -74,7 +66,7 @@ class ShortLeaveController extends Controller
         }
      
         $existingLeave = ShortLeave::where('user_id', auth()->user()->id)
-        ->whereDate("created_at",$currentDate)
+        ->whereDate("created_at", $currentDate)
         ->where(function ($query) use ($startTime, $endTime) {
             $query->whereBetween('from', [$startTime, $endTime])
                   ->orWhereBetween('to', [$startTime, $endTime])
@@ -83,49 +75,44 @@ class ShortLeaveController extends Controller
                             ->where('to', '>', $endTime);
                   });
         })
-        ->get(); // Use get() to retrieve multiple overlapping records
+        ->get();
 
-    if ($existingLeave->count() > 0) {
-        $overlappingDates = $existingLeave->pluck('from', 'to')->toArray();
+        if ($existingLeave->count() > 0) {
+            $overlappingDates = $existingLeave->pluck('from', 'to')->toArray();
 
-        $statusMessage = 'You have overlapping leave time on ';
-        foreach ($overlappingDates as $toTime => $fromTime) {
-            $fromTimeFormatted = Carbon::parse($fromTime)->format('g:i A'); // 12-hour format
-            $toTimeFormatted = Carbon::parse($toTime)->format('g:i A');     // 12-hour format
-    
-            $statusMessage .= "{$fromTimeFormatted} to {$toTimeFormatted}, ";
+            $statusMessage = 'You have overlapping leave time on ';
+            foreach ($overlappingDates as $toTime => $fromTime) {
+                $fromTimeFormatted = Carbon::parse($fromTime)->format('g:i A'); 
+                $toTimeFormatted = Carbon::parse($toTime)->format('g:i A');     
+            
+                $statusMessage .= "{$fromTimeFormatted} to {$toTimeFormatted}, ";
+            }
+            $statusMessage = rtrim($statusMessage, ', '); 
+
+           return redirect($this->base_url)->with('status', $statusMessage);
         }
-        $statusMessage = rtrim($statusMessage, ', '); // Remove trailing comma and space
 
-        return redirect($this->base_url)->with('status', $statusMessage);
-    }
-         
         $shortLeave = ShortLeave::create([
-            'date' => $request->input('date'), // You may want to adjust this as needed
+            'date' =>  $currentDate,
             'from' => $request->input('from'),
             'to' => $request->input('to'),
             'reason' => $request->input('reason'),
         ]);
         $user->shortLeave()->save($shortLeave);
 
+        $data =[
+            "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+            "date" => date("d/m/Y",  $currentDate),
+            'leave_type' => "Short Leave",
+            'start_date' => $request->input('from'),
+            'end_date' =>$request->input('to'),
+            'reason' => $request->input("reason"),
+            'admin' => config('settings.store_owmer'),
+        ];
+    
+        Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));
+
         return redirect($this->base_url);
-
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -141,7 +128,6 @@ class ShortLeaveController extends Controller
             'to' => 'required',
             'reason' => 'required',
         ]);
-
 
         $startTime = Carbon::parse($request->input('from'));
         $endTime = Carbon::parse( $request->input('to'));
@@ -159,8 +145,6 @@ class ShortLeaveController extends Controller
         }
 
         $shortLeave = ShortLeave::findOrFail($id);
-
-        // Update the field 
  
         $shortLeave->update(
             [
@@ -169,8 +153,7 @@ class ShortLeaveController extends Controller
                 'to' => $request->to,
                 'reason' => $request->reason
             ]
-        );
-      
+        );  
 
         return redirect($this->base_url);
     }

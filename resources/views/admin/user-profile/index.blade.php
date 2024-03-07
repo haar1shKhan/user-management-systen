@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Default')
+@section('title', '{{ $page_title }}')
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/vendors/datatables.css') }}">
@@ -40,7 +40,7 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-items')
-<li class="breadcrumb-item">{{ $page_title }}</li>
+<li class="breadcrumb-item active">{{ $page_title }}</li>
 @endsection
 
 @section('content')
@@ -95,7 +95,7 @@ form button.border-none {
                 </div>
                 <div class="my-3 d-flex">
                   <h6 class="form-labe">Date of Birth :</h6>
-                  <span class="mx-1">{{ $user->profile->date_of_birth ?? "N/A" }}</span>
+                  <span class="mx-1">{{ date('d/m/Y', strtotime($user->profile->date_of_birth)) ?? "N/A" }}</span>
                 </div>
                 <div class="my-3 d-flex">
                   <h6 class="form-label">Gender : </h6>
@@ -123,8 +123,7 @@ form button.border-none {
                     <div class=" mb-3  d-flex justify-content-between align-item-betweem">
                         <h4 class="card-title mb-0">Edit Profile</h4>
                         <div class="d-flex">
-                            <a href="{{route('admin.user-profile.edit',['user_profile'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
-                            <a href="{{ url('admin/users') }}" class="btn btn-primary">Back</a>
+                            <a href="{{ route('admin.account.profile.edit') }}"><h4><i class="icon-pencil-alt"></i></h4></a>
                         </div>
                     </div>
               <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
@@ -184,64 +183,6 @@ form button.border-none {
               </div>
             </div>
           </form>
-        </div>
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h4 class="card-title mb-0">Add projects And Upload</h4>
-              <div class="card-options"><a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a></div>
-            </div>
-            <div class="table-responsive add-project">
-              <table class="table card-table table-vcenter text-nowrap">
-                <thead>
-                  <tr>
-                    <th>Project Name</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Price</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><a class="text-inherit" href="#">Untrammelled prevents </a></td>
-                    <td>28 May 2018</td>
-                    <td><span class="status-icon bg-success"></span> Completed</td>
-                    <td>$56,908</td>
-                    <td class="text-end"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)"><i class="fa fa-pencil"></i> Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-transparent btn-sm" href="javascript:void(0)"><i class="fa fa-link"></i> Update</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td><a class="text-inherit" href="#">Untrammelled prevents</a></td>
-                    <td>12 June 2018</td>
-                    <td><span class="status-icon bg-danger"></span> On going</td>
-                    <td>$45,087</td>
-                    <td class="text-end"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)"><i class="fa fa-pencil"></i> Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-transparent btn-sm" href="javascript:void(0)"><i class="fa fa-link"></i> Update</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td><a class="text-inherit" href="#">Untrammelled prevents</a></td>
-                    <td>12 July 2018</td>
-                    <td><span class="status-icon bg-warning"></span> Pending</td>
-                    <td>$60,123</td>
-                    <td class="text-end"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)"><i class="fa fa-pencil"></i> Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-transparent btn-sm" href="javascript:void(0)"><i class="fa fa-link"></i> Update</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td><a class="text-inherit" href="#">Untrammelled prevents</a></td>
-                    <td>14 June 2018</td>
-                    <td><span class="status-icon bg-warning"></span> Pending</td>
-                    <td>$70,435</td>
-                    <td class="text-end"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)"><i class="fa fa-pencil"></i> Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-transparent btn-sm" href="javascript:void(0)"><i class="fa fa-link"></i> Update</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a></td>
-                  </tr>
-                  <tr>
-                    <td><a class="text-inherit" href="#">Untrammelled prevents</a></td>
-                    <td>25 June 2018</td>
-                    <td><span class="status-icon bg-success"></span> Completed</td>
-                    <td>$15,987</td>
-                    <td class="text-end"><a class="icon" href="javascript:void(0)"></a><a class="btn btn-primary btn-sm" href="javascript:void(0)"><i class="fa fa-pencil"></i> Edit</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-transparent btn-sm" href="javascript:void(0)"><i class="fa fa-link"></i> Update</a><a class="icon" href="javascript:void(0)"></a><a class="btn btn-danger btn-sm" href="javascript:void(0)"><i class="fa fa-trash"></i> Delete</a></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
       </div>
     </div>

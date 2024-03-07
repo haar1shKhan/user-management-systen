@@ -17,8 +17,8 @@
                 <div>
                     <div>
                         <a class="logo text-start" href="{{ route('/') }}">
-                            <img class="img-fluid for-light" src="{{asset('assets/images/logo/login.png')}}" alt="looginpage">
-                            <img class="img-fluid for-dark" src="{{asset('assets/images/logo/logo_dark.png')}}" alt="looginpage">
+                            <img class="img-fluid for-light" src="{{asset(config('settings.site_logo'))}}" alt="looginpage">
+                            <img class="img-fluid for-dark" src="{{asset(config('settings.site_logo'))}}" alt="looginpage">
                             {{-- <img class="img-fluid for-light" src="{{asset(config('settings.site_logo'))}}" alt="looginpage"> --}}
                         </a>
                     </div>

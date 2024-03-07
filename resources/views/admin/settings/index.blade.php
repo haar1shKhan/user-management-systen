@@ -62,7 +62,7 @@
 
     <div class="container-fluid">
 
-        <form  enctype="multipart/form-data" action="{{route("admin.setting.update",['setting'=>'1'])}}" method="POST" class="row">
+        <form  enctype="multipart/form-data" action="{{route("admin.settings.update")}}" method="POST" class="row">
             @method("PUT")
             @csrf
 
@@ -138,11 +138,11 @@
                                     <div class="col-md-3 mb-3">
                                         <h5>Site Email</h5>
                                         <div class="my-3">
-                                            <img class="img-100" id="site-email-preview" src="{{asset(config('settings.site_email'))}}"/>
+                                            <img class="img-100" id="site-email-preview" src="{{asset(config('settings.mail_logo'))}}"/>
                                         </div>
-                                        <label for="site_email" class="btn btn-square btn-primary">Replace</label>
-                                        <input class="file-input" data-preview="site-email-preview" name="site_email" style="display: none;" id="site_email" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
-                                        @error("site_email")
+                                        <label for="mail_logo" class="btn btn-square btn-primary">Replace</label>
+                                        <input class="file-input" data-preview="site-email-preview" name="mail_logo" style="display: none;" id="mail_logo" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" class="form-control" type="file">
+                                        @error("mail_logo")
                                         <div class="invalid-feedback"> {{$message}} </div> 
                                         @enderror
                                     </div>
@@ -177,7 +177,7 @@
                                     
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_name">Store Name</label>
-                                            <input class="form-control" id="store_name" name="store_name" value="{{ Config::get('settings.store_name') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_name" name="store_name" value="{{ config('settings.store_name') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_name")
@@ -188,7 +188,7 @@
             
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_owner">Store Owner</label>
-                                            <input class="form-control" id="store_owner" name="store_owner" value="{{ Config::get('settings.store_owner') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_owner" name="store_owner" value="{{ config('settings.store_owner') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_owner")
@@ -199,7 +199,7 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_address">Store Address</label>
-                                            <input class="form-control" id="store_address" name="store_address" value="{{ Config::get('settings.store_address') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_address" name="store_address" value="{{ config('settings.store_address') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_address")
@@ -210,7 +210,7 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_email">Store Email</label>
-                                            <input class="form-control" id="store_email" name="store_email" value="{{ Config::get('settings.store_email') }}" type="email"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_email" name="store_email" value="{{ config('settings.store_email') }}" type="email"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_email")
@@ -221,7 +221,7 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_phone">Store phone</label>
-                                            <input class="form-control" id="store_phone" name="store_phone" value="{{ Config::get('settings.store_phone') }}" type="tel"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_phone" name="store_phone" value="{{ config('settings.store_phone') }}" type="tel"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_phone")
@@ -232,7 +232,7 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_telephone">Store Telephone</label>
-                                            <input class="form-control" id="store_telephone" name="store_telephone" value="{{ Config::get('settings.store_telephone') }}" type="tel"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_telephone" name="store_telephone" value="{{ config('settings.store_telephone') }}" type="tel"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_telephone")
@@ -245,7 +245,7 @@
 
                                         <div class="col-md-3">
                                         <label class="form-label" for="store_Latitude">Store Latitude</label>
-                                        <input class="form-control" id="store_latitude" name="store_latitude"  value="{{ Config::get('settings.store_latitude') }}" readonly type="text"  required="" data-bs-original-title="" title="">
+                                        <input class="form-control" id="store_latitude" name="store_latitude"  value="{{ config('settings.store_latitude') }}" readonly type="text"  required="" data-bs-original-title="" title="">
                                         {{-- <div class="valid-feedback">Looks good!</div> --}}
                                         <div class="text-danger mt-1">
                                             @error("store_latitude")
@@ -256,7 +256,7 @@
 
                                         <div class="col-md-3">
                                             <label class="form-label" for="store_longitude">Store Longitude</label>
-                                            <input class="form-control" id="store_longitude" name="store_longitute" value="{{ Config::get('settings.store_longitute') }}" readonly   type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_longitude" name="store_longitute" value="{{ config('settings.store_longitute') }}" readonly   type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_longitude")
@@ -279,7 +279,7 @@
                                    
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_name">SMTP Hostname</label>
-                                            <input class="form-control" id="store_name" name="mail_smtp_hostname" value="{{ Config::get('settings.mail_smtp_hostname') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_name" name="mail_smtp_hostname" value="{{ config('settings.mail_smtp_hostname') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_name")
@@ -289,7 +289,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_owner">SMTP Username</label>
-                                            <input class="form-control" id="store_owner" name="mail_smtp_username" value="{{ Config::get('settings.mail_smtp_username') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_owner" name="mail_smtp_username" value="{{ config('settings.mail_smtp_username') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_owner")
@@ -299,7 +299,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_owner">SMTP Password</label>
-                                            <input class="form-control" id="store_owner" name="mail_smtp_password" value="{{ Config::get('settings.mail_smtp_password') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_owner" name="mail_smtp_password" value="{{ config('settings.mail_smtp_password') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_owner")
@@ -310,7 +310,7 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_owner">SMTP Port</label>
-                                            <input class="form-control" id="store_owner" name="mail_smtp_port" value="{{ Config::get('settings.mail_smtp_port') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_owner" name="mail_smtp_port" value="{{ config('settings.mail_smtp_port') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_owner")
@@ -320,7 +320,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label" for="store_owner">SMTP Timeout</label>
-                                            <input class="form-control" id="store_owner" name="mail_smtp_timeout" value="{{ Config::get('settings.mail_smtp_timeout') }}" type="text"  required="" data-bs-original-title="" title="">
+                                            <input class="form-control" id="store_owner" name="mail_smtp_timeout" value="{{ config('settings.mail_smtp_timeout') }}" type="text"  required="" data-bs-original-title="" title="">
                                             {{-- <div class="valid-feedback">Looks good!</div> --}}
                                             <div class="text-danger mt-1">
                                                 @error("store_owner")

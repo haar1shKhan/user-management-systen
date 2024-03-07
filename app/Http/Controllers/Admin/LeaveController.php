@@ -79,7 +79,7 @@ class LeaveController extends Controller
        $data['trash']=$trash;
        $data['url']='longLeave';
 
-       return view('admin.LongLeave.index',$data);
+       return view('admin.longLeave.index',$data);
    }
 
 
