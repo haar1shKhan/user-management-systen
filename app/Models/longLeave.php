@@ -13,6 +13,7 @@ class longLeave extends Model
         'to',
         'reason',
         'approved',
+        'reject_reason',
         'user_id',
         'entitlement_id',
         'leave_file',

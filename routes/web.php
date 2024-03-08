@@ -77,12 +77,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     ----------------*/
 
     Route::resource('globalLeave', GlobalLeaveController::class)->except([
+        'create', 
+        'store', 
         'show', 
+        'edit', 
     ])->names([
         'index' => 'globalLeave',
-        'create' => 'globalLeave.create',
-        'store' => 'globalLeave.store',
-        'edit' => 'globalLeave.edit',
         'update' => 'globalLeave.update',
         'destroy' => 'globalLeave.destroy',
     ]);
