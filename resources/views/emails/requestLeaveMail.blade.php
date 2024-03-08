@@ -7,19 +7,23 @@
 </x-slot:header>
 
 {{-- Body --}}
-## Hi {{ $admin }},
-                        
-#### {{ $username }} has requested {{$leave_type}} {{$date ? "on " .$date: "" }},
+@if(!$status)
+    ## Hi {{ $admin }},
+
+    #### {{ $username }} has requested {{$leave_type}}{{$date ? " on " .$date: "" }},
+@else
+    #### Your request has been [{{$status}}] by {{ $username }}.
+@endif
     
-    
-| Type          | {{$leave_type}}  |
+| Leave Type    | {{$leave_type}}  |
 | -             |-                 |
 | From:         | {{$start_date}}  |
 | To:           | {{$end_date}}    |
 | Reason        | {{$reason}}      |
     
-    
+@if(!$status)
 #### Please click the button below and update the leave status in the system
+@endif
 
 {{-- Subcopy --}}
 @isset($subcopy)

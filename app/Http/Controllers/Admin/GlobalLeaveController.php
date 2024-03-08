@@ -11,6 +11,8 @@ use App\Models\LateAttendance;
 use App\Models\longLeave;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Mail\LeaveRequestMail;
+use Mail;
 use illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -105,13 +107,23 @@ class GlobalLeaveController extends Controller
             $startDate = Carbon::parse($longLeave->from);
             $endDate = Carbon::parse($longLeave->to);
             $numberOfDays = $startDate->diffInDays($endDate);
-            // Check if the button clicked is for approval or rejection
+        
             if ($request->has('approve')) {
                
                 $totalDays = $userEntitlement->leave_taken + $numberOfDays;
                 $userEntitlement->update(['leave_taken'=>$totalDays]);
                 $longLeave->update(['approved' => 1]);
- 
+
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' => $userEntitlement->policy->title,
+                    'start_date' => $longLeave->from,
+                    'end_date' => $longLeave->to,
+                    'reason' => $longLeave->reason,
+                    'status' => 'Approved'
+                ];
+
+                Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
      
             } elseif ($request->has('reject')) {
 
@@ -120,10 +132,20 @@ class GlobalLeaveController extends Controller
                     $userEntitlement->update(['leave_taken'=>$totalDays]);
                 }
                 
-                $longLeave->update(['approved' => -1]); //-1 represents rejection,
+                $longLeave->update(['approved' => -1]);
+
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' => $userEntitlement->policy->title,
+                    'start_date' => $longLeave->from,
+                    'end_date' => $longLeave->to,
+                    'reason' => $longLeave->reason,
+                    'status' => 'Rejected'
+                ];
+
+                Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
             }
             
-            // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
             if(auth()->user()->roles[0]->title == "Admin" && !$request->has('pending') )
             {
                 $longLeave->update(['approved_by' => auth()->user()->id]);
@@ -146,14 +168,35 @@ class GlobalLeaveController extends Controller
 
             $lateAttendance = LateAttendance::findOrFail($id);
 
-            // Check if the button clicked is for approval or rejection
             if ($request->has('approve')) {
+
                 $lateAttendance->update(['approved' => 1]);
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' =>'Late Attendance',
+                    'start_date' => $lateAttendance->from,
+                    'end_date' => $lateAttendance->to,
+                    'reason' => $lateAttendance->reason,
+                    'status' => 'Approved'
+                ];
+
+                Mail::to($lateAttendance->user->email)->send(new LeaveRequestMail($data));
+
             } elseif ($request->has('reject')) {
-                $lateAttendance->update(['approved' => -1]); // Assuming 2 represents rejection, adjust as needed
+                
+                $lateAttendance->update(['approved' => -1]); 
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' =>'Late Attendance',
+                    'start_date' => $lateAttendance->from,
+                    'end_date' => $lateAttendance->to,
+                    'reason' => $lateAttendance->reason,
+                    'status' => 'Rejected'
+                ];
+
+                Mail::to($lateAttendance->user->email)->send(new LeaveRequestMail($data));
             }
         
-            // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
             if(auth()->user()->roles[0]->title == "Admin"  && !$request->has('pending')  )
             {
                 $lateAttendance->update(['approved_by' => auth()->user()->id]);
@@ -177,9 +220,33 @@ class GlobalLeaveController extends Controller
 
             // Check if the button clicked is for approval or rejection
             if ($request->has('approve')) {
+
                 $shortLeave->update(['approved' => 1]);
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' =>'Short Leave',
+                    'start_date' => $shortLeave->from,
+                    'end_date' => $shortLeave->to,
+                    'reason' => $shortLeave->reason,
+                    'status' => 'Approved'
+                ];
+
+                Mail::to($shortLeave->user->email)->send(new LeaveRequestMail($data));
+
             } elseif ($request->has('reject')) {
+
                 $shortLeave->update(['approved' => -1]); 
+
+                $data =[
+                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'leave_type' =>'Short Leave',
+                    'start_date' => $shortLeave->from,
+                    'end_date' => $shortLeave->to,
+                    'reason' => $shortLeave->reason,
+                    'status' => 'Rejected'
+                ];
+
+                Mail::to($shortLeave->user->email)->send(new LeaveRequestMail($data));
             }
         
             // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
@@ -237,19 +304,22 @@ class GlobalLeaveController extends Controller
                 
                 // Check if the button clicked is for approval or rejection
                 
-                    if($userEntitlement->leave_taken==0){
-                        
-                        $userEntitlement->update(['leave_taken'=> $numberOfDays]);
-                        $longLeave->update(['approved' => 1]);
-
-                    } 
-                    else{
                         
                         $totalDays = $userEntitlement->leave_taken + $numberOfDays;
                         $userEntitlement->update(['leave_taken'=>$totalDays]);
                         $longLeave->update(['approved' => 1]);
+                        $longLeave->update(['approved' => 1]);
 
-                }   
+                        $data =[
+                            "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                            'leave_type' => $userEntitlement->policy->title,
+                            'start_date' => $longLeave->from,
+                            'end_date' => $longLeave->to,
+                            'reason' => $longLeave->reason,
+                            'status' => 'Approved'
+                        ];
+        
+                        Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));  
         
                 
                 // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
@@ -264,18 +334,24 @@ class GlobalLeaveController extends Controller
                     $lateAttendance = LateAttendance::findOrFail($id);
 
                     // Check if the button clicked is for approval or rejection
-                        $lateAttendance->update(['approved' => 1]);
+                     $lateAttendance->update(['approved' => 1]);
                 
                     // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
                     if(auth()->user()->roles[0]->title == "Admin")
                     {
                         $lateAttendance->update(['approved_by' => auth()->user()->id]);
                     }
-                    // Update the field 
-                    if($request->reason){
-                    $lateAttendance->update(['reason' => $request->reason]);
-                    }
-
+                    
+                    $data =[
+                        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                        'leave_type' =>'Late Attendance',
+                        'start_date' => $lateAttendance->from,
+                        'end_date' => $lateAttendance->to,
+                        'reason' => $lateAttendance->reason,
+                        'status' => 'Approved'
+                    ];
+    
+                    Mail::to($lateAttendance->user->email)->send(new LeaveRequestMail($data));
                 }
 
                 if($request->tableId == "basic-3"){
@@ -290,10 +366,17 @@ class GlobalLeaveController extends Controller
                     {
                         $shortLeave->update(['approved_by' => auth()->user()->id]);
                     }
-                    // Update the field 
-                    if($request->reason){
-                     $shortLeave->update(['reason' => $request->reason]);
-                    }
+                    
+                    $data =[
+                        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                        'leave_type' =>'Short Leave',
+                        'start_date' => $shortLeave->from,
+                        'end_date' => $shortLeave->to,
+                        'reason' => $shortLeave->reason,
+                        'status' => 'Approved'
+                    ];
+    
+                    Mail::to($shortLeave->user->email)->send(new LeaveRequestMail($data));
 
                 }
             }
@@ -324,7 +407,19 @@ class GlobalLeaveController extends Controller
                         $totalDays = $userEntitlement->leave_taken - $numberOfDays;
                         $userEntitlement->update(['leave_taken'=>$totalDays]);
                     }
+
                     $longLeave->update(['approved' => -1]); //-1 represents rejection,
+
+                    $data =[
+                        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                        'leave_type' => $userEntitlement->policy->title,
+                        'start_date' => $longLeave->from,
+                        'end_date' => $longLeave->to,
+                        'reason' => $longLeave->reason,
+                        'status' => 'Rejected'
+                    ];
+    
+                    Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));  
                 }   
 
                 if($request->tableId == "basic-2"){
@@ -339,11 +434,17 @@ class GlobalLeaveController extends Controller
                     {
                         $lateAttendance->update(['approved_by' => auth()->user()->id]);
                     }
-                    // Update the field 
-                    if($request->reason){
-                    $lateAttendance->update(['reason' => $request->reason]);
-                    }
-
+                    
+                    $data =[
+                        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                        'leave_type' =>'Late Attendance',
+                        'start_date' => $lateAttendance->from,
+                        'end_date' => $lateAttendance->to,
+                        'reason' => $lateAttendance->reason,
+                        'status' => 'Rejected'
+                    ];
+    
+                    Mail::to($lateAttendance->user->email)->send(new LeaveRequestMail($data));
                 }
 
                 if($request->tableId == "basic-3"){
@@ -358,11 +459,17 @@ class GlobalLeaveController extends Controller
                     {
                         $shortLeave->update(['approved_by' => auth()->user()->id]);
                     }
-                    // Update the field 
-                    if($request->reason){
-                    $shortLeave->update(['reason' => $request->reason]);
-                    }
 
+                    $data =[
+                        "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                        'leave_type' =>'Short Leave',
+                        'start_date' => $shortLeave->from,
+                        'end_date' => $shortLeave->to,
+                        'reason' => $shortLeave->reason,
+                        'status' => 'Approved'
+                    ];
+    
+                    Mail::to($shortLeave->user->email)->send(new LeaveRequestMail($data));
                 }
             }
 

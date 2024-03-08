@@ -29,6 +29,7 @@ class LeaveRequestMail extends Mailable
     public $date;
     public $reason;
     public $admin;
+    public $status;
 
     public function __construct($data)
     {
@@ -36,9 +37,10 @@ class LeaveRequestMail extends Mailable
         $this->leave_type = $data['leave_type'];
         $this->start_date = $data['start_date'];
         $this->end_date = $data['end_date'];
-        $this->date = $data['date'];
+        $this->date = $data['date'] ?? null;
         $this->reason = $data['reason'];
         $this->admin = ucfirst(config('settings.store_owner'));
+        $this->status = $data['status'] ?? null;
     }
 
     /**
@@ -46,8 +48,16 @@ class LeaveRequestMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $message="";
+        if($this->status){
+            $message = "Your request has been [{$this->status}] by {$this->username}." ;
+        }
+        else{
+            $message = ucfirst($this->username).' have requested for leave '.$this->leave_type;
+        }
+        
         return new Envelope(
-            subject: ucfirst($this->username).' have requested for leave '.$this->leave_type ,
+            subject: $message ,
         );
     }
 
