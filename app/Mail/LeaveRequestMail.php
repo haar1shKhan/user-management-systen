@@ -36,9 +36,9 @@ class LeaveRequestMail extends Mailable
     {
         $this->username = $data['username'];
         $this->leave_type = $data['leave_type'];
-        $this->start_date = $data['start_date'];
-        $this->end_date = $data['end_date'];
-        $this->days = $data['days'];
+        $this->from = $data['from'];
+        $this->to = $data['to'];
+        $this->days = $data['days'] ?? null;
         $this->date = $data['date'] ?? null;
         $this->reason = $data['reason'];
         $this->admin = ucfirst(config('settings.store_owner'));

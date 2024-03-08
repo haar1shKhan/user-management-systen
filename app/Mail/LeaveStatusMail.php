@@ -16,9 +16,27 @@ class LeaveStatusMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+
+    public $username;
+    public $status;
+    public $leave_type;
+    public $approved_by;
+    public $days;
+    public $start;
+    public $end;
+    public $reason;
+
+    public function __construct($data)
     {
         //
+        $this->username = $data['reciever_name'];
+        $this->status = $data['status'];
+        $this->leave_type = $data['leave_type'];
+        $this->approved_by = $data['username'];
+        $this->duration = $data['duration'];
+        $this->start = $data['from'];
+        $this->end = $data['to'];
+        $this->reason = $data['reason'] ?? null;
     }
 
     /**
@@ -37,7 +55,7 @@ class LeaveStatusMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'emails.leaveStatusMail',
         );
     }
 

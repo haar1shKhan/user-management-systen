@@ -11,7 +11,7 @@ use App\Models\LateAttendance;
 use App\Models\longLeave;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Mail\LeaveRequestMail;
+use App\Mail\LeaveStatusMail;
 use Illuminate\Support\Facades\Mail;
 use illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,17 +77,20 @@ class GlobalLeaveController extends Controller
                     'approved_by' => auth()->user()->id,
                 ]);
 
-                $data =[
-                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                $data = [
+                    'username' => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'status'  => 'Approved',
                     'leave_type' => $userEntitlement->policy->title,
-                    'start_date' => $longLeave->from,
-                    'end_date' => $longLeave->to,
-                    'reason' => $longLeave->reason,
-                    'status' => 'Approved'
+                    // 'reciever_name' => $longLeave->user->first_name.' '.$longLeave->user->last_name,
+                    'reciever_name' => 'Haarishkhan',
+                    'duration' => $numberOfDays,
+                    'from' => $longLeave->from,
+                    'to' => $longLeave->to,
                 ];
 
-                Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
-     
+                // Mail::to($longLeave->user->email)->send(new LeaveStatusMail($data));
+                Mail::to("haarishkhan13@gmail.com")->send(new LeaveStatusMail($data));
+
             } elseif ($request->has('reject')) {
 
                 if($longLeave->approved==1){
@@ -107,16 +110,20 @@ class GlobalLeaveController extends Controller
                     'approved_by' => auth()->user()->id,
                 ]); //-1 represents rejection,
 
-                $data =[
-                    "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
+                $data = [
+                    'username' => auth()->user()->first_name.' '.auth()->user()->last_name,
+                    'status'  => 'Rejected',
                     'leave_type' => $userEntitlement->policy->title,
-                    'start_date' => $longLeave->from,
-                    'end_date' => $longLeave->to,
-                    'reason' => $longLeave->reason,
-                    'status' => 'Rejected'
+                    // 'reciever_name' => $longLeave->user->first_name.' '.$longLeave->user->last_name,
+                    'reciever_name' => 'Haarishkhan',
+                    'duration' => $numberOfDays,
+                    'from' => $longLeave->from,
+                    'to' => $longLeave->to,
+                    'reason' =>  $reject_reason,
                 ];
 
-                Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
+                // Mail::to($longLeave->user->email)->send(new LeaveStatusMail($data));
+                Mail::to("haarishkhan13@gmail.com")->send(new LeaveStatusMail($data));
          
             }
             
