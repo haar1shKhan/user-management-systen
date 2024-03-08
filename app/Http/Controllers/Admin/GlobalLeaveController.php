@@ -106,7 +106,6 @@ class GlobalLeaveController extends Controller
                     $reject_reason = $request->input('reject_reason');
                 }
                 
-<<<<<<< HEAD
                 $longLeave->update(['approved' => -1]);
 
                 $data =[
@@ -119,12 +118,10 @@ class GlobalLeaveController extends Controller
                 ];
 
                 Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
-=======
                 $longLeave->update([
                     'approved' => -1,
                     'reject_reason' => $reject_reason,
                 ]); //-1 represents rejection,
->>>>>>> 180b7f3adc56e58621baa57d5bedda4d59e86baf
             }
             
             if(auth()->user()->roles[0]->title == "Admin" && !$request->has('pending') )
