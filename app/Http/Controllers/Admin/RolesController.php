@@ -45,31 +45,22 @@ class RolesController extends Controller
      */
     public function create()
     {
-        //
         abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $permissions = Permission::all();
-        
-        // $categories = [];
-        
-        // foreach ($permissions as $item) {
+        $permissionsc = Permission::pluck('group');
+        $permissionsc = $permissionsc->unique();
 
-        //     //$parts = explode('_', $item['slug']);
-        //     $permission_title = $item->title;
+        $group = [];
 
-        //     $str = preg_replace('/\W\w+\s*(\W*)$/','$1',$permission_title);
-            
-        //     // $words =  array_splice($parts, 0, -1);
-        //     // $category = "";
-
-        //     // foreach ($words as $value) {
-        //     //     $category .= $value." ";
-        //     // }
-           
-        //     if (!in_array($str, $categories)) {
-        //         $categories[] = $str;
-        //     }
-        // }
+        foreach ($permissionsc as $key => $value) {
+            $group[$key]['title'] = $value;
+            $perm = Permission::where('group', $value)->get();
+            foreach ($perm as $key2 => $value2) {
+                $group[$key]['permissions'][$key2] = $value2;
+            }
+        }
+       // dd($group);
 
         $categories=[];
 
@@ -84,12 +75,15 @@ class RolesController extends Controller
                 $categories[] = $baseName;
             }
         }
-        
-        $data['permissions'] = $permissions;
-        $data['categories'] = $categories;
-        $data['url'] = 'role';
 
-       return view('admin/roles/create',$data);
+        $data = [
+            'permissions' => $permissions,
+            'categories' => $categories,
+            'group' => $group,
+            'url' => 'role',
+        ];
+
+       return view('admin/roles/create', $data);
     }
     
     /**

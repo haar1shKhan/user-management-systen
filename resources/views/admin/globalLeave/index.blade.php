@@ -288,7 +288,7 @@
 
                                                         <div class="modal fade" id="rejectModalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                            <div class="modal-dialog" role="document">
-                                                              <form class="" action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                              <form class="" action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}" method="post">
                                                                 @csrf
                                                                 @method('PUT')
                                                                 <input type="hidden" name="user_id" value="{{ $list->user->id }}">
@@ -326,7 +326,7 @@
                                                                     @if (!$list->approved == "1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form class=""
-                                                                            action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                             @method('PUT')
@@ -351,7 +351,7 @@
                                                                     @if (!$list->approved == "0")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form class=""
-                                                                            action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                             @method('PUT')
@@ -495,7 +495,7 @@
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="">
                                                                             <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                                 method="post">
                                                                                 @csrf
                                                                                 @method('PUT')
@@ -516,7 +516,7 @@
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="mx-1">
                                                                             <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                                 method="post">
                                                                                 @csrf
                                                                                 @method('PUT')
@@ -536,7 +536,7 @@
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="">
                                                                             <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                                 method="post">
                                                                                 @csrf
                                                                                 @method('PUT')
@@ -558,7 +558,7 @@
                                                                 </div>
 
                                                                 {{-- <li class="">
-                                                            <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                                  @csrf
                                                                  @method('PUT')
 
@@ -572,7 +572,7 @@
                                                         </li>
 
                                                         <li class="mx-1">
-                                                            <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                            <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                                 @csrf
                                                                 @method('PUT')
                                                             
@@ -585,7 +585,7 @@
                                                         </li>
     
                                                         <li class="">
-                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                        <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                             @csrf
                                                             @method('PUT')
                                                         
@@ -704,7 +704,7 @@
 
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                             @method('PUT')
@@ -725,7 +725,7 @@
                                                                     </div>
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                             @method('PUT')
@@ -745,7 +745,7 @@
                                                                     </div>
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['globalLeave' => $list->id]) }}"
+                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
                                                                             method="post">
                                                                             @csrf
                                                                             @method('PUT')
@@ -770,7 +770,7 @@
 
                                                             {{-- <ul class="action">
                                                         
-                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                        <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                             @csrf
                                                             @method('PUT')
                                                         
@@ -784,7 +784,7 @@
                                                             </li>
                                                         </form>
 
-                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                        <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                             @csrf
                                                             @method('PUT')
                                                         
@@ -797,7 +797,7 @@
                                                             </li>
                                                         </form>
 
-                                                        <form action="{{ route('admin.'.$url.'.update', ['globalLeave' => $list->id]) }}" method="post">
+                                                        <form action="{{ route('admin.'.$url.'.update', ['leave_request' => $list->id]) }}" method="post">
                                                             @csrf
                                                             @method('PUT')
                                                         

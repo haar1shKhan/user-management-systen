@@ -20,7 +20,7 @@ class GlobalLeaveController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public $base_url = 'admin/globalLeave';
+    public $base_url = 'admin/leave-requests';
 
     public function index()
     {
@@ -32,7 +32,7 @@ class GlobalLeaveController extends Controller
 
         $page_title = 'Leave Requests';
         $trash = false;
-        $data['url']='globalLeave';
+        $data['url']='leave.requests';
 
         $data['longLeaves']=$longLeaves;
         $data['shortLeave']=$shortLeave;

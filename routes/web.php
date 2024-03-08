@@ -76,19 +76,53 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     |  GLOBAL LEAVE  |
     ----------------*/
 
-    Route::resource('globalLeave', GlobalLeaveController::class)->except([
+    Route::resource('leave-requests', GlobalLeaveController::class)->except([
         'create', 
         'store', 
         'show', 
         'edit', 
     ])->names([
-        'index' => 'globalLeave',
-        'update' => 'globalLeave.update',
-        'destroy' => 'globalLeave.destroy',
+        'index' => 'leave.requests',
+        'update' => 'leave.requests.update',
+        'destroy' => 'leave.requests.destroy',
     ]);
 
     Route::post('globalLeave/massAction', [GlobalLeaveController::class,'massAction'])->name('globalLeave.massAction');
  
+    /*----------------
+    |  LEAVE POLICY  |
+    ----------------*/
+
+    Route::resource('leaveSettings/policies', LeavePoliciesController::class)->except([
+        'show',
+        'create',
+        'edit',
+    ])->names([
+        'index' => 'leaveSettings.leavePolicies',
+        'store' => 'leaveSettings.leavePolicies.store',
+        'update' => 'leaveSettings.leavePolicies.update',
+        'destroy' => 'leaveSettings.leavePolicies.destroy',
+    ]);
+
+    Route::post('leaveSettings/policies/massAction', [LeavePoliciesController::class,'massAction'])->name('leaveSettings.policies.massAction');
+    
+    /*---------------------
+    |  LEAVE ENTITLEMENT  |
+    ---------------------*/
+
+    Route::resource('leaveSettings/leaveEntitlement', LeaveEntitlementController::class)->except([
+        'show',
+        'create',
+        'edit',
+    ])->names([
+        'index' => 'leaveSettings.leaveEntitlement',
+        'store' => 'leaveSettings.leaveEntitlement.store',
+        'update' => 'leaveSettings.leaveEntitlement.update',
+        'destroy' => 'leaveSettings.leaveEntitlement.destroy',
+    ]);
+
+    Route::post('leaveSettings/leaveEntitlement/massAction', [LeaveEntitlementController::class,'massAction'])->name('leaveSettings.leaveEntitlement.massAction');
+
     /*------------
     |  FEEDBACK  |
     ------------*/
@@ -203,36 +237,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     ]);
 
     Route::post('longLeave/massAction', [LeaveController::class,'massAction'])->name('longLeave.massAction');
-
-    Route::resource('leaveSettings/policies', LeavePoliciesController::class)->except([
-        'show', // If you don't have a show method in your controller
-        'create',
-        'edit',
-    ])->names([
-        'index' => 'leaveSettings.leavePolicies',
-        'store' => 'leaveSettings.leavePolicies.store',
-        'update' => 'leaveSettings.leavePolicies.update',
-        'destroy' => 'leaveSettings.leavePolicies.destroy',
-    ]);
-
-    Route::post('leaveSettings/policies/massAction', [LeavePoliciesController::class,'massAction'])->name('leaveSettings.policies.massAction');
-    
-    Route::resource('leaveSettings/leaveEntitlement', LeaveEntitlementController::class)->except([
-        'show', // If you don't have a show method in your controller
-        'create',
-        'edit',
-    ])->names([
-        'index' => 'leaveSettings.leaveEntitlement',
-        'store' => 'leaveSettings.leaveEntitlement.store',
-        'update' => 'leaveSettings.leaveEntitlement.update',
-        'destroy' => 'leaveSettings.leaveEntitlement.destroy',
-    ]);
-
-    Route::post('leaveSettings/leaveEntitlement/massAction', [LeaveEntitlementController::class,'massAction'])->name('leaveSettings.leaveEntitlement.massAction');
-    
-
-    
-
 
     //DISABLED
     /* Route::get('maintanance/backup', [MaintananceController::class,'backup'])->name('backup');
