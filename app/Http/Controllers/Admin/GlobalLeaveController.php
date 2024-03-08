@@ -48,10 +48,6 @@ class GlobalLeaveController extends Controller
     {
         abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if(auth()->user()->roles[0]->title != "Admin"){
-            return redirect('admin/globalLeave');
-        }
-
         if($request->type == "longLeave"){
             $longLeave= longLeave::findOrFail($id);
             $userEntitlement = LeaveEntitlement::findOrFail($longLeave->entitlement_id);
@@ -76,7 +72,10 @@ class GlobalLeaveController extends Controller
                
                 $totalDays = $userEntitlement->leave_taken + $numberOfDays;
                 $userEntitlement->update(['leave_taken'=>$totalDays]);
-                $longLeave->update(['approved' => 1]);
+                $longLeave->update([
+                    'approved' => 1,
+                    'approved_by' => auth()->user()->id,
+                ]);
 
                 $data =[
                     "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
@@ -105,6 +104,7 @@ class GlobalLeaveController extends Controller
                 $longLeave->update([
                     'approved' => -1,
                     'reject_reason' => $reject_reason,
+                    'approved_by' => auth()->user()->id,
                 ]); //-1 represents rejection,
 
                 $data =[
@@ -120,16 +120,16 @@ class GlobalLeaveController extends Controller
          
             }
             
-            if(auth()->user()->roles[0]->title == "Admin" && !$request->has('pending') )
+            if(!$request->has('pending') )
             {
-                $longLeave->update(['approved_by' => auth()->user()->id]);
                 return redirect($this->base_url);
             }
             
-            if($longLeave->approved==1){
+            if($longLeave->approved == 1){
                 $totalDays = $userEntitlement->leave_taken - $numberOfDays;
                 $userEntitlement->update(['leave_taken'=>$totalDays]);
             }
+
             $longLeave->update(['approved_by' => null]);
             $longLeave->update(['approved' => 0]); 
             
