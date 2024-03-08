@@ -10,7 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Mail\LeaveRequestMail;
-use Mail;
+use DateTime;
+use Illuminate\Support\Facades\Mail;
 
 class LateAttendanceController extends Controller
 {
@@ -94,17 +95,20 @@ class LateAttendanceController extends Controller
             'to' => $request->input('to'),
             'reason' => $request->input('reason'),
         ]);
+
         $user->lateAttendance()->save($lateAttendance);
-        $from = Carbon::parse($request->input('from'));
-        $to = Carbon::parse($request->input('to'));
-        $duration = $from->diffInDays($to);
+        
+        $from = new DateTime($request->input('from'));
+        $to = new DateTime($request->input('to'));
+        $duration = $from->diff($to);
+
         $data =[
             "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
             "date" => date("d/m/Y", strtotime($request->input('date'))),
             'leave_type' => "Late Attendance",
-            'start_date' => $request->input('from'),
-            'end_date' =>$request->input('to'),
-            'days' =>    date('h',$duration).' Hour',
+            'start_date' => $from->format('h:i a'),
+            'end_date' => $to->format('h:i a'),
+            'days' => $duration->format('%h hours %i miniutes '),
             'reason' => $request->input("reason"),
         ];
 

@@ -10,7 +10,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Mail\LeaveRequestMail;
-use Mail;
+use DateTime;
+use Illuminate\Support\Facades\Mail;
 
 class ShortLeaveController extends Controller
 {
@@ -100,14 +101,18 @@ class ShortLeaveController extends Controller
         ]);
         $user->shortLeave()->save($shortLeave);
 
+        $from = new DateTime($request->input('from'));
+        $to = new DateTime($request->input('to'));
+        $duration = $from->diff($to);
+        
         $data =[
             "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
-            "date" => date("d/m/Y",  $currentDate),
+            "date" => date("d/m/Y",  strtotime($currentDate)),
             'leave_type' => "Short Leave",
-            'start_date' => $request->input('from'),
-            'end_date' =>$request->input('to'),
+            'start_date' => $from->format('h:i a'),
+            'end_date' => $to->format('h:i a'),
+            'days' => $duration->format('%h hours %i miniutes '),
             'reason' => $request->input("reason"),
-            'admin' => config('settings.store_owmer'),
         ];
     
         Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));

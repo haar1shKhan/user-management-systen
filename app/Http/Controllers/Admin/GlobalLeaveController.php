@@ -12,7 +12,7 @@ use App\Models\longLeave;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Mail\LeaveRequestMail;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,11 +53,8 @@ class GlobalLeaveController extends Controller
         }
 
         if($request->type == "longLeave"){
-
-
             $longLeave= longLeave::findOrFail($id);
             $userEntitlement = LeaveEntitlement::findOrFail($longLeave->entitlement_id);
-            // dd($userEntitlement);
 
             if($longLeave->approved==1 && $request->has('approve')){
                 return redirect($this->base_url);

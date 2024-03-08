@@ -82,7 +82,7 @@
                                                                     <div class="col-md-4">
                                                                         <label class="col-form-label">Date</label>
                                                                         <div class="col-sm-12">
-                                                                            <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="date" name="date" required>
+                                                                            <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" value="{{date('Y-m-d')}}" id="date" name="date" required>
                                                                         </div>
                                                                     </div>   
                                                                </div>
@@ -246,7 +246,7 @@
                                                                                 <div class="col-md-4">
                                                                                     <label class="col-form-label">Date</label>
                                                                                     <div class="col-sm-12">
-                                                                                        <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" id="date" name="date" required>
+                                                                                        <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" value="{{$list->date}}" id="date" name="date" required>
                                                                                     </div>
                                                                                 </div>   
                                                                            </div>

@@ -21,7 +21,7 @@ A new leave request has been recieved from {{ $username }}.
 
 Please approve/reject this leave application by going following:
 
-@component('mail::button', ['url' => 'https://www.google.com', 'color' => 'success'])
+@component('mail::button', ['url' => route('admin.leave.requests'), 'color' => 'success'])
     View Request
 @endcomponent
 

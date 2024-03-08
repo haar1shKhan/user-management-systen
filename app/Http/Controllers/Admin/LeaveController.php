@@ -9,7 +9,8 @@ use App\Models\LeaveEntitlement;
 use App\Models\longLeave;
 use Carbon\Carbon;
 use App\Mail\LeaveRequestMail;
-use Mail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,7 +43,7 @@ class LeaveController extends Controller
                 ->where('user_id',auth()->user()->id)
                 ->where(function ($query) {
                     $query->whereYear('from', Carbon::now()->year)
-                        ->whereBetween(\DB::raw('MONTH(`from`)'),[1,Carbon::now()->month-1]);
+                        ->whereBetween(DB::raw('MONTH(`from`)'),[1,Carbon::now()->month-1]);
                 })
                 ->where('approved',1)->get();
 
