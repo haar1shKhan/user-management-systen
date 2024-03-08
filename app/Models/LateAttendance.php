@@ -15,6 +15,7 @@ class LateAttendance extends Model
         'to',
         'reason',
         'approved',
+        'reject_reason',
         'approved_by'
     ];
 

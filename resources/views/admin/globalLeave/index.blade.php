@@ -286,7 +286,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="modal fade" id="rejectModalForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal fade" id="rejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                            <div class="modal-dialog" role="document">
                                                               <form class="" action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}" method="post">
                                                                 @csrf
@@ -377,7 +377,7 @@
                                                                     @if (!$list->approved == "-1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="delete">
-                                                                            <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#rejectModalForm">
+                                                                            <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#rejectModalForm{{$list->id}}">
                                                                                 <span><i class="icon-close"></i></span>
                                                                             </button>
                                                                         </li>
@@ -478,6 +478,7 @@
                                                                 <p class="text-success">Approved</p>
                                                             @else
                                                                 <p class="text-danger">Rejected</p>
+                                                                @if($list->reject_reason) <p>Reason: {{$list->reject_reason}}</p> @endif
                                                             @endif
 
                                                         </td>
@@ -486,75 +487,66 @@
                                                         </td>
 
                                                         {{-- @can('user_edit' || 'user_delete') --}}
+                                                        <div class="modal fade" id="lateRejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                           <div class="modal-dialog" role="document">
+                                                              <form action="{{ route('admin.lateAttendance.reject', ['leave' => $list->id]) }}" method="post">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <div class="mb-3">
+                                                                          <label class="col-form-label" for="reject_reason">Reason</label>
+                                                                          <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button class="btn btn-danger" type="submit" name="reject">Reject</button>
+                                                                    </div>
+                                                              </div>
+                                                            </form>
+                                                           </div>
+                                                        </div>
 
                                                         <td style="min-width: 125px;">
                                                             <ul class="d-flex justify-content-center align-items-center">
 
                                                                 <div class="row">
-
+                                                                    @if (!$list->approved == "1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="">
-                                                                            <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                                method="post">
+                                                                            <form action="{{ route('admin.lateAttendance.approve', ['leave' => $list->id]) }}" method="post">
                                                                                 @csrf
                                                                                 @method('PUT')
-
-                                                                                <!-- Add a hidden input field for user ID -->
-                                                                                <input type="hidden" name="user_id"
-                                                                                    value="{{ $list->user->id }}">
-                                                                                <input type="hidden" name="type"
-                                                                                    value="lateAttendances">
-
-
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="approve"><i
-                                                                                        class="icon-check text-success font-weight-bold"></i></button>
+                                                                                <button class="border-none" type="submit">
+                                                                                    <i class="icon-check text-success font-weight-bold"></i>
+                                                                                </button>
                                                                             </form>
                                                                         </li>
                                                                     </div>
+                                                                    @endif
+                                                                    @if (!$list->approved == "0")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="mx-1">
-                                                                            <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                                method="post">
+                                                                            <form action="{{ route('admin.lateAttendance.pending', ['leave' => $list->id]) }}" method="post">
                                                                                 @csrf
-                                                                                @method('PUT')
-
-                                                                                <!-- Add a hidden input field for user ID -->
-                                                                                <input type="hidden" name="user_id"
-                                                                                    value="{{ $list->user->id }}">
-                                                                                <input type="hidden" name="type"
-                                                                                    value="lateAttendances">
-
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="pending"><i
-                                                                                        class="icofont icofont-clock-time text-warning font-weight-bold"></i></button>
+                                                                                @method('PUT') 
+                                                                                <button class="border-none" type="submit">
+                                                                                    <i class="icofont icofont-clock-time text-warning font-weight-bold"></i>
+                                                                                </button>
                                                                             </form>
                                                                         </li>
                                                                     </div>
+                                                                    @endif
+                                                                    @if (!$list->approved == "-1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <li class="">
-                                                                            <form
-                                                                                action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                                method="post">
-                                                                                @csrf
-                                                                                @method('PUT')
-
-                                                                                <!-- Add a hidden input field for user ID -->
-                                                                                <input type="hidden" name="user_id"
-                                                                                    value="{{ $list->user->id }}">
-                                                                                <input type="hidden" name="type"
-                                                                                    value="lateAttendances">
-
-
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="reject"><i
-                                                                                        class="icon-close text-danger font-weight-bold"></i></button>
-                                                                            </form>
+                                                                        <li class="delete">
+                                                                            <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#lateRejectModalForm{{$list->id}}">
+                                                                                <span><i class="icon-close"></i></span>
+                                                                            </button>
                                                                         </li>
                                                                     </div>
-
+                                                                    @endif
                                                                 </div>
 
                                                                 {{-- <li class="">
@@ -688,6 +680,7 @@
                                                                 <p class="text-success">Approved</p>
                                                             @else
                                                                 <p class="text-danger">Rejected</p>
+                                                                @if($list->reject_reason) <p>Reason: {{$list->reject_reason}}</p> @endif
                                                             @endif
 
                                                         </td>
@@ -697,74 +690,66 @@
 
                                                         {{-- @can('user_edit' || 'user_delete') --}}
 
+                                                        <div class="modal fade" id="shortRejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                           <div class="modal-dialog" role="document">
+                                                              <form action="{{ route('admin.short-leave.reject', ['leave' => $list->id]) }}" method="post">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <div class="mb-3">
+                                                                          <label class="col-form-label" for="reject_reason">Reason</label>
+                                                                          <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                                                                        <button class="btn btn-danger" type="submit" name="reject">Reject</button>
+                                                                    </div>
+                                                              </div>
+                                                            </form>
+                                                           </div>
+                                                        </div>
+
                                                         <td style="min-width: 125px;">
                                                             <ul class="d-flex justify-content-center align-items-center">
 
                                                                 <div class="row">
-
+                                                                    @if (!$list->approved == "1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                            method="post">
+                                                                        <form action="{{ route('admin.short-leave.approve', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
                                                                             @method('PUT')
-
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id"
-                                                                                value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="type"
-                                                                                value="shortLeave">
-
-
                                                                             <li class="edit">
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="approve"><i
-                                                                                        class="icon-check"></i></button>
+                                                                                <button class="border-none" type="submit">
+                                                                                    <i class="icon-check"></i>
+                                                                                </button>
                                                                             </li>
                                                                         </form>
                                                                     </div>
+                                                                    @endif
+                                                                    @if (!$list->approved == "0")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                            method="post">
+                                                                        <form action="{{ route('admin.short-leave.pending', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
                                                                             @method('PUT')
-
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id"
-                                                                                value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="type"
-                                                                                value="shortLeave">
-
                                                                             <li class="pending">
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="pending"><i
-                                                                                        class="icofont icofont-clock-time"></i></i></button>
+                                                                                <button class="border-none" type="submit" name="pending">
+                                                                                    <i class="icofont icofont-clock-time"></i>
+                                                                                </button>
                                                                             </li>
                                                                         </form>
                                                                     </div>
+                                                                    @endif
+                                                                    @if (!$list->approved == "-1")
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <form
-                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                            method="post">
-                                                                            @csrf
-                                                                            @method('PUT')
-
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id"
-                                                                                value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="type"
-                                                                                value="shortLeave">
-
-
-                                                                            <li class="delete">
-                                                                                <button class="border-none" type="submit"
-                                                                                    name="reject"><i
-                                                                                        class="icon-close"></i></button>
-                                                                            </li>
-                                                                        </form>
+                                                                        <li class="delete">
+                                                                            <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#shortRejectModalForm{{$list->id}}">
+                                                                                <span><i class="icon-close"></i></span>
+                                                                            </button>
+                                                                        </li>
                                                                     </div>
-
+                                                                    @endif
                                                                 </div>
                                                             </ul>
 

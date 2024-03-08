@@ -54,6 +54,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         'update' => 'short-leave.update',
         'destroy' => 'short-leave.destroy',
     ]);
+    Route::controller(ShortLeaveController::class)->prefix('short-leave')->name('short-leave.')->group(function () {
+        Route::put('approve/{leave}', 'approve')->name('approve');
+        Route::put('pending/{leave}', 'pending')->name('pending');
+        Route::put('reject/{leave}', 'reject')->name('reject');
+    });
     Route::post('short-leave/mass-delete', [ShortLeaveController::class,'massDelete'])->name('user.massDelete');
     
     /*-------------------
@@ -70,7 +75,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         'update' => 'lateAttendance.update',
         'destroy' => 'lateAttendance.destroy',
     ]);
-    Route::post('lateAttendance/massAction', [LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
+    Route::controller(LateAttendanceController::class)->prefix('late-attendance')->name('lateAttendance.')->group(function () {
+        Route::put('approve/{leave}', 'approve')->name('approve');
+        Route::put('pending/{leave}', 'pending')->name('pending');
+        Route::put('reject/{leave}', 'reject')->name('reject');
+    });
+    Route::post('late-attendance/mass-action', [LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
 
     /*---------------
     |  GLOBAL LEAVE  |

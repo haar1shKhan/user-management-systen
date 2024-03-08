@@ -18,6 +18,7 @@ return new class extends Migration
             $table->time('to');
             $table->longText('reason');
             $table->boolean('approved')->default(0);
+            $table->text('reject_reason')->nullable();
             $table->timestamps();
             // $table->softDelete();
         });

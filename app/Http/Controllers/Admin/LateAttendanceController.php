@@ -97,7 +97,7 @@ class LateAttendanceController extends Controller
         ]);
 
         $user->lateAttendance()->save($lateAttendance);
-        
+
         $from = new DateTime($request->input('from'));
         $to = new DateTime($request->input('to'));
         $duration = $from->diff($to);
@@ -186,5 +186,30 @@ class LateAttendanceController extends Controller
         }
         return redirect($this->base_url);
 
+    }
+
+    public function approve(LateAttendance $leave){
+        $leave->update([
+            'approved' => 1,
+            'approved_by' => auth()->user()->id,
+        ]);
+        return redirect()->route('admin.leave.requests');
+    }
+
+    public function reject(Request $request, LateAttendance $leave){
+        $leave->update([
+            'approved' => -1,
+            'reject_reason' => $request->input('reject_reason'),
+            'approved_by' => auth()->user()->id,
+        ]);
+        return redirect()->route('admin.leave.requests');
+    }
+
+    public function pending(LateAttendance $leave){
+        $leave->update([
+            'approved' => 0,
+            'approved_by' => null,
+        ]);
+        return redirect()->route('admin.leave.requests');
     }
 }
