@@ -86,7 +86,7 @@
 
                     @can('leave_request_access')       
                     <li class="sidebar-list">
-                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.globalLeave') }}">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.leave.requests') }}">
                             <svg class="stroke-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>

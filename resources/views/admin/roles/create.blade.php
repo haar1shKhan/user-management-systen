@@ -57,6 +57,22 @@
                                 </div>
                             </div>
                             <div class="row">
+                                @foreach ( $group as $category )
+                                <?php print_r($category)?>
+                                    <div class="col-4 my-4">
+                                        {{-- <h6 class="permission-category">{{ $category->title }}</h6>
+                                        @foreach($category->permissions as $permission)
+                                            @if (str_starts_with($permission->slug, $category))
+                                            
+                                                <div class="form-check checkbox checkbox-dark mb-0">
+                                                    <input class="form-check-input" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" >
+                                                    <label class="form-check-label" for={{"inline-".$permission->id}}>{{ $permission->title }}</label>
+                                                </div>
+                                            @endif
+                                        @endforeach --}} 
+                                    </div>
+                                @endforeach
+                                
                                 @foreach($categories as $category)
                                     <div class="col-4 my-4">
                                         <h6 class="permission-category">{{ $category }}</h6>
