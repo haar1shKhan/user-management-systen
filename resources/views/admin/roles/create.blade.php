@@ -69,7 +69,7 @@
                                                     <label class="form-check-label" for={{"inline-".$permission->id}}>{{ $permission->title }}</label>
                                                 </div>
                                             @endif
-                                        @endforeach --}}
+                                        @endforeach --}} 
                                     </div>
                                 @endforeach
                                 
