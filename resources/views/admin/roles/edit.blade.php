@@ -56,26 +56,23 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
-                                @foreach($categories as $category)
-                                    <div class="col-4 my-2">
-                                        <h6 class="permission-category">{{ $category }}</h6>
-                                        @foreach($permissions as $permission)
-                                            @if (str_starts_with($permission->slug, strtolower($category)))
-                                            
-                                                <div class="form-check checkbox checkbox-dark mb-0">
-                                                    <input class="form-check-input select" name="permissions[]" id={{"inline-".$permission->id}} value="{{ $permission->id }}" type="checkbox" 
-                                                        @if ($role->permissions->pluck('id')->contains($permission->id))
+                                @foreach ( $group as $category )
+                                    @if($category['title'] != "Permissions" )
+                                        <div class="col-4 my-4">
+                                            <h6 class="permission-category" style="cursor: pointer;">{{ $category['title'] }}</h6>
+                                            @foreach($category['permissions'] as $permission)
+                                                    <div class="form-check checkbox checkbox-dark mb-0">
+                                                        <input class="form-check-input" name="permissions[]" id={{"inline-".$permission['id']}} value="{{ $permission['id'] }}" type="checkbox" 
+                                                            @if ($role->permissions->pluck('id')->contains($permission['id']))
                                                             checked
-                                                        @endif
-                                                    >
-                                                    <label class="form-check-label" for={{"inline-".$permission->id}}>{{ $permission->title }}</label>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                                
+                                                            @endif
+                                                        >
+                                                        <label class="form-check-label" for={{"inline-".$permission['id']}}>{{ $permission['title'] }}</label>
+                                                    </div>
+                                            @endforeach 
+                                        </div>
+                                    @endif
+                                @endforeach      
                             </div>
                         </div>
                         <div class="row">
@@ -121,7 +118,19 @@
 
         if(selects.not(':checked').length == 0)  {
             $('#selectall').prop('checked', true);
-        }      
+        }    
+        
+        let permission_category =  document.getElementsByClassName('permission-category');
+
+        permission_category.forEach(function (element) {
+            element.addEventListener('click',function (e) {
+                let parent = e.target.parentElement;
+                let inputs = parent.getElementsByTagName('input');
+                inputs.forEach(function (input){
+                    input.checked = !input.checked;
+                })
+            })
+        })
         
     });
 </script>

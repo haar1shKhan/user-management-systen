@@ -47,38 +47,20 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $permissions = Permission::all();
-        $permissionsc = Permission::pluck('group');
-        $permissionsc = $permissionsc->unique();
+        $categories = Permission::pluck('group');
+        $categories = $categories->unique();
 
         $group = [];
 
-        foreach ($permissionsc as $key => $value) {
-            $group[$key]['title'] = $value;
-            $perm = Permission::where('group', $value)->get();
-            foreach ($perm as $key2 => $value2) {
-                $group[$key]['permissions'][$key2] = $value2;
-            }
-        }
-       // dd($group);
-
-        $categories=[];
-
-        foreach ($permissions as $item) {
-            $parts = explode('_', $item['slug']);
-        
-            // Assuming the base name is the first part of the title
-            $baseName = $parts[0];
-        
-            // Add to the permissions array
-            if (!in_array($baseName, $categories)) {
-                $categories[] = $baseName;
+        foreach ($categories as $key => $category) {
+            $group[$key]['title'] = $category;
+            $permissions = Permission::where('group', $category)->get();
+            foreach ($permissions as $key2 => $permission) {
+                $group[$key]['permissions'][$key2] = $permission;
             }
         }
 
         $data = [
-            'permissions' => $permissions,
-            'categories' => $categories,
             'group' => $group,
             'url' => 'role',
         ];
@@ -124,37 +106,34 @@ class RolesController extends Controller
      */
     public function edit(string $id)
     {
-        //
         abort_if(Gate::denies('role_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $role = Role::with('permissions')->find($id);
-        $roles = Role::all();
-        $permissions = Permission::all();
+
         if(is_null($role))
         {
             return redirect('roles/index');
         }
 
-        $categories=[];
+        $categories = Permission::pluck('group');
+        $categories = $categories->unique();
 
-        foreach ($permissions as $item) {
-            $parts = explode('_', $item['slug']);
-        
-            // Assuming the base name is the first part of the title
-            $baseName = $parts[0];
-        
-            // Add to the permissions array
-            if (!in_array($baseName, $categories)) {
-                $categories[] = $baseName;
+        $group = [];
+
+        foreach ($categories as $key => $category) {
+            $group[$key]['title'] = $category;
+            $permissions = Permission::where('group', $category)->get();
+            foreach ($permissions as $key2 => $permission) {
+                $group[$key]['permissions'][$key2] = $permission;
             }
         }
 
-        $data['role'] = $role;
-        $data['permissions'] = $permissions;
+        $data = [
+            'role'=> $role,
+            'group' => $group,
+            'url' => 'role',
+        ];
         
-        $data['categories'] = $categories;
-        $data['url'] = 'role';
-      
         return view('admin/roles/edit',$data);
     }
 
