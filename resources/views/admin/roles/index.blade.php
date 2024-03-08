@@ -48,7 +48,8 @@
                             <div>
                                 @can('role_create')
                                     
-                                <a class="btn btn-primary" href="{{'/admin'.'/'.$url.'s/create'}}">{{trans('admin/role.addRole') }}</a>
+                                <a class="btn btn-primary" href="{{'/admin'.'/'.$url.'s/duplicate-user'}}">Add User Role</a>
+                                <a class="btn btn-primary" href="{{'/admin'.'/'.$url.'s/create'}}">Add Role</a>
                                 
                                 @endcan
 

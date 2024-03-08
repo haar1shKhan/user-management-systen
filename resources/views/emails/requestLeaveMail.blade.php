@@ -7,24 +7,25 @@
 </x-slot:header>
 
 {{-- Body --}}
-@if(!$status)
-    ## Hi {{ $admin }},
+#  NEW Leave Request,
 
-    #### {{ $username }} has requested {{$leave_type}}{{$date ? " on " .$date: "" }},
-@else
-    #### Your request has been [{{$status}}] by {{ $username }}.
-@endif
-    
-| Leave Type    | {{$leave_type}}  |
-| -             |-                 |
-| From:         | {{$start_date}}  |
-| To:           | {{$end_date}}    |
-| Reason        | {{$reason}}      |
-    
-@if(!$status)
-#### Please click the button below and update the leave status in the system
-@endif
+Hello,
 
+A new leave request has been recieved from {{ $username }}.
+    
+**Leave Type:** {{$leave_type}} \
+**From:** {{$start_date}} \
+**To:** {{$end_date}} \
+**Duration:** {{$days}} \
+**Reason:** {{$reason}}
+
+Please approve/reject this leave application by going following:
+
+@component('mail::button', ['url' => 'https://www.google.com', 'color' => 'success'])
+    View Request
+@endcomponent
+
+Thanks.
 {{-- Subcopy --}}
 @isset($subcopy)
 <x-slot:subcopy>

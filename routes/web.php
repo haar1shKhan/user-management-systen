@@ -164,7 +164,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     Route::get('roles/{role}',function(){
         abort(404);
     });
-
+    
+    Route::get('roles/duplicate-user', [RolesController::class,'duplicateUser'])->name('role.duplicate.user');
     Route::get('roles/restore/{role}', [RolesController::class,'restore'])->name('role.restore');
     Route::delete('roles/forceDelete/{role}', [RolesController::class,'forceDelete'])->name('role.forceDelete');
     Route::post('roles/massAction', [RolesController::class,'massAction'])->name('role.massAction');

@@ -225,11 +225,11 @@ class LeaveController extends Controller
         'leave_type' => $userEntitlement->policy->title,
         'start_date' => date("d/m/Y", strtotime($startDate)),
         'end_date' => date("d/m/Y", strtotime($endDate)),
+        'days' =>   $numberOfDays.' days',
         'reason' => $request->input("comment"),
-        'admin' => config('settings.store_owmer'),
     ];
 
-    Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));
+    Mail::to(config('settings.store_email'))->queue(new LeaveRequestMail($data));
 
     return redirect($this->base_url);
 

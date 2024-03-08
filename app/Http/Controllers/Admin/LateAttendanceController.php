@@ -95,17 +95,19 @@ class LateAttendanceController extends Controller
             'reason' => $request->input('reason'),
         ]);
         $user->lateAttendance()->save($lateAttendance);
-
+        $from = Carbon::parse($request->input('from'));
+        $to = Carbon::parse($request->input('to'));
+        $duration = $from->diffInDays($to);
         $data =[
             "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
             "date" => date("d/m/Y", strtotime($request->input('date'))),
             'leave_type' => "Late Attendance",
             'start_date' => $request->input('from'),
             'end_date' =>$request->input('to'),
+            'days' =>    date('h',$duration).' Hour',
             'reason' => $request->input("reason"),
-            'admin' => config('settings.store_owmer'),
         ];
-    
+
         Mail::to(config('settings.store_email'))->send(new LeaveRequestMail($data));
 
         return redirect($this->base_url);

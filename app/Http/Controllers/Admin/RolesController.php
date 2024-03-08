@@ -18,8 +18,6 @@ class RolesController extends Controller
      */
     public function index(Request $request)
     {
-        //
-
         abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $roles = Role::with('permissions')->get();
@@ -29,15 +27,27 @@ class RolesController extends Controller
             $roles = Role::with('permissions')->onlyTrashed()->get();
             $data['trash'] = true;
         }
-        // echo '<pre>';
-        // echo $roles;
-        // die;
         $data['page_title'] = 'Dashboard';
         $data['roles'] = $roles;
         $data['url'] = 'role';
         
-       
         return view('admin.roles.index', $data);
+    }
+    
+    public function duplicateUser ()
+    {
+        $role = Role::find(2)->replicate()->save();
+        $role = Role::with('permissions')->find(2);
+        $newRole = Role::latest()->first();
+
+        $permissions = [];
+        foreach ($role->permissions as $key => $value) {
+            $permissions[]= $value->id;
+        }
+        
+        $newRole->permissions()->sync($permissions);
+
+        return redirect()->route('admin.roles');
     }
 
     /**
@@ -86,19 +96,10 @@ class RolesController extends Controller
         if ($request->has('permissions')) {
             $role->permissions()->sync($request['permissions']);
         } else {
-            // If no permissions are selected, remove all existing permissions
             $role->permissions()->detach();
         }
 
         return redirect('admin/roles');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -169,7 +170,7 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if(!$role->id === 1)
+        if($role->id != 1 && $role->id != 2)
         {
             $role->delete();
         }
@@ -213,7 +214,7 @@ class RolesController extends Controller
 
                 $role = Role::find($id);
         
-                if(!$role->id === 1){
+                if($role->id != 1 && $role->id != 2){
                     Role::find($id)->delete();
                 }
             }
@@ -225,7 +226,6 @@ class RolesController extends Controller
     
     public function forceDelete(string $id)
     {
-        //
         abort_if(Gate::denies('role_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         Role::withTrashed()->find($id)->forceDelete();

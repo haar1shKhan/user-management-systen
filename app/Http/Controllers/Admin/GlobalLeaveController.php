@@ -40,8 +40,7 @@ class GlobalLeaveController extends Controller
         $data['shortLeave']=$shortLeave;
         $data['lateAttendances']=$lateAttendances;
         $data['page_title']=$page_title;
-
-
+        
         return view('admin.globalLeave.index',$data);
     }
 
@@ -106,7 +105,10 @@ class GlobalLeaveController extends Controller
                     $reject_reason = $request->input('reject_reason');
                 }
                 
-                $longLeave->update(['approved' => -1]);
+                $longLeave->update([
+                    'approved' => -1,
+                    'reject_reason' => $reject_reason,
+                ]); //-1 represents rejection,
 
                 $data =[
                     "username" => auth()->user()->first_name.' '.auth()->user()->last_name,
@@ -118,10 +120,7 @@ class GlobalLeaveController extends Controller
                 ];
 
                 Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
-                $longLeave->update([
-                    'approved' => -1,
-                    'reject_reason' => $reject_reason,
-                ]); //-1 represents rejection,
+         
             }
             
             if(auth()->user()->roles[0]->title == "Admin" && !$request->has('pending') )
