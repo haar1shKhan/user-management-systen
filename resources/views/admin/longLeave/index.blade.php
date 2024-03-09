@@ -308,10 +308,10 @@ button.border-none {
                                             <td>{{ date('d/m/Y', strtotime($list->from)) }}</td>
                                             <td>{{ date('d/m/Y', strtotime($list->to)) }}</td>
                                             <td>{{$list->reason}}</td>
-                                            <td class="action"> 
+                                            <td> 
                                                 @if ($list->leave_file)
                                                 <a class="pdf" href="{{ asset('storage/leave_files/'.$list->leave_file) }}" target="_blank">
-                                                <i class="icofont icofont-file-pdf"></i></a>
+                                                <i style="color:red;" class="icofont icofont-file-pdf"></i></a>
                                                 @else
                                                 File not available
                                                 @endif 
