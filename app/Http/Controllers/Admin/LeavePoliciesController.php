@@ -121,7 +121,6 @@ class LeavePoliciesController extends Controller
     {
         //
         $leavePolicies = LeavePolicies::findOrFail($id);
-
         $days = $request->input('days');
         
         if($request->has('monthly')){
@@ -155,7 +154,11 @@ class LeavePoliciesController extends Controller
         
         if (count($users) > 0){
             foreach ($users as $key => $user) {
-
+            
+                if(LeaveEntitlement::where('leave_policy_id',$id)->where('user_id',$user->id)->exists()){
+                    continue;
+                }
+              
                 $gender = $request->input('gender') ;
                 $role = $request->input('role') ;
                 $marital_status = $request->input('marital_status');
