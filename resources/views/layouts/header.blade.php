@@ -64,9 +64,9 @@
         <li class="profile-nav onhover-dropdown pe-0 py-0">
           <div class="media profile-media">
             @if (empty(auth()->user()->profile->image))
-            <img height="40px" width="40px" class="rounded-circle" src="{{ asset('assets/images/placeholder.png') }}" alt="">
+            <img width="40px" class="rounded-circle" src="{{ asset('assets/images/placeholder.png') }}" alt="">
             @else
-            <img height="40px" width="40px" class="rounded-circle" src="{{ asset('storage/profile_images/' . (auth()->user()->profile->image)) }}" alt="">
+            <img width="40px" class="rounded-circle" src="{{ asset('storage/profile_images/' . (auth()->user()->profile->image)) }}" alt="">
             @endif
             <div class="media-body"><span>{{auth()->user()->first_name }} {{auth()->user()->last_name}}</span>
               <p class="mb-0 font-roboto">
