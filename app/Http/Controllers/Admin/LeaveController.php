@@ -119,11 +119,6 @@ class LeaveController extends Controller
         return redirect($this->base_url)->with('status', $statusMessage);
     }
 
-    if($month !== $currentMonth){
-        $statusMessage = 'Cannot apply leave for comming month in advance';
-        return redirect($this->base_url)->with('status', $statusMessage);
-    }
-
     $userEntitlement = LeaveEntitlement::where('user_id',auth()->user()->id)->where('leave_policy_id', $request->input('policy_id'))->with("policy","user")->first();
 
      $existingLeave = longLeave::where('user_id', auth()->user()->id)
@@ -150,6 +145,11 @@ class LeaveController extends Controller
     }
 
     if ($userEntitlement->policy->monthly == 1) {
+
+        if($month !== $currentMonth){
+            $statusMessage = 'Cannot apply leave for comming month in advance';
+            return redirect($this->base_url)->with('status', $statusMessage);
+        }
 
     // Check if the user has already applied for leave in the current month
     // Check if leave already exists for the same user and entitlement in the same month
