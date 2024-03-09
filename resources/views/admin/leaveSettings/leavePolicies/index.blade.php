@@ -30,6 +30,12 @@
 
 @section('content')
 
+@if (session('status'))
+    <div class="alert alert-warning " role="alert">
+        {{ session('status') }}
+    </div>
+@endif
+
 <div class="container-fluid">
     <div class="row">
 
@@ -159,7 +165,6 @@
                                                         <label class="form-label" for="activate">Activate</label>
                                                         <select name="activate"  class="form-select" id="activate" required>
                         
-                                                            <option selected="true" disabled value="">Choose...</option>
                                                             <option   value="manual">Manually</option>
                                                             <option   value="immediately_after_hiring">Immediately After Hiring</option>
                                                 
@@ -376,7 +381,6 @@
                                                                                 <label class="form-label" for="update_gender-{{$type->id}}">Gender</label>
                                                                                 <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
                                                 
-                                                                                    <option selected="true" disabled value="">Choose...</option>
                                                                                     <option   value="">All</option>       
                                                                                     <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
                                                                                     <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
@@ -393,7 +397,6 @@
                                                                                 <label class="form-label" for="update_marital_status-{{$type->id}}">Marital status</label>
                                                                                 <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
                                                 
-                                                                                    <option selected="true" disabled value="">Choose...</option>
                                                                                     <option   value="">All</option>       
                                                                                     <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
                                                                                     <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">Married</option>
@@ -416,7 +419,6 @@
                                                                                 <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
                                                                                 <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required>
                                                 
-                                                                                    <option selected="true" disabled value="">Choose...</option>
                                                                                     <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
                                                                                     <option {{$type->activate=="immediately_after_hiring"?"selected":""}} value="immediately_after_hiring">Immediately After Hiring</option>
                                                                         

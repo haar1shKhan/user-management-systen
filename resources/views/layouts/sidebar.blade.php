@@ -93,7 +93,7 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
-                            <span>Leave Requests</span>
+                            <span>Leave Requests @if(config('count.total'))<span  class="text-white badge rounded-pill badge-danger">{{config('count.total')}}@endif</span> </span>
                         </a>
                     </li>
                     @endcan

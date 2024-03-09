@@ -37,13 +37,19 @@ class LeavePoliciesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $days = $request->input('days');
 
-        // dd($request->has('advance_salary'));
+        if($request->has('monthly')){
+            $days = $request->input("days") * 12;
+            if($days > 31){
+                $statusMessage = 'You cannot choose more than 31 days ';
+                return redirect()->route('admin.leaveSettings.leavePolicies')->with("status",$statusMessage);
+            }
+        }
 
         $leavePolicy = new LeavePolicies([
             'title' => $request->input('title'),
-            'days' => $request->input('days'),
+            'days' => $days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
             'roles' => $request->input('role'),
@@ -115,10 +121,20 @@ class LeavePoliciesController extends Controller
     {
         //
         $leavePolicies = LeavePolicies::findOrFail($id);
-          
+
+        $days = $request->input('days');
+        
+        if($request->has('monthly')){
+            $days = $request->input("days") * 12;
+            if($days > 31){
+                $statusMessage = 'You cannot choose more than 31 days ';
+                return redirect()->route('admin.leaveSettings.leavePolicies')->with("status",$statusMessage);
+            }
+        }
+
         $leavePolicies->update([
             'title' => $request->input('title'),
-            'days' => $request->input('days'),
+            'days' => $days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
             'roles' => $request->input('role'),

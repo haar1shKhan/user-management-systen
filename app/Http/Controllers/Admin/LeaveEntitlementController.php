@@ -21,6 +21,7 @@ class LeaveEntitlementController extends Controller
 
         $leaveEntitlement = LeaveEntitlement::with("policy","user")->get();
         $leavePolicies = LeavePolicies::get();
+        // dd($leavePolicies);
         $users = User::get();
 
         $data['page_title'] = 'Leave Manager';
@@ -49,13 +50,23 @@ class LeaveEntitlementController extends Controller
         abort_if(Gate::denies('leave_entitlement_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
           // Create a new LeaveEntitlement instance
           $users = $request->input("user_id");
-
+          $leavePolicies = LeavePolicies::find($request->input('leave_policy_id'));
+          $days = $request->input('days');
+        
+          if($leavePolicies->monthly){
+              $days = $request->input("days") * 12;
+              if($days > 31){
+                  $statusMessage = 'You cannot choose more than 31 days ';
+                  return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+              }
+          }
+  
           foreach($users as $user){
             
           $leaveEntitlement = new LeaveEntitlement([
             'leave_policy_id' => $request->input('leave_policy_id'),
             'leave_year' => $request->input('leave_year'),
-            'days' => $request->input('days'),
+            'days' =>  $days,
             'user_id' => $user,
         ]);
 
@@ -90,11 +101,19 @@ class LeaveEntitlementController extends Controller
     {
         abort_if(Gate::denies('leave_entitlement_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $leaveEntitlement = LeaveEntitlement::findOrFail($id);
+        $days = $request->input('days');
+        if($leaveEntitlement->policy->montly){
+            $days = $request->input("days") * 12;
+            if($days > 31){
+                $statusMessage = 'You cannot choose more than 31 days ';
+                return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+            }
+        }
 
         $leaveEntitlement -> update([
             'leave_policy_id' => $request->input('leave_policy_id'),
             'leave_year' => $request->input('leave_year'),
-            'days' => $request->input('days'),
+            'days' => $days,
             // 'user_id' => $user,
         ]);
 

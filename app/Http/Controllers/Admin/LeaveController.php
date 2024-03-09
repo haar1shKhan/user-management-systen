@@ -20,7 +20,7 @@ class LeaveController extends Controller
     * Display a listing of the resource.
     */
 
-    public $base_url = "/admin/longLeave";
+    public $base_url = "/admin/long-leave";
     //remaing holiddays and expired holidays are not working as expected 
     //The form and the approval is working also when admin approve the total holiday is reduced
 
@@ -218,6 +218,7 @@ class LeaveController extends Controller
         'to' => $endDate,
         'number_of_days' => $numberOfDays,
         "leave_file"=> $fileName,
+        "salary"=> $request->has('advance_salary'),
         'reason' => $request->input("comment"),
         // Other leave-related data
     ]);

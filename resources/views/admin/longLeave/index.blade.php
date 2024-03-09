@@ -117,7 +117,7 @@ button.border-none {
                                                                        
                                                                        @endphp 
                                                                    <option value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
-                                                                   data-number-of-days="{{$remainingDays}}">
+                                                                   data-number-of-days="@if($leaveType->policy->monthly) {{$totalDays/12}} @else{{$remainingDays}}@endif">
                                                                        {{ $leaveType->policy->title }}
                                                                    </option>
                                                                @endforeach
@@ -154,14 +154,12 @@ button.border-none {
                                                        <div class="row mb-2 my-4">
 
                                                            <div class=" d-flex justify-content-around">
-                                                               <div class="form-check form-check-inline radio radio-primary">
-                                                               <input disabled class="form-check-input" id="radioinline2" type="radio" name="advance_salary">
-                                                               <label class="form-check-label mb-0 small" for="radioinline2">Advance Salary</label>
+
+                                                               <div id="advance_salary_div" style="display:none;" class="form-check form-check-inline checkbox checkbox-dark mb-0">
+                                                                    <input class="form-check-input" id="inline-1" type="checkbox" name="advance_salary">
+                                                                    <label class="form-check-label" for="inline-1">Advance Salary</label>
                                                                </div>
-                                                               <div class="form-check form-check-inline radio radio-primary">
-                                                               <input disabled class="form-check-input" id="radioinline3" type="radio" name="monthly">
-                                                               <label class="form-check-label mb-0 small" for="radioinline3">Monthly</label>
-                                                               </div>
+
                                                            </div>
                                                        
                                                        </div>
@@ -544,6 +542,7 @@ button.border-none {
 
         });
 
+        $('#advance_salary_div').hide();
 
         $('#policy_id',).change(function () {
             var selectedLeaveType = $(this).find(':selected');
@@ -553,27 +552,23 @@ button.border-none {
 
         function updateFormFields(selectedLeaveType) {
             // Reset form fields
-            $('input[name="advance_salary"]').prop('checked', false);
-            $('input[name="monthly"]').prop('checked', false);
-
             // Add logic to show/hide and update fields based on the selected leave type
             var monthly = selectedLeaveType.data('monthly');
             var advanceSalary = selectedLeaveType.data('advance-salary');
             var numberOfDays = selectedLeaveType.data('number-of-days');
 
-
             $('.days-field').text('Remaining days: ' + numberOfDays);
 
-
             if (monthly) {
-                // Update fields for monthly leave
-                $('input[name="monthly"]').prop('checked', true);
-                
+                $('.days-field').text('Remaining days: ' + numberOfDays+ " per month");
             }
-            
+            $('#advance_salary_div').hide();
+            $('input[name="advance_salary"]').prop('checked', false)
             if (advanceSalary) {
                 // Update fields for leave with advance salary
-                $('input[name="advance_salary"]').prop('checked', true);
+                // console.log(advanceSalary);
+                $('#advance_salary_div').show();
+                $('input[name="advance_salary"]').prop('checked', false)
             }
             // Add more conditions based on your dynamic leave type properties
 
@@ -591,6 +586,7 @@ button.border-none {
                 startDateInput = $("#startDate").val();
                 endDateInput = $("#endDate").val();
                 var numberOfDays = selectedLeaveType.data('number-of-days');
+                var monthly = selectedLeaveType.data('monthly');
 
                 const startDate = new Date(startDateInput);
                 const endDate = new Date(endDateInput);
@@ -602,6 +598,10 @@ button.border-none {
                 const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
                 $('.days-field').html((numberOfDays - daysDifference>0?'Remaining days: ' +( numberOfDays - daysDifference):"<span class='text-danger'>Remaining days: "+0+"</span>"));
+
+                if(monthly){
+                   $('.days-field').html((numberOfDays - daysDifference>0?'Remaining days: ' +( numberOfDays - daysDifference) + ' per month' : "<span class='text-danger'>Remaining days: "+0+" per month</span>"));
+                }
 
 
             });

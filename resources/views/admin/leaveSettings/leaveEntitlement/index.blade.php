@@ -31,6 +31,12 @@
 
 @section('content')
 
+@if (session('status'))
+    <div class="alert alert-warning " role="alert">
+        {{ session('status') }}
+    </div>
+@endif
+
 <div class="container-fluid">
     <div class="row">
 
@@ -71,7 +77,7 @@
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             @foreach ($leavePolicies as $policies)
-                                                             <option data-days="{{ $policies->days }}" value="{{ $policies->id }}">
+                                                             <option data-days="{{ $policies->days }}" data-monthly={{$policies->monthly}} value="{{ $policies->id }}">
                                                                  {{ $policies->title }}
                                                              </option>
                                                             @endforeach
@@ -101,7 +107,7 @@
 
 
                                                     <div class="d-flex flex-column  col-md-4">
-                                                        <label class="form-label" for="days">Days</label>
+                                                        <label class="form-label" for="days" id="daysLabel">Days</label>
                                                          <input class="form-control" id="days"  name="days" type="number"  data-bs-original-title="" title="">
                                                          <div class="text-danger mt-1">
                                                              @error("days")
@@ -421,17 +427,17 @@
 
         function updateFormFields(selectedLeaveType) {
 
-            // Add logic to show/hide and update fields based on the selected leave type
             var days = selectedLeaveType.data('days');
-            console.log(days);
-            // var advanceSalary = selectedLeaveType.data('advance-salary');
-            // var numberOfDays = selectedLeaveType.data('number-of-days');
-            // $('.days-field').text('Number of days: ' + days);
+            var monthly = selectedLeaveType.data('monthly');
+            console.log(monthly);
             $('input[name="days"]').val(days);
 
-            // Add more conditions based on your dynamic leave type properties
+            if (monthly) {
+                $('#daysLabel').text("Days per month");
+            } else {
+                $('#daysLabel').text("Days per year");
+            }
 
-            // Show the relevant form fields
         }
 </script>
     <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>

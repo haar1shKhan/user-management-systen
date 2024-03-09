@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 use App\Models\Setting;
+use App\Models\longLeave;
+use App\Models\LateAttendance;
+use App\Models\ShortLeave;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Config;
 
@@ -46,5 +49,14 @@ class AppServiceProvider extends ServiceProvider
             Config::set($smtp);
         }
 
+        $leave_request = longLeave::where('approved','0')->count();
+        $late_request  = LateAttendance::where('approved','0')->count();
+        $short_request = ShortLeave::where('approved','0')->count();
+        $total_request = $leave_request + $late_request + $short_request;
+
+        Config::set('count.leave', $leave_request);
+        Config::set('count.late', $late_request);
+        Config::set('count.short', $short_request);
+        Config::set('count.total', $total_request);
     }
 }
