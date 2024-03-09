@@ -10,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Mail\LeaveRequestMail;
+use App\Mail\LeaveStatusMail;
 use DateTime;
 use Illuminate\Support\Facades\Mail;
 
@@ -196,27 +197,73 @@ class ShortLeaveController extends Controller
     }
 
     public function approve(ShortLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $from = new DateTime($leave->from);
+        $to = new DateTime($leave->to);
+        $duration = $from->diff($to);
+
         $leave->update([
             'approved' => 1,
             'approved_by' => auth()->user()->id,
         ]);
+
+        $this->sendEmail($leave, 'Short Leave', $duration, 'Approved');
+
         return redirect()->route('admin.leave.requests');
     }
 
     public function reject(Request $request, ShortLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $from = new DateTime($leave->from);
+        $to = new DateTime($leave->to);
+        $duration = $from->diff($to);
+
         $leave->update([
             'approved' => -1,
             'reject_reason' => $request->input('reject_reason'),
             'approved_by' => auth()->user()->id,
         ]);
+
+        $this->sendEmail($leave, 'Short Leave', $duration, 'Rejected');
+
         return redirect()->route('admin.leave.requests');
     }
 
     public function pending(ShortLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $from = new DateTime($leave->from);
+        $to = new DateTime($leave->to);
+        $duration = $from->diff($to);
+
         $leave->update([
             'approved' => 0,
             'approved_by' => null,
         ]);
+
+        $this->sendEmail($leave, 'Short Leave', $duration, 'set to Pending');
+
         return redirect()->route('admin.leave.requests');
+    }
+
+    public function sendEmail($leave, $entitlement, $duration, $status){
+
+        $data = [
+            'username' => $leave->user->first_name.' '.$leave->user->last_name,
+            'status'  => $status,
+            'leave_type' => $entitlement,
+            'approved_by' => auth()->user()->first_name.' '.auth()->user()->last_name,
+            'date' => date('d/m/Y', strtotime($leave->date)),
+            'duration' => $duration->format('%h hours %i miniutes '),
+            'from' => date('h:i a', strtotime($leave->from)),
+            'to' => date('h:i a', strtotime($leave->to)),
+        ];
+    
+        Mail::to($leave->user->email)->send(new LeaveStatusMail($data));
     }
 }

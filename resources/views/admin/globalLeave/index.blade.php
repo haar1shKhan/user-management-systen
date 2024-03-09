@@ -288,12 +288,9 @@
 
                                                         <div class="modal fade" id="rejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                            <div class="modal-dialog" role="document">
-                                                              <form class="" action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}" method="post">
+                                                              <form action="{{ route('admin.longLeave.reject', ['leave' => $list->id]) }}" method="post">
                                                                 @csrf
                                                                 @method('PUT')
-                                                                <input type="hidden" name="user_id" value="{{ $list->user->id }}">
-                                                                <input type="hidden" name="leave_policy_id" value="{{ $list->entitlement->policy->id }}">
-                                                                <input type="hidden" name="type" value="longLeave">
                                                               <div class="modal-content">
                                                                  <div class="modal-body">
                                                                        <div class="mb-3">
@@ -303,7 +300,7 @@
                                                                  </div>
                                                                  <div class="modal-footer">
                                                                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button class="btn btn-danger" type="submit" name="reject">Reject</button>
+                                                                    <button class="btn btn-danger" type="submit">Reject</button>
                                                                  </div>
                                                               </div>
                                                             </form>
@@ -323,58 +320,33 @@
                                                                         </li>
                                                                     </div>
 
-                                                                    @if (!$list->approved == "1")
+                                                                    @if ($list->approved != 1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <form class=""
-                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                            method="post">
+                                                                        <form action="{{ route('admin.longLeave.approve', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
                                                                             @method('PUT')
-
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id"
-                                                                                value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="leave_policy_id"
-                                                                                value="{{ $list->entitlement->policy->id }}">
-                                                                            <input type="hidden" name="type"
-                                                                                value="longLeave">
-
                                                                             <li class="edit">
-                                                                                <button type="submit" name="approve"
-                                                                                    class="border-none">
+                                                                                <button type="submit" class="border-none">
                                                                                     <span><i class="icon-check"></i></span>
                                                                                 </button>
                                                                             </li>
                                                                         </form>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "0")
+                                                                    @if ($list->approved != 0)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
-                                                                        <form class=""
-                                                                            action="{{ route('admin.' . $url . '.update', ['leave_request' => $list->id]) }}"
-                                                                            method="post">
+                                                                        <form action="{{ route('admin.longLeave.pending', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
                                                                             @method('PUT')
-
-                                                                            <!-- Add a hidden input field for user ID -->
-                                                                            <input type="hidden" name="user_id"
-                                                                                value="{{ $list->user->id }}">
-                                                                            <input type="hidden" name="leave_policy_id"
-                                                                                value="{{ $list->entitlement->policy->id }}">
-                                                                            <input type="hidden" name="type"
-                                                                                value="longLeave">
-
                                                                             <li class="pending">
-                                                                                <button type="submit" name="pending"
-                                                                                    class="border-none">
-                                                                                    <span><i
-                                                                                            class="icofont icofont-clock-time "></i></span>
+                                                                                <button type="submit" class="border-none">
+                                                                                    <span><i class="icofont icofont-clock-time "></i></span>
                                                                                 </button>
                                                                             </li>
                                                                         </form>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "-1")
+                                                                    @if ($list->approved != -1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="delete">
                                                                             <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#rejectModalForm{{$list->id}}">
@@ -512,7 +484,7 @@
                                                             <ul class="d-flex justify-content-center align-items-center">
 
                                                                 <div class="row">
-                                                                    @if (!$list->approved == "1")
+                                                                    @if ($list->approved != 1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="">
                                                                             <form action="{{ route('admin.lateAttendance.approve', ['leave' => $list->id]) }}" method="post">
@@ -525,7 +497,7 @@
                                                                         </li>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "0")
+                                                                    @if ($list->approved != 0)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="mx-1">
                                                                             <form action="{{ route('admin.lateAttendance.pending', ['leave' => $list->id]) }}" method="post">
@@ -538,7 +510,7 @@
                                                                         </li>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "-1")
+                                                                    @if ($list->approved != -1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="delete">
                                                                             <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#lateRejectModalForm{{$list->id}}">
@@ -715,7 +687,7 @@
                                                             <ul class="d-flex justify-content-center align-items-center">
 
                                                                 <div class="row">
-                                                                    @if (!$list->approved == "1")
+                                                                    @if ($list->approved != 1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form action="{{ route('admin.short-leave.approve', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
@@ -728,7 +700,7 @@
                                                                         </form>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "0")
+                                                                    @if ($list->approved != 0)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <form action="{{ route('admin.short-leave.pending', ['leave' => $list->id]) }}" method="post">
                                                                             @csrf
@@ -741,7 +713,7 @@
                                                                         </form>
                                                                     </div>
                                                                     @endif
-                                                                    @if (!$list->approved == "-1")
+                                                                    @if ($list->approved != -1)
                                                                     <div class="col-md-6 b-primary mx-2 my-2 action-btn">
                                                                         <li class="delete">
                                                                             <button type="button" class="border-none" data-bs-toggle="modal" data-bs-target="#shortRejectModalForm{{$list->id}}">

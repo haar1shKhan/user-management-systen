@@ -37,8 +37,31 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     /*-------------
     |  DASHBOARD  |
     -------------*/
-
+    
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    
+    /*--------------
+    |  LONG LEAVE  |
+    --------------*/
+
+    Route::resource('long-leave', LeaveController::class)->except([
+        'show', 
+    ])->names([
+        'index' => 'longLeave',
+        'create' => 'longLeave.create',
+        'store' => 'longLeave.store',
+        'edit' => 'longLeave.edit',
+        'update' => 'longLeave.update',
+        'destroy' => 'longLeave.destroy',
+    ]);
+
+    Route::controller(LeaveController::class)->prefix('long-leave')->name('longLeave.')->group(function () {
+        Route::put('approve/{leave}', 'approve')->name('approve');
+        Route::put('pending/{leave}', 'pending')->name('pending');
+        Route::put('reject/{leave}', 'reject')->name('reject');
+    });
+
+    Route::post('longLeave/massAction', [LeaveController::class,'massAction'])->name('longLeave.massAction');
 
     /*---------------
     |  SHORT LEAVE  |
@@ -220,9 +243,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
 
 });
 
-Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
-   
-
+//Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
     //passport DISABLED
     /* Route::resource('passport', App\Http\Controllers\Admin\PassportController::class)->except([
         'show', // If you don't have a show method in your controller
@@ -235,22 +256,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         'destroy' => 'passport.destroy',
     ]); */
 
-    //Leave
-    Route::resource('longLeave', LeaveController::class)->except([
-        'show', // If you don't have a show method in your controller
-    ])->names([
-        'index' => 'longLeave',
-        'create' => 'longLeave.create',
-        'store' => 'longLeave.store',
-        'edit' => 'longLeave.edit',
-        'update' => 'longLeave.update',
-        'destroy' => 'longLeave.destroy',
-    ]);
-
-    Route::post('longLeave/massAction', [LeaveController::class,'massAction'])->name('longLeave.massAction');
-
     //DISABLED
     /* Route::get('maintanance/backup', [MaintananceController::class,'backup'])->name('backup');
     Route::get('maintanance/error-log', [MaintananceController::class,'error'])->name('error.log'); */
-});
+//});
 

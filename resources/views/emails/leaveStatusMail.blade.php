@@ -11,7 +11,11 @@
 
 Hello {{$username}},
 
-Your **{{$leave_type}}** request for {{$days}} days from {{$start}} to {{$end}} has been {{$status}}  
+@if ($date)
+Your **{{$leave_type}}** request for {{$duration}} on {{$date}} from {{$start}} to {{$end}} has been {{$status}}  
+@else
+Your **{{$leave_type}}** request for {{$duration}} days from {{$start}} to {{$end}} has been {{$status}}  
+@endif
     
 @if ($status === 'Rejected')
 The reason of rejection is: {{$reason}}

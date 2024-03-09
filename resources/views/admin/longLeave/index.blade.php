@@ -145,7 +145,7 @@ button.border-none {
                                                            </div>
                                                            <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
                                                                <div class="mx-2 days-field">
-                                                                   Number of days: 0
+                                                                   Remaining days: 0
                                                                </div>
                                                            </div>
                                                        </div>
@@ -411,7 +411,7 @@ button.border-none {
                                                         @endcan
 
                                                         @can("long_leave_delete")
-                                                            <form action="{{route('admin.'.$url.'.destroy',['longLeave'=>$list->id])}}" method="post">
+                                                            <form action="{{route('admin.'.$url.'.destroy',['long_leave'=>$list->id])}}" method="post">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
@@ -562,7 +562,7 @@ button.border-none {
             var numberOfDays = selectedLeaveType.data('number-of-days');
 
 
-            $('.days-field').text('Number of days: ' + numberOfDays);
+            $('.days-field').text('Remaining days: ' + numberOfDays);
 
 
             if (monthly) {
@@ -601,7 +601,7 @@ button.border-none {
                 // Convert milliseconds to days
                 const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
-                $('.days-field').html((numberOfDays - daysDifference>0?'Number of days: ' +( numberOfDays - daysDifference):"<span class='text-danger'>Number of days: "+0+"</span>"));
+                $('.days-field').html((numberOfDays - daysDifference>0?'Remaining days: ' +( numberOfDays - daysDifference):"<span class='text-danger'>Remaining days: "+0+"</span>"));
 
 
             });

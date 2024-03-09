@@ -9,6 +9,7 @@ use App\Models\LeaveEntitlement;
 use App\Models\longLeave;
 use Carbon\Carbon;
 use App\Mail\LeaveRequestMail;
+use App\Mail\LeaveStatusMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -374,6 +375,116 @@ class LeaveController extends Controller
         }
         return redirect($this->base_url);
 
+    }
+
+    /**
+    * Updtate Status to Approved.
+    */
+    public function approve(longLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if($leave->approved==1){
+            return redirect()->route('admin.leave.requests');
+        }
+        
+        $startDate = Carbon::parse($leave->from);
+        $endDate = Carbon::parse($leave->to);
+        $numberOfDays = $startDate->diffInDays($endDate);
+
+        $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
+
+        $totalDays = $userEntitlement->leave_taken + $numberOfDays;
+        $userEntitlement->update(['leave_taken'=>$totalDays]);
+
+        $leave->update([
+            'approved' => 1,
+            'approved_by' => auth()->user()->id,
+        ]);
+
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Approved');
+
+        return redirect()->route('admin.leave.requests');
+    }
+
+    /**
+    * Updtate Status to Rejected.
+    */
+    public function reject(Request $request, longLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if($leave->approved == -1){
+            return redirect()->route('admin.leave.requests');
+        }
+
+        $startDate = Carbon::parse($leave->from);
+        $endDate = Carbon::parse($leave->to);
+        $numberOfDays = $startDate->diffInDays($endDate);
+
+        $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
+
+        if($leave->approved == 1){
+            $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+            $userEntitlement->update(['leave_taken'=>$totalDays]);
+        }
+
+        $leave->update([
+            'approved' => -1,
+            'reject_reason' => $request->input('reject_reason'),
+            'approved_by' => auth()->user()->id,
+        ]);
+
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Rejected');
+
+        return redirect()->route('admin.leave.requests');
+    }
+
+    /**
+    * Updtate Status to Pending.
+    */
+    public function pending(longLeave $leave){
+
+        abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        if($leave->approved == 0){
+            return redirect()->route('admin.leave.requests');
+        }
+        
+        $startDate = Carbon::parse($leave->from);
+        $endDate = Carbon::parse($leave->to);
+        $numberOfDays = $startDate->diffInDays($endDate);
+
+        $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
+
+        if($leave->approved == 1){
+            $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+            $userEntitlement->update(['leave_taken'=>$totalDays]);
+        }
+
+        $leave->update([
+            'approved' => 0,
+            'approved_by' => null,
+        ]);
+
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'set to Pending');
+
+        return redirect()->route('admin.leave.requests');
+    }
+
+    public function sendEmail($leave, $entitlement, $numberOfDays, $status){
+
+        $data = [
+            'username' => $leave->user->first_name.' '.$leave->user->last_name,
+            'status'  => $status,
+            'leave_type' => $entitlement->policy->title,
+            'approved_by' => auth()->user()->first_name.' '.auth()->user()->last_name,
+            'duration' => $numberOfDays,
+            'from' => date('d/m/Y', strtotime($leave->from)),
+            'to' => date('d/m/Y', strtotime($leave->to)),
+        ];
+    
+        Mail::to($leave->user->email)->send(new LeaveStatusMail($data));
     }
     
 }

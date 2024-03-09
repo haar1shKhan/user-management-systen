@@ -21,7 +21,8 @@ class LeaveStatusMail extends Mailable
     public $status;
     public $leave_type;
     public $approved_by;
-    public $days;
+    public $duration;
+    public $date;
     public $start;
     public $end;
     public $reason;
@@ -29,11 +30,12 @@ class LeaveStatusMail extends Mailable
     public function __construct($data)
     {
         //
-        $this->username = $data['reciever_name'];
+        $this->username = $data['username'];
         $this->status = $data['status'];
         $this->leave_type = $data['leave_type'];
-        $this->approved_by = $data['username'];
+        $this->approved_by = $data['approved_by'];
         $this->duration = $data['duration'];
+        $this->date = $data['date'] ?? null;
         $this->start = $data['from'];
         $this->end = $data['to'];
         $this->reason = $data['reason'] ?? null;
