@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -206,6 +208,13 @@ class UsersController extends Controller
                 }
             }
         }
+
+        $mailData = [
+            'name' => $user->email,
+            'email' => $user->first_name.' '.$user->lastname,
+        ];
+
+        Mail::to($user->email)->queue(new WelcomeMail($mailData));
     
         return redirect('admin/users');
     }

@@ -16,8 +16,19 @@ Your expertise and energy will undoubtedly contribute to our success.
 
 Here are a few quick details to help you get started:
 
+- Login Credentials:
+
+**Username:** {{ $employee_email }}
+**Password:** Please contact your admin.
+
+- Click this button below to access:
+
+@component('mail::button', ['url' => route('/'), 'color' => 'success'])
+    Get Access
+@endcomponent
+
 Regards  
-**{{$sender_name}}**  
+**{{config('settings.store_owner')}}**  
 Ansee Nails Care
 
 {{-- Subcopy --}}
