@@ -8,6 +8,7 @@
 @endsection
 
 @section('style')
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/owlcarousel.css')}}">
 <style>
 button.border-none {
     border: none;
@@ -38,7 +39,49 @@ button.border-none {
 
 <div class="container-fluid">
     <div class="row">
-
+        @if (!empty($entitlmentArray))
+        <div class="col-sm-12">
+            <div class="card">
+				<div class="card-body">
+					<div class="owl-carousel owl-theme" id="owl-carousel-1">
+                        @foreach ($entitlmentArray as $entitlement)
+						<div class="item">
+                            <div style="background-color:#efefef;" class="card text-dark shadow-none mb-0">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="mb-5 d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="mb-0">{{ $entitlement['leaveType'] }}</h6>
+                                                <p>{{ $entitlement['totaDays'] }} days</p>
+                                            </div>
+                                            <div>
+                                                <h6>{{ $entitlement['leaveYear'] }}</h6>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <div class="text-center mx-2">
+                                                <h6>Taken</h6>
+                                                <p>{{ $entitlement['leaveTaken'] }} days</p>
+                                            </div>
+                                            <div class="text-center mx-2">
+                                                <h6>Expired</h6>
+                                                <p>{{ $entitlement['expiredLeave'] }} days</p>
+                                            </div>
+                                            <div class="text-center mx-2">
+                                                <h6>Remaining</h6>
+                                                <p>{{ $entitlement['remainingLeave'] }} days</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+					</div>
+				</div>
+			</div>
+        </div> 
+        @endif
         <!-- Zero Configuration  Starts-->
         <div class="col-sm-12">
 
@@ -205,43 +248,6 @@ button.border-none {
                         </div>
                         @endif
                     </div>
-
-                    <div class="col-md-8">
-                        <div class="mt-4">
-                            <h5 class="p-1 bg-success">Previous Vacation</h5>
-
-                            <table class="table table-bordered table-striped" style="background-color: #f8f9fa;">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="small">Leave Year</th>
-                                        <th class="small">leave Type</th>
-                                        <th class="small">Total Days</th>
-                                        <th class="small">Leave taken</th>
-                                        <th class="small">Remaining Balance</th>
-                                        <th class="small">Expired Days</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @foreach ($entitlmentArray as $entitlement)
-                                        <tr>
-                                            <td class="small">{{ $entitlement['leaveYear'] }}</td>
-                                            <td class="small">{{ $entitlement['leaveType'] }}</td>
-                                            <td class="small">{{ $entitlement['totaDays'] }}</td>
-                                            <td class="small">{{ $entitlement['leaveTaken'] }}</td>
-                                            <td class="small">{{ $entitlement['remainingLeave'] }}</td>
-                                            <td class="small">{{ $entitlement['expiredLeave'] }}</td>
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
-                                
-                           
-                            
-                        </div>
-                    </div>
-                        
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -443,6 +449,10 @@ button.border-none {
 @endsection
 
 @section('script')
+    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+    <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script>
+
     <script>
         $(document).ready(function () {
             // Disable the button initially if massDestroy array is empty
@@ -607,9 +617,21 @@ button.border-none {
             });
         }
      
-
-
+    $('#owl-carousel-1').owlCarousel({
+        loop:false,
+        margin:10,
+        nav:false,
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:2
+            },
+            1000:{
+                items:3
+            }
+        }
+    })
     </script>
-    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
 @endsection
