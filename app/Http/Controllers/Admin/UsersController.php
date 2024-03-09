@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -123,7 +125,7 @@ class UsersController extends Controller
             'email' => $request->input('personal_email'),
             'phone' => $request->input('phone'),
             'mobile' => $request->input('mobile'),
-            'date_of_birth' => str_replace("/","-",$request->input('date_of_birth')),
+            'date_of_birth' => date("Y-m-d",strtotime($request->input('date_of_birth'))),
             'gender' => $request->input('gender'),
             'nationality' => $request->input('nationality'),
             'marital_status' => $request->input('marital_status'),
@@ -206,6 +208,13 @@ class UsersController extends Controller
                 }
             }
         }
+
+        $mailData = [
+            'name' => $user->first_name.' '.$user->last_name,
+            'email' => $user->email,
+        ];
+
+        Mail::to($user->email)->queue(new WelcomeMail($mailData));
     
         return redirect('admin/users');
     }

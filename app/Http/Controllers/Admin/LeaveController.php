@@ -403,7 +403,7 @@ class LeaveController extends Controller
             'approved_by' => auth()->user()->id,
         ]);
 
-        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Approved');
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Approved', null);
 
         return redirect()->route('admin.leave.requests');
     }
@@ -436,7 +436,7 @@ class LeaveController extends Controller
             'approved_by' => auth()->user()->id,
         ]);
 
-        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Rejected');
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'Rejected', $request->input('reject_reason'));
 
         return redirect()->route('admin.leave.requests');
     }
@@ -468,12 +468,12 @@ class LeaveController extends Controller
             'approved_by' => null,
         ]);
 
-        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'set to Pending');
+        $this->sendEmail($leave, $userEntitlement, $numberOfDays, 'set to Pending', null);
 
         return redirect()->route('admin.leave.requests');
     }
 
-    public function sendEmail($leave, $entitlement, $numberOfDays, $status){
+    public function sendEmail($leave, $entitlement, $numberOfDays, $status, $reason){
 
         $data = [
             'username' => $leave->user->first_name.' '.$leave->user->last_name,
@@ -483,6 +483,7 @@ class LeaveController extends Controller
             'duration' => $numberOfDays,
             'from' => date('d/m/Y', strtotime($leave->from)),
             'to' => date('d/m/Y', strtotime($leave->to)),
+            'reason' => $reason,
         ];
     
         Mail::to($leave->user->email)->send(new LeaveStatusMail($data));
