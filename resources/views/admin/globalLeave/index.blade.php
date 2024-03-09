@@ -68,6 +68,108 @@
 @endsection
 
 @section('content')
+@if (!empty($longLeaves))
+@foreach ($longLeaves as $list)
+ <div class="modal fade" id="file{{ $list->id }}" tabindex="-1"
+        role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                            <div class="mb-3">
+                                @if (empty($list->user->profile->image))
+                                    <img height="100px" width="100px"
+                                        class="img-thumbnail rounded-circle"
+                                        style="max-width: 150px; max-height: 150px;"
+                                        src="{{ asset('assets/images/placeholder.png') }}"
+                                        alt="">
+                                @else
+                                    <img height="100px" width="100px"
+                                        src="{{ asset('storage/profile_images/' . $list->user->profile->image) }}"
+                                        alt="Profile Picture"
+                                        class="rounded-circle media profile-media">
+                                @endif
+                            </div>
+                            <span>
+                                Name: {{ $list->user->first_name }} {{ $list->user->last_name }}
+                            </span>
+                        </div>
+                        <div class="col-md-6 py-4">
+                            <div class="my-1">
+                                Type of Leave: {{ $list->entitlement->policy->title }}
+                            </div>
+                            <div class="row">
+                                <p>
+                                    Status:
+                                    @if ($list->approved == 0)
+                                        <span
+                                            class="text-warning">Pending</span>
+                                    @elseif($list->approved == 1)
+                                        <span
+                                            class="text-success">Approved</span>
+                                    @else
+                                        <span
+                                            class="text-danger">Rejected</span>
+                                    @endif
+                                </p>
+                            </div>
+                            <div class="my-1">
+                                Approved By : {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
+                            </div>
+                            <div class="d-flex">
+                                <p>From
+                                    :{{ date('d/m/Y', strtotime($list->from)) }}
+                                    To :
+                                    {{ date('d/m/Y', strtotime($list->to)) }}
+                                </p>
+                            </div>
+
+                            <div class="my-4">
+                                Reason:
+                                <p>
+                                    {{ $list->reason }}
+                                </p>
+                            </div>
+                             <div class="action ">
+                                <a target="_blank"
+                                    class="bg-light text-dark px-3 py-2"
+                                    href="{{ asset('storage/leave_files/' . $list->leave_file) }}">
+                                    View File
+                                    <i
+                                        class="icofont icofont-file-pdf text-danger"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="rejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog" role="document">
+          <form action="{{ route('admin.longLeave.reject', ['leave' => $list->id]) }}" method="post">
+            @csrf
+            @method('PUT')
+          <div class="modal-content">
+             <div class="modal-body">
+                   <div class="mb-3">
+                      <label class="col-form-label" for="reject_reason">Reason</label>
+                      <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
+                   </div>
+             </div>
+             <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" type="submit">Reject</button>
+             </div>
+          </div>
+        </form>
+       </div>
+    </div>
+@endforeach
+@endif
     <div class="container-fluid">
         <div class="row">
 
@@ -206,106 +308,6 @@
                                                         <td>
                                                             {{ ucwords(optional($list->approvedBy)->first_name) . ' ' . ucwords(optional($list->approvedBy)->last_name) ?? 'Not Approved' }}
                                                         </td>
-
-                                                        <div class="modal fade" id="file{{ $list->id }}" tabindex="-1"
-                                                            role="dialog" aria-labelledby="exampleModalLongTitle"
-                                                            aria-hidden="true">
-                                                            <div class="modal-dialog modal-lg" role="document">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
-                                                                                <div class="mb-3">
-                                                                                    @if (empty($list->user->profile->image))
-                                                                                        <img height="100px" width="100px"
-                                                                                            class="img-thumbnail rounded-circle"
-                                                                                            style="max-width: 150px; max-height: 150px;"
-                                                                                            src="{{ asset('assets/images/placeholder.png') }}"
-                                                                                            alt="">
-                                                                                    @else
-                                                                                        <img height="100px" width="100px"
-                                                                                            src="{{ asset('storage/profile_images/' . $list->user->profile->image) }}"
-                                                                                            alt="Profile Picture"
-                                                                                            class="rounded-circle media profile-media">
-                                                                                    @endif
-                                                                                </div>
-                                                                                <span>
-                                                                                    Name: {{ $list->user->first_name }} {{ $list->user->last_name }}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="col-md-6 py-4">
-                                                                                <div class="my-1">
-                                                                                    Type of Leave: {{ $list->entitlement->policy->title }}
-                                                                                </div>
-                                                                                <div class="row">
-                                                                                    <p>
-                                                                                        Status:
-                                                                                        @if ($list->approved == 0)
-                                                                                            <span
-                                                                                                class="text-warning">Pending</span>
-                                                                                        @elseif($list->approved == 1)
-                                                                                            <span
-                                                                                                class="text-success">Approved</span>
-                                                                                        @else
-                                                                                            <span
-                                                                                                class="text-danger">Rejected</span>
-                                                                                        @endif
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div class="my-1">
-                                                                                    Approved By : {{ optional($list->approvedBy)->first_name . ' ' . optional($list->approvedBy)->last_name ?? 'Not Approved' }}
-                                                                                </div>
-                                                                                <div class="d-flex">
-                                                                                    <p>From
-                                                                                        :{{ date('d/m/Y', strtotime($list->from)) }}
-                                                                                        To :
-                                                                                        {{ date('d/m/Y', strtotime($list->to)) }}
-                                                                                    </p>
-                                                                                </div>
-
-                                                                                <div class="my-4">
-                                                                                    Reason:
-                                                                                    <p>
-                                                                                        {{ $list->reason }}
-                                                                                    </p>
-                                                                                </div>
-                                                                                 <div class="action ">
-                                                                                    <a target="_blank"
-                                                                                        class="bg-light text-dark px-3 py-2"
-                                                                                        href="{{ asset('storage/leave_files/' . $list->leave_file) }}">
-                                                                                        View File
-                                                                                        <i
-                                                                                            class="icofont icofont-file-pdf text-danger"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="modal fade" id="rejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                           <div class="modal-dialog" role="document">
-                                                              <form action="{{ route('admin.longLeave.reject', ['leave' => $list->id]) }}" method="post">
-                                                                @csrf
-                                                                @method('PUT')
-                                                              <div class="modal-content">
-                                                                 <div class="modal-body">
-                                                                       <div class="mb-3">
-                                                                          <label class="col-form-label" for="reject_reason">Reason</label>
-                                                                          <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
-                                                                       </div>
-                                                                 </div>
-                                                                 <div class="modal-footer">
-                                                                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button class="btn btn-danger" type="submit">Reject</button>
-                                                                 </div>
-                                                              </div>
-                                                            </form>
-                                                           </div>
-                                                        </div>
-
                                                         <td style="min-width: 125px;">
                                                             <ul class="d-flex justify-content-center align-items-center">
                                                                 <div class="row">
