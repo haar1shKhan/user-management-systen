@@ -125,7 +125,7 @@ class UsersController extends Controller
             'email' => $request->input('personal_email'),
             'phone' => $request->input('phone'),
             'mobile' => $request->input('mobile'),
-            'date_of_birth' => str_replace("/","-",$request->input('date_of_birth')),
+            'date_of_birth' => date("Y-m-d",strtotime($request->input('date_of_birth'))),
             'gender' => $request->input('gender'),
             'nationality' => $request->input('nationality'),
             'marital_status' => $request->input('marital_status'),
