@@ -54,11 +54,11 @@ class LeaveEntitlementController extends Controller
           $days = $request->input('days');
         
           if($leavePolicies->monthly){
-              $days = $request->input("days") * 12;
               if($days > 31){
                   $statusMessage = 'You cannot choose more than 31 days ';
                   return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
-              }
+                }
+                $days = $request->input("days") * 12;
           }
   
           foreach($users as $user){
@@ -103,11 +103,11 @@ class LeaveEntitlementController extends Controller
         $leaveEntitlement = LeaveEntitlement::findOrFail($id);
         $days = $request->input('days');
         if($leaveEntitlement->policy->montly){
-            $days = $request->input("days") * 12;
             if($days > 31){
                 $statusMessage = 'You cannot choose more than 31 days ';
                 return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
             }
+            $days = $request->input("days") * 12;
         }
 
         $leaveEntitlement -> update([

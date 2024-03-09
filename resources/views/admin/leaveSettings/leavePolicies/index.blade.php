@@ -195,7 +195,7 @@
                                              </div>
                                       </div>
                                       <div class="modal-footer">
-                                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
                                         <button class="btn btn-primary" type="submit">Add</button>
                                      </div>
                                       </form>
@@ -359,8 +359,6 @@
                                                                             <div class="col-md-3">
                                                                                 <label class="form-label" for="update_role-{{$type->id}}">{{ trans('admin/user.role') }}</label>
                                                                                 <select name="role"  class="form-select" id="update_role-{{$type->id}}">
-                        
-                                                                                    <option selected="true" disabled value="">Choose...</option>
                                                                                     
                                                                                     <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
                                                                                     @foreach ($roles as $role)
@@ -449,7 +447,7 @@
                                                                      </div>
                                                               </div>
                                                               <div class="modal-footer">
-                                                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
                                                                 <button class="btn btn-primary" type="submit">Update</button>
                                                              </div>
                                                               </form>

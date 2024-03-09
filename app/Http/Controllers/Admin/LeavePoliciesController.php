@@ -40,11 +40,11 @@ class LeavePoliciesController extends Controller
         $days = $request->input('days');
 
         if($request->has('monthly')){
-            $days = $request->input("days") * 12;
             if($days > 31){
                 $statusMessage = 'You cannot choose more than 31 days ';
                 return redirect()->route('admin.leaveSettings.leavePolicies')->with("status",$statusMessage);
             }
+            $days = $request->input("days") * 12;
         }
 
         $leavePolicy = new LeavePolicies([
@@ -125,11 +125,11 @@ class LeavePoliciesController extends Controller
         $days = $request->input('days');
         
         if($request->has('monthly')){
-            $days = $request->input("days") * 12;
             if($days > 31){
                 $statusMessage = 'You cannot choose more than 31 days ';
                 return redirect()->route('admin.leaveSettings.leavePolicies')->with("status",$statusMessage);
             }
+            $days = $request->input("days") * 12;
         }
 
         $leavePolicies->update([
