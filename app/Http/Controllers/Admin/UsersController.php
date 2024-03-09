@@ -210,8 +210,8 @@ class UsersController extends Controller
         }
 
         $mailData = [
-            'name' => $user->email,
-            'email' => $user->first_name.' '.$user->lastname,
+            'name' => $user->first_name.' '.$user->last_name,
+            'email' => $user->email,
         ];
 
         Mail::to($user->email)->queue(new WelcomeMail($mailData));

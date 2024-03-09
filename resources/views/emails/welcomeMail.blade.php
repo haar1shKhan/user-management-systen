@@ -18,7 +18,7 @@ Here are a few quick details to help you get started:
 
 - Login Credentials:
 
-**Username:** {{ $employee_email }}
+**Username:** {{ $employee_email }} \
 **Password:** Please contact your admin.
 
 - Click this button below to access:
