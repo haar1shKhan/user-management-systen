@@ -40,7 +40,7 @@ class LeavePoliciesController extends Controller
         // dd($request->all());
 
         $days = $request->input('days');
-        $max_days = $request->input('max_days');
+        $max_days = $request->input('max_days')  ?? 0;
 
         if($request->has('monthly')){
             if($days > 31){
@@ -56,7 +56,7 @@ class LeavePoliciesController extends Controller
             'max_days' => $max_days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
-            "is_unlimited" => $request->has('is_unlimited'), // true if checked, false if unchecked
+            "is_unlimited" => $request->input('is_unlimited'), // true if checked, false if unchecked
             'roles' => $request->input('role'),
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),
@@ -144,7 +144,7 @@ class LeavePoliciesController extends Controller
             'max_days' => $max_days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
-            "is_unlimited" => $request->has('is_unlimited'), // true if checked, false if unchecked
+            "is_unlimited" => $request->input('is_unlimited'), // true if checked, false if unchecked
             'roles' => $request->input('role'),
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),

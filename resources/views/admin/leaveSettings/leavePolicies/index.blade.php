@@ -101,7 +101,7 @@
 
                                                     <div id="max_day_div" style="display: none;" class=" flex-column  col-md-3">
                                                        <label class="form-label" for="max_days">Max days</label>
-                                                        <input class="form-control" id="max_days"  name="max_days" type="number" required >
+                                                        <input class="form-control" id="max_days"  name="max_days" type="number" >
                                                         <div class="text-danger mt-1">
                                                             @error("max_days")
                                                                 {{ $message }}
@@ -311,7 +311,7 @@
                                                 <h6>{{$type->monthly?"True" : "False" }}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->is_unlimited?"True" : "False" }}</h6>
+                                                <h6>{{$type->is_unlimited === 1?"True" : "False" }}</h6>
                                             </td>
                                             <td>
                                                 <h6>{{$type->advance_salary? "True" : "False"}}</h6>
