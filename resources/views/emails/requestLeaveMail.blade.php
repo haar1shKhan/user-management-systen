@@ -7,25 +7,25 @@
 </x-slot:header>
 
 {{-- Body --}}
-#  NEW Leave Request,
+#  طلب إجازة جديد,
 
-Hello,
+مرحباً,
 
-A new leave request has been recieved from {{ $username }}.
+لقد تم استلام طلب إجازة جديد من {{ $username }}.
     
-**Leave Type:** {{$leave_type}} \
-**From:** {{$start_date}} \
-**To:** {{$end_date}} \
-**Duration:** {{$days}} \
-**Reason:** {{$reason}}
+**نوع الإجازة:** {{$leave_type}} \
+**من:** {{$start_date}} \
+**إلى:** {{$end_date}} \
+**مدة الإجازة:** {{$days}} \
+**السبب:** {{$reason}}
 
-Please approve/reject this leave application by going following:
+يرجى الموافقة على/رفض طلب الإجازة هذا من خلال المتابعة:
 
 @component('mail::button', ['url' => route('admin.leave.requests'), 'color' => 'success'])
-    View Request
+    عرض الطلب
 @endcomponent
 
-Thanks.
+شكرًا.
 {{-- Subcopy --}}
 @isset($subcopy)
 <x-slot:subcopy>

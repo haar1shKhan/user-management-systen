@@ -108,7 +108,7 @@
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
 
-                            <span>Leave Manager</span>
+                            <span class="trans_leave_manager">Leave Manager</span>
                         </a>
                         <ul class="sidebar-submenu">
                             @can('leave_policy_access')
