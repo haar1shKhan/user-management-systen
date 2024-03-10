@@ -53,7 +53,6 @@ $(document).ready(function () {
 });
 
 function translate(tnum) {
-    $('.trans_leave_manager').text(trans[0][tnum]);
     $('.trans_leave_manager').text(trans['trans_leave_manager'][tnum]);
     $('.trans_leave_policy').text(trans['trans_leave_policy'][tnum]);
 }
