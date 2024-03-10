@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->integer('days');
+            $table->integer('max_days')->default(0);
             $table->boolean('monthly')->default(false);
+            $table->boolean('is_unlimited')->default(false);
             $table->boolean('advance_salary')->default(false);
             $table->string('roles')->nullable();
             $table->string('gender')->nullable();

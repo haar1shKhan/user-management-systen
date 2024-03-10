@@ -37,7 +37,10 @@ class LeavePoliciesController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+
         $days = $request->input('days');
+        $max_days = $request->input('max_days');
 
         if($request->has('monthly')){
             if($days > 31){
@@ -50,8 +53,10 @@ class LeavePoliciesController extends Controller
         $leavePolicy = new LeavePolicies([
             'title' => $request->input('title'),
             'days' => $days,
+            'max_days' => $max_days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
+            "is_unlimited" => $request->has('is_unlimited'), // true if checked, false if unchecked
             'roles' => $request->input('role'),
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),
@@ -120,8 +125,10 @@ class LeavePoliciesController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        // dd($request->all());
         $leavePolicies = LeavePolicies::findOrFail($id);
         $days = $request->input('days');
+        $max_days = $request->input('max_days');
         
         if($request->has('monthly')){
             if($days > 31){
@@ -134,8 +141,10 @@ class LeavePoliciesController extends Controller
         $leavePolicies->update([
             'title' => $request->input('title'),
             'days' => $days,
+            'max_days' => $max_days,
             "monthly" => $request->has('monthly'), // true if checked, false if unchecked
             "advance_salary" => $request->has('advance_salary'), // true if checked, false if unchecked
+            "is_unlimited" => $request->has('is_unlimited'), // true if checked, false if unchecked
             'roles' => $request->input('role'),
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),

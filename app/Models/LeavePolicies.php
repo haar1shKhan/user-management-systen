@@ -20,6 +20,8 @@ class LeavePolicies extends Model
         'gender',
         'marital_status',
         'activate',
+        "max_days",
+        "is_unlimited"
     ];
 
     // Relationships

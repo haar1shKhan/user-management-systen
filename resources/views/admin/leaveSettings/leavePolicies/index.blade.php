@@ -80,9 +80,36 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="row">
+                                                    <div>
+                                                        <label class="form-label" for="is_unlimited">Set limit</label>
+                                                        <select name="is_unlimited"  class="form-select" id="is_unlimited" >
+
+                                                            <option   value="0">Limited</option>
+                                                            <option   value="1">Unlimited</option>
+                                                        
+                                                        </select>
+                                                        <div class="text-danger mt-1">
+                                                            @error("is_unlimited")
+                                                            {{$message}}    
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                                 <div class="row d-flex align-items-end my-4">
 
-                                                    <div class="d-flex flex-column  col-md-3">
+                                                    <div id="max_day_div" style="display: none;" class=" flex-column  col-md-3">
+                                                       <label class="form-label" for="max_days">Max days</label>
+                                                        <input class="form-control" id="max_days"  name="max_days" type="number" required >
+                                                        <div class="text-danger mt-1">
+                                                            @error("max_days")
+                                                                {{ $message }}
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="days_div" style="display: flex;" class="flex-column  col-md-3">
                                                        <label class="form-label" for="days">Days</label>
                                                         <input class="form-control" id="days"  name="days" type="number" required >
                                                         <div class="text-danger mt-1">
@@ -92,12 +119,13 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-check checkbox checkbox-dark  mx-3  col-md-3">
+
+                                                    <div id="monthly_div" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
                                                         <input id='monthly' name="monthly" class="form-check-input monthly-checkbox" data-category="monthly" type="checkbox">
                                                         <label for="monthly" class="form-check-label">Monthly</label>
                                                     </div>
 
-                                                    <div class="form-check checkbox checkbox-dark  mx-3 col-md-3">
+                                                    <div id="advance_salary_div" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
                                                         <input id='advance_salary' name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
                                                         <label for="advance_salary" class="form-check-label">Advance Salary</label>
                                                     </div>
@@ -243,7 +271,9 @@
                                     <th>{{trans('global.id') }}</th>
                                     <th class="col-8">{{trans('admin/leaveSettings/leavePolicies.type') }}</th>
                                     <th class="col-8">Days</th>
+                                    <th class="col-8">Max Days</th>
                                     <th class="col-8">Monthly</th>
+                                    <th class="col-8">Is unlimited</th>
                                     <th class="col-8">Advance Salary</th>
                                     <th class="col-8">Roles</th>
                                     <th class="col-8">Gender</th>
@@ -275,7 +305,13 @@
                                                 <h6>{{$type->days}}</h6>
                                             </td>
                                             <td>
+                                                <h6>{{$type->max_days}}</h6>
+                                            </td>
+                                            <td>
                                                 <h6>{{$type->monthly?"True" : "False" }}</h6>
+                                            </td>
+                                            <td>
+                                                <h6>{{$type->is_unlimited?"True" : "False" }}</h6>
                                             </td>
                                             <td>
                                                 <h6>{{$type->advance_salary? "True" : "False"}}</h6>
@@ -328,10 +364,37 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
+                                                                        <div class="row">
+                                                                            <div>
+                                                                                <label class="form-label" for="update_is_unlimited-{{$type->id}}">Set limit</label>
+                                                                                <select name="is_unlimited"  class="form-select update_is_unlimited" data-id="{{$type->id}}" data-days="{{$type->days}}" id="update_is_unlimited-{{$type->id}}" >
+                        
+                                                                                    <option {{$type->is_unlimited=="0"?"selected":""}}  value="0">Limited</option>
+                                                                                    <option {{$type->is_unlimited=="1"?"selected":""}}  value="1">Unlimited</option>
+                                                                                
+                                                                                </select>
+                                                                                <div class="text-danger mt-1">
+                                                                                    @error("is_unlimited")
+                                                                                    {{$message}}    
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                         
                                                                         <div class="row d-flex align-items-end my-4">
                         
-                                                                            <div class="d-flex flex-column  col-md-3">
+                                                                            <div id="max_day_div-{{$type->id}}" style="display: none;" class="flex-column  col-md-3">
+                                                                               <label class="form-label" for="update_max_days-{{$type->id}}">Max Days</label>
+                                                                                <input class="form-control" id="update_max_days-{{$type->id}}"  name="max_days" value="{{$type->max_days}}" type="number" required >
+                                                                                <div class="text-danger mt-1">
+                                                                                    @error("max_days")
+                                                                                        {{ $message }}
+                                                                                    @enderror
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div id="update_days_div-{{$type->id}}" style="display: flex" class="flex-column  col-md-3">
                                                                                <label class="form-label" for="update_days-{{$type->id}}">Days</label>
                                                                                 <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
                                                                                 <div class="text-danger mt-1">
@@ -341,12 +404,12 @@
                                                                                 </div>
                                                                             </div>
                         
-                                                                            <div class="form-check checkbox checkbox-dark  mx-3  col-md-3">
-                                                                                <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox" data-category="monthly" type="checkbox">
+                                                                            <div id="update_monthly_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
+                                                                                <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox update_monthly" data-id={{$type->id}} data-category="monthly" type="checkbox">
                                                                                 <label for="update_monthly-{{$type->id}}" class="form-check-label">Monthly</label>
                                                                             </div>
                         
-                                                                            <div class="form-check checkbox checkbox-dark  mx-3 col-md-3">
+                                                                            <div id ="update_advance_salary_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
                                                                                 <input id='update_advance_salary-{{$type->id}}' {{$type->advance_salary?"checked":""}} name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
                                                                                 <label for="update_advance_salary-{{$type->id}}" class="form-check-label">Advance Salary</label>
                                                                             </div>
@@ -516,6 +579,103 @@
         $('#massActionButton').prop('disabled', ismassActionEmpty);
     }
 
+    $('#is_unlimited',).change(function () {
+            var selectedValue = $(this).val();
+
+            $('#days_div').show();
+            $('#monthly_div').show();
+            $('#advance_salary_div').show();
+            $("#max_day_div").css('display','none');
+
+            $('#days').val(null);
+            $('#monthly').prop('checked', false);
+            $('#advance_salary').prop('checked', false);
+            
+            if(selectedValue == 1){
+                $("#max_day_div").css('display','flex');  
+                $('#days_div').hide();
+                $('#monthly_div').hide();
+                $('#advance_salary_div').hide();
+                
+                $('#max_days').val(0);
+                $('#days').val(0);
+
+                if ($('#monthly').prop('checked')) {
+                     $('#monthly').prop('checked', false);
+                 }
+
+                if ($('#advance_salary').prop('checked')) {
+                     $('#advance_salary').prop('checked', false);
+                 }
+
+            }
+        });
+
+    $('#monthly').change(function(){
+
+      isChecked =  $(this).prop('checked');
+
+      if ($('#advance_salary').prop('checked')) {
+          $('#advance_salary').prop('checked', false);
+      }
+
+      $('#advance_salary').prop('disabled', isChecked);
+    })
+
+    $('.update_is_unlimited').each(function () {
+    $(this).change(function (e) {
+        var selectedValue = $(this).val();
+        var days = $(this).data('days');
+        var type_id = $(this).data('id');
+
+        console.log(type_id);
+
+        $('#update_days_div-'+type_id).show();
+        $('#update_monthly_div-'+type_id).show();
+        $('#update_advance_salary_div-'+type_id).show();
+        $("#max_day_div-"+type_id).css('display', 'none');
+
+        $('#update_days-'+type_id).val(days);
+        $('#update_monthly-'+type_id).prop('checked', false);
+        $('#update_advance_salary-'+type_id).prop('checked', false);
+
+        if (selectedValue == 1) {
+            $("#max_day_div-"+type_id).css('display', 'flex');
+            $('#update_days_div-'+type_id).hide();
+            $('#update_monthly_div-'+type_id).hide();
+            $('#update_advance_salary_div-'+type_id).hide();
+
+            $('#update_days-'+type_id).val(0);
+
+            if ($('#update_monthly-'+type_id).prop('checked')) {
+                $('#update_monthly-'+type_id).prop('checked', false);
+            }
+
+            if ($('#update_advance_salary-'+type_id).prop('checked')) {
+                $('#update_advance_salary-'+type_id).prop('checked', false);
+            }
+        }
+    });
+});
+
+        $('.update_monthly').each(function(){
+
+             $(this).change(function(e,type_id=$(this).data('id')){
+                  isChecked =  $(this).prop('checked');
+
+                  if ($('#update_advance_salary-'+type_id).prop('checked')) {
+                      $('#update_advance_salary-'+type_id).prop('checked', false);
+                  }
+                  $('#update_advance_salary-'+type_id).css('display', 'block');
+
+                  if(isChecked){
+                      $('#update_advance_salary-'+type_id).hide();
+                  }
+           })
+
+        })
+
+       
 
     $(function() {
 
