@@ -118,7 +118,7 @@
                             @endcan
                             @can('leave_entitlement_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}">Leave Entitlement</a>
+                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}" class="trans_leave_entitlements">Leave Entitlement</a>
                             </li>
                             @endcan
                         </ul>

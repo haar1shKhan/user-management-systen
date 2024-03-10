@@ -55,6 +55,7 @@ $(document).ready(function () {
 function translate(tnum) {
     $('.trans_leave_manager').text(trans['trans_leave_manager'][tnum]);
     $('.trans_leave_policy').text(trans['trans_leave_policy'][tnum]);
+    $('.trans_leave_entitlements').text(trans['trans_leave_entitlements'][tnum]);
 }
 
 var trans = {
@@ -65,5 +66,9 @@ var trans = {
     trans_leave_policy : {
         en: 'Leave Policies',
         ae: 'سياسات الاجازة'
+    },
+    trans_leave_entitlements : {
+        en: 'Leave Entitlements',
+        ae: 'استحقاقات الإجازة'
     },
 };
