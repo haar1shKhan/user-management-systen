@@ -113,7 +113,7 @@
                         <ul class="sidebar-submenu">
                             @can('leave_policy_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}">Leave Policies</a>
+                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}" class="trans_leave_policy">Leave Policies</a>
                             </li>
                             @endcan
                             @can('leave_entitlement_access')

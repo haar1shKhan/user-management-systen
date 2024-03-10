@@ -54,43 +54,17 @@ $(document).ready(function () {
 
 function translate(tnum) {
     $('.trans_leave_manager').text(trans[0][tnum]);
-    $('.lan-2').text(trans[1][tnum]);
-    $('.lan-3').text(trans[2][tnum]);
-    $('.lan-4').text(trans[3][tnum]);
-    $('.lan-5').text(trans[4][tnum]);
-    $('.lan-6').text(trans[5][tnum]);
-    $('.lan-7').text(trans[6][tnum]);
-    $('.lan-8').text(trans[7][tnum]);
-    $('.lan-9').text(trans[8][tnum]);
+    $('.trans_leave_manager').text(trans['trans_leave_manager'][tnum]);
+    $('.trans_leave_policy').text(trans['trans_leave_policy'][tnum]);
 }
 
-var trans = [{
-    en: 'Leave Manager',
-    ae: 'إعدادات الاجازات'
-}, {
-    en: 'Dashboards,widgets & layout.',
-    ae: 'Ù„ÙˆØ­Ø§Øª Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª ÙˆØ§Ù„Ø£Ø¯ÙˆØ§Øª ÙˆØ§Ù„ØªØ®Ø·ÙŠØ·.'
-}, {
-    en: 'Dashboards',
-    ae: 'ÙˆØ­Ø§Øª Ø§Ù„Ù‚ÙŠØ§Ø¯Ø© '
-}, {
-    en: 'Default',
-    ae: 'ÙˆØ¥ÙØªØ±Ø§Ø¶ÙŠ'
-}, {
-    en: 'Users',
-    ae: 'ÙˆØ§Ù„ØªØ¬Ø§Ø±Ø© Ø§Ù„Ø¥Ù„ÙƒØªØ±ÙˆÙ†ÙŠØ©'
-}, {
-    en: 'Widgets',
-    ae: 'ÙˆØ§Ù„Ø­Ø§Ø¬ÙŠØ§Øª'
-}, {
-    en: 'Page layout',
-    ae: 'ÙˆØªØ®Ø·ÙŠØ· Ø§Ù„ØµÙØ­Ø©'
-}, {
-    en: 'Applications',
-    ae: 'ÙˆØ§Ù„ØªØ·Ø¨ÙŠÙ‚Ø§Øª'
-}, {
-    en: 'Ready to use Apps',
-    ae: 'Ø¬Ø§Ù‡Ø² Ù„Ø§Ø³ØªØ®Ø¯Ø§Ù… Ø§Ù„ØªØ·Ø¨ÙŠÙ‚Ø§Øª'
-},
-
-];
+var trans = {
+    trans_leave_manager : {
+        en: 'Leave Manager',
+        ae: 'إعدادات الاجازات'
+    },
+    trans_leave_policy : {
+        en: 'Leave Policies',
+        ae: 'سياسات الاجازة'
+    },
+};
