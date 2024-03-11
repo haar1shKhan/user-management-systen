@@ -107,8 +107,7 @@ class LeavePoliciesController extends Controller
                         'leave_policy_id' => $leavePolicy->id,
                         'start_year' => $user->jobDetail->start_year,
                         'end_year' => $user->jobDetail->end_year,
-                        'max_days' => $leavePolicy->max_days,
-                        'days' => $leavePolicy->days,
+                        'days' => $leavePolicy->max_days > 0 ? $leavePolicy->max_days : $leavePolicy->days,
                         'user_id' => $user->id,
                     ]);
 
@@ -200,8 +199,7 @@ class LeavePoliciesController extends Controller
                         'leave_policy_id' => $leavePolicies->id,
                         'start_year' => $user->jobDetail->start_year,
                         'end_year' => $user->jobDetail->end_year,
-                        'max_days' => $leavePolicies->max_days,
-                        'days' => $leavePolicies->days,
+                        'days' => $leavePolicies->max_days > 0 ? $leavePolicies->max_days : $leavePolicies->days,
                         'user_id' => $user->id,
                     ]);
 
