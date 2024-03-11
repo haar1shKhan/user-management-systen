@@ -19,11 +19,13 @@ class WelcomeMail extends Mailable
     
     public $employee_name;
     public $employee_email;
+    public $joining_date;
 
     public function __construct($data)
     {
         $this->employee_name = $data['name'];
         $this->employee_email = $data['email'];
+        $this->joining_date = $data['joining_date'];
     }
 
     /**

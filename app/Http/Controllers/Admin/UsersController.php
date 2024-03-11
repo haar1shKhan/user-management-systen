@@ -217,6 +217,7 @@ class UsersController extends Controller
         $mailData = [
             'name' => $user->first_name.' '.$user->last_name,
             'email' => $user->email,
+            'joining_date' => date("d/m/Y",$joining_date),
         ];
 
         Mail::to($user->email)->queue(new WelcomeMail($mailData));
@@ -328,10 +329,15 @@ class UsersController extends Controller
             ]);
         }    
 
+        $joining_date = strtotime($request->input('joined_at'));
+        $end_year = date('Y-m-d',strtotime('+1 year',$joining_date));
+
         $user->jobDetail->update([
             'hired_at' => $request->input('hired_at'),
-            'joined_at' => $request->input('joined_at'),
+            'joined_at' => date("Y-m-d",$joining_date),
             'resigned_at' => $request->input('resigned_at'),
+            'start_year' => date("Y-m-d",$joining_date),
+            'end_year' => date("Y-m-d",$end_year),
             'source_of_hire' => $request->input('source_of_hire'),
             'job_type' => $request->input('job_type'),
             'status' => $request->input('status'),
