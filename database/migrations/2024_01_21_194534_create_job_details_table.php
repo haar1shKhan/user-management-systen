@@ -16,7 +16,8 @@ return new class extends Migration
             $table->date('hired_at')->nullable();
             $table->date('joined_at')->nullable();
             $table->date('resigned_at')->nullable();
-
+            $table->dateTime('start_year')->nullable();
+            $table->dateTime('end_year')->nullable();
             $table->enum('source_of_hire', ['direct', 'refaral', 'online'])->nullable();
             $table->enum('job_type', ['part_time', 'full_time', 'contract','internship','freelance'])->nullable();
             $table->enum('status', ['active', 'terminated', 'resigned','deceased'])->nullable();
@@ -26,9 +27,6 @@ return new class extends Migration
             $table->string('bank_account_number')->nullable();
             $table->enum('payment_method', ['cash', 'bank_transfer'])->nullable();
             $table->boolean('recived_email_notification')->default(0);
-
-
-
             
             $table->timestamps();
         });

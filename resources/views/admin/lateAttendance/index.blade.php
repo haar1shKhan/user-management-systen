@@ -35,6 +35,67 @@
     </div>
 @endif
 
+@if(!empty($lateAttendances))
+@foreach ($lateAttendances as $list )
+
+<div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form action="{{ route('admin.'.$url.'.update', ['late_attendance' => $list->id]) }}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
+            <div class="modal-header">
+                <h5 class="modal-title">Update Late Attendance</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="">
+
+                   <div>
+                       <div class="col-md-4">
+                           <label class="col-form-label">Date</label>
+                           <div class="col-sm-12">
+                               <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" value="{{$list->date}}" id="date" name="date" required>
+                           </div>
+                       </div>   
+                  </div>
+
+                    <div class="row" id="shortLeaveFields">
+                        <div class="col-md-4">
+                            <label class="col-form-label">From</label>
+                            <div class="col-sm-12">
+                                <input class="form-control digits" value="{{$list->from}}" type="time" name="from" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="col-form-label">To</label>
+                            <div class="col-sm-12">
+                                <input class="form-control digits" value="{{$list->to}}" type="time" name="to" required>
+                            </div>
+                        </div>
+                    </div>
+                
+                   <div class="row">
+                       <div class="col">
+                       <div>
+                           <label class="form-label" for="reason">Reason</label>
+                           <textarea class="form-control" name="reason" id="reason" rows="3" required>{{$list->reason}}</textarea>
+                       </div>
+                       </div>
+                   </div>
+
+             </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@endforeach
+@endif
+
 <div class="container-fluid">
     <div class="row">
 
@@ -229,61 +290,6 @@
                                                                 <i class="icon-pencil-alt"></i>
                                                             </button>
                                                         </li>
-
-                                                         <div class="modal fade" id="editModal{{ $list->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter" aria-hidden="true">
-                                                             <div class="modal-dialog modal-lg" role="document">
-                                                                 <form action="{{ route('admin.'.$url.'.update', ['late_attendance' => $list->id]) }}" method="POST" class="modal-content">
-                                                                     @csrf
-                                                                     @method('PUT')
-                                                                     <div class="modal-header">
-                                                                         <h5 class="modal-title">Update Late Attendance</h5>
-                                                                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                     </div>
-                                                                     <div class="modal-body">
-                                                                         <div class="">
-
-                                                                            <div>
-                                                                                <div class="col-md-4">
-                                                                                    <label class="col-form-label">Date</label>
-                                                                                    <div class="col-sm-12">
-                                                                                        <input class="form-control digits" type="date" min="{{date('Y-m-d')}}" value="{{$list->date}}" id="date" name="date" required>
-                                                                                    </div>
-                                                                                </div>   
-                                                                           </div>
-
-                                                                             <div class="row" id="shortLeaveFields">
-                                                                                 <div class="col-md-4">
-                                                                                     <label class="col-form-label">From</label>
-                                                                                     <div class="col-sm-12">
-                                                                                         <input class="form-control digits" value="{{$list->from}}" type="time" name="from" required>
-                                                                                     </div>
-                                                                                 </div>
-                                                                                 <div class="col-md-4">
-                                                                                     <label class="col-form-label">To</label>
-                                                                                     <div class="col-sm-12">
-                                                                                         <input class="form-control digits" value="{{$list->to}}" type="time" name="to" required>
-                                                                                     </div>
-                                                                                 </div>
-                                                                             </div>
-                                                                         
-                                                                            <div class="row">
-                                                                                <div class="col">
-                                                                                <div>
-                                                                                    <label class="form-label" for="reason">Reason</label>
-                                                                                    <textarea class="form-control" name="reason" id="reason" rows="3" required>{{$list->reason}}</textarea>
-                                                                                </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                      </div>
-                                                                     </div>
-                                                                     <div class="modal-footer">
-                                                                         <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                                                         <button class="btn btn-primary" type="submit">Save</button>
-                                                                     </div>
-                                                                 </form>
-                                                             </div>
-                                                         </div>
                                                     @endcan
 
                                                     @can("late_attendance_delete")  

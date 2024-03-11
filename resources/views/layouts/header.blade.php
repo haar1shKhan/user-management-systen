@@ -36,7 +36,7 @@
             </svg>
           </div>
         </li>
-        <li class="onhover-dropdown">
+        {{-- <li class="onhover-dropdown">
           <div class="notification-box">
             <svg>
               <use href="{{ asset('assets/svg/icon-sprite.svg#notification') }}"></use>
@@ -60,7 +60,7 @@
               <li><a class="f-w-700" href="#">Check all</a></li>
             </ul>
           </div>
-        </li>
+        </li> --}}
         <li class="profile-nav onhover-dropdown pe-0 py-0">
           <div class="media profile-media">
             @if (empty(auth()->user()->profile->image))

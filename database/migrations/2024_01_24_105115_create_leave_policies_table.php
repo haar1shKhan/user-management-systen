@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('marital_status')->nullable();
             $table->enum('activate', ['manual', 'immediately_after_hiring']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

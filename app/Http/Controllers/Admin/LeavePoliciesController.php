@@ -40,7 +40,7 @@ class LeavePoliciesController extends Controller
         // dd($request->all());
 
         $days = $request->input('days');
-        $max_days = $request->input('max_days')  ?? 0;
+        $max_days = $request->input('max_days') ?? 0;
 
         if($request->has('monthly')){
             if($days > 31){
@@ -61,7 +61,6 @@ class LeavePoliciesController extends Controller
             'gender' => $request->input('gender'),
             'marital_status' => $request->input('marital_status'),
             'activate' => $request->input('activate'),
-            'apply_existing_users' => $request->has('existing_user'), 
         ]);
 
         // Save the leave policy
@@ -103,9 +102,12 @@ class LeavePoliciesController extends Controller
 
                 if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
                     
+
                     $leaveEntitlement = new LeaveEntitlement( [
                         'leave_policy_id' => $leavePolicy->id,
-                        'leave_year' => date("Y"),
+                        'start_year' => $user->jobDetail->start_year,
+                        'end_year' => $user->jobDetail->end_year,
+                        'max_days' => $leavePolicy->max_days,
                         'days' => $leavePolicy->days,
                         'user_id' => $user->id,
                     ]);
@@ -164,7 +166,11 @@ class LeavePoliciesController extends Controller
         if (count($users) > 0){
             foreach ($users as $key => $user) {
             
-                if(LeaveEntitlement::where('leave_policy_id',$id)->where('user_id',$user->id)->exists()){
+                if  (LeaveEntitlement::where('leave_policy_id',$id)
+                        ->where('user_id',$user->id)
+                        ->where('start_year',$user->jobDetail->start_year)
+                        ->where('end_year',$user->jobDetail->end_year)->exists()) 
+                {
                     continue;
                 }
               
@@ -191,9 +197,11 @@ class LeavePoliciesController extends Controller
                 if( $role == $user_role->title and $gender == $user->profile->gender and $marital_status == $user->profile->marital_status){
                     
                     $leaveEntitlement = new LeaveEntitlement( [
-                        'leave_policy_id' => $id,
-                        'leave_year' => date("Y"),
-                        'days' => $request->input('days'),
+                        'leave_policy_id' => $leavePolicies->id,
+                        'start_year' => $user->jobDetail->start_year,
+                        'end_year' => $user->jobDetail->end_year,
+                        'max_days' => $leavePolicies->max_days,
+                        'days' => $leavePolicies->days,
                         'user_id' => $user->id,
                     ]);
 

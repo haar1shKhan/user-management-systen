@@ -170,6 +170,58 @@
     </div>
 @endforeach
 @endif
+
+@if (!empty($lateAttendances))
+@foreach ($lateAttendances as $list)
+<div class="modal fade" id="lateRejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <form action="{{ route('admin.lateAttendance.reject', ['leave' => $list->id]) }}" method="post">
+         @csrf
+         @method('PUT')
+         <div class="modal-content">
+             <div class="modal-body">
+                 <div class="mb-3">
+                   <label class="col-form-label" for="reject_reason">Reason</label>
+                   <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                 <button class="btn btn-danger" type="submit" name="reject">Reject</button>
+             </div>
+       </div>
+     </form>
+    </div>
+ </div>
+@endforeach
+@endif
+
+@if (!empty($shortLeave))
+@foreach ($shortLeave as $list)
+<div class="modal fade" id="shortRejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+       <form action="{{ route('admin.short-leave.reject', ['leave' => $list->id]) }}" method="post">
+         @csrf
+         @method('PUT')
+         <div class="modal-content">
+             <div class="modal-body">
+                 <div class="mb-3">
+                   <label class="col-form-label" for="reject_reason">Reason</label>
+                   <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
+                 <button class="btn btn-danger" type="submit" name="reject">Reject</button>
+             </div>
+       </div>
+     </form>
+    </div>
+ </div>
+@endforeach
+@endif
+
+
     <div class="container-fluid">
         <div class="row">
 
@@ -460,26 +512,6 @@
                                                         </td>
 
                                                         {{-- @can('user_edit' || 'user_delete') --}}
-                                                        <div class="modal fade" id="lateRejectModalForm{{$list->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                           <div class="modal-dialog" role="document">
-                                                              <form action="{{ route('admin.lateAttendance.reject', ['leave' => $list->id]) }}" method="post">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <div class="modal-content">
-                                                                    <div class="modal-body">
-                                                                        <div class="mb-3">
-                                                                          <label class="col-form-label" for="reject_reason">Reason</label>
-                                                                          <textarea class="form-control" id="reject_reason" name="reject_reason"></textarea>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Cancel</button>
-                                                                        <button class="btn btn-danger" type="submit" name="reject">Reject</button>
-                                                                    </div>
-                                                              </div>
-                                                            </form>
-                                                           </div>
-                                                        </div>
 
                                                         <td style="min-width: 125px;">
                                                             <ul class="d-flex justify-content-center align-items-center">

@@ -15,11 +15,15 @@ class JobDetailsTableSeeder extends Seeder
        $data = [
             [
                 'user_id' => 1, 
-                'salary' => 0
+                'salary' => 0,
+                'start_year' => now(),
+                'end_year' => now(),
             ],
             [
                 'user_id' => 2,
-                'salary' => 0
+                'salary' => 0,
+                'start_year' => now(),
+                'end_year' => now(),
             ],
        ];
 

@@ -36,6 +36,194 @@
     </div>
 @endif
 
+@if(!is_null($leavePolicies))
+@foreach ($leavePolicies as $type)
+
+<div class="modal fade bd-{{$type->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h4 class="modal-title" id="myLargeModalLabel">Update Policies</h4>
+             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+
+          <form action="{{route('admin.'.$url.'.leavePolicies.update', ['policy' => $type->id])}}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
+           <div class="modal-body">
+                <div class="">
+
+                    <div class="row">
+                        <div class="d-flex flex-column ">
+                            <label class="form-label" for="update_title-{{$type->id}}">Title</label>
+                            <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required >
+                            <div class="text-danger mt-1">
+                                @error("title")
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div>
+                            <label class="form-label" for="update_is_unlimited-{{$type->id}}">Set limit</label>
+                            <select name="is_unlimited"  class="form-select update_is_unlimited" data-id="{{$type->id}}" data-days="{{$type->days}}" id="update_is_unlimited-{{$type->id}}" >
+
+                                <option {{$type->is_unlimited=="0"?"selected":""}}  value="0">Limited</option>
+                                <option {{$type->is_unlimited=="1"?"selected":""}}  value="1">Unlimited</option>
+                            
+                            </select>
+                            <div class="text-danger mt-1">
+                                @error("is_unlimited")
+                                {{$message}}    
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex align-items-end my-4">
+
+                        <div id="max_day_div-{{$type->id}}" style="display: none;" class="flex-column  col-md-3">
+                           <label class="form-label" for="update_max_days-{{$type->id}}">Days</label>
+                            <input class="form-control" id="update_max_days-{{$type->id}}"  name="max_days" value="{{$type->max_days}}" type="number" required >
+                            <div class="text-danger mt-1">
+                                @error("max_days")
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div id="update_days_div-{{$type->id}}" style="display: flex" class="flex-column  col-md-3">
+                           <label class="form-label" for="update_days-{{$type->id}}">Days</label>
+                            <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
+                            <div class="text-danger mt-1">
+                                @error("days")
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div id="update_monthly_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
+                            <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox update_monthly" data-id={{$type->id}} data-category="monthly" type="checkbox">
+                            <label for="update_monthly-{{$type->id}}" class="form-check-label">Monthly</label>
+                        </div>
+
+                        <div id ="update_advance_salary_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
+                            <input id='update_advance_salary-{{$type->id}}' {{$type->advance_salary?"checked":""}} name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
+                            <label for="update_advance_salary-{{$type->id}}" class="form-check-label">Advance Salary</label>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-3">
+                            <label class="form-label" for="update_role-{{$type->id}}">{{ trans('admin/user.role') }}</label>
+                            <select name="role"  class="form-select" id="update_role-{{$type->id}}">
+                                
+                                @foreach ($roles as $role)
+                                <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
+                                    <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->title }}">
+                                        {{ $role->title }}
+                                    </option>
+                                 @endforeach
+                    
+                            </select>
+                            <div class="text-danger mt-1">
+                                @error("role")
+                                {{$message}}    
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label" for="update_gender-{{$type->id}}">Gender</label>
+                            <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
+
+                                <option   value="">All</option>       
+                                <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
+                                <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
+                    
+                            </select>
+                            <div class="text-danger mt-1">
+                                @error("gender")
+                                {{$message}}    
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label" for="update_marital_status-{{$type->id}}">Marital status</label>
+                            <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
+
+                                <option   value="">All</option>       
+                                <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
+                                <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">Married</option>
+                    
+                            </select>
+                            <div class="text-danger mt-1">
+                                @error("marital_status")
+                                {{$message}}    
+                                @enderror
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row d-flex align-items-end my-4">
+
+                        <div class="col-md-3">
+                        
+                            <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
+                            <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required>
+
+                                <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
+                                <option {{$type->activate=="immediately_after_hiring"?"selected":""}} value="immediately_after_hiring">Immediately After Hiring</option>
+                    
+                            </select>
+                            <div class="text-danger mt-1">
+                                @error("activate")
+                                {{$message}}    
+                                @enderror
+                            </div>
+                        </div>
+
+                            
+                         <div class="form-check checkbox checkbox-dark  mx-3 col-md-5">
+
+                            <input id='update_existing_user-{{$type->id}}' {{$type->apply_existing_users?"checked":""}} name="existing_user" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
+                             <label for="update_existing_user-{{$type->id}}" class="form-check-label">Apply to existing user</label>
+
+                         </div>
+
+                    </div>
+
+                   
+
+                    
+                        
+
+                       
+                 </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Update</button>
+         </div>
+          </form>
+
+         
+       </div>
+    </div>
+ </div>
+
+@endforeach
+@endif
+
 <div class="container-fluid">
     <div class="row">
 
@@ -100,7 +288,7 @@
                                                 <div class="row d-flex align-items-end my-4">
 
                                                     <div id="max_day_div" style="display: none;" class=" flex-column  col-md-3">
-                                                       <label class="form-label" for="max_days">Max days</label>
+                                                       <label class="form-label" for="max_days">Days</label>
                                                         <input class="form-control" id="max_days"  name="max_days" type="number" >
                                                         <div class="text-danger mt-1">
                                                             @error("max_days")
@@ -268,12 +456,11 @@
 
                                     {{-- @endcan --}}
 
-                                    <th>{{trans('global.id') }}</th>
+                                    {{-- <th>{{trans('global.id') }}</th> --}}
                                     <th class="col-8">{{trans('admin/leaveSettings/leavePolicies.type') }}</th>
                                     <th class="col-8">Days</th>
-                                    <th class="col-8">Max Days</th>
                                     <th class="col-8">Monthly</th>
-                                    <th class="col-8">Is unlimited</th>
+                                    <th class="col-8">Unlimited</th>
                                     <th class="col-8">Advance Salary</th>
                                     <th class="col-8">Roles</th>
                                     <th class="col-8">Gender</th>
@@ -297,15 +484,12 @@
                                                     <label class="form-check-label" for={{"inline-".$type->id}}></label>
                                                 </div>
                                             </td>
-                                            <td>{{$type->id}}</td>
+                                            {{-- <td>{{$type->id}}</td> --}}
                                             <td>
                                                 <h6>{{$type->title}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->days}}</h6>
-                                            </td>
-                                            <td>
-                                                <h6>{{$type->max_days}}</h6>
+                                                <h6>{{$type->max_days > 0 ? $type->max_days : $type->days}}</h6>
                                             </td>
                                             <td>
                                                 <h6>{{$type->monthly?"True" : "False" }}</h6>
@@ -337,188 +521,6 @@
 
                                                         </button>
                                                     </li>
-
-                                                    <div class="modal fade bd-{{$type->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg">
-                                                           <div class="modal-content">
-                                                              <div class="modal-header">
-                                                                 <h4 class="modal-title" id="myLargeModalLabel">Update Policies</h4>
-                                                                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                              </div>
-                                                              
-                        
-                                                              <form action="{{route('admin.'.$url.'.leavePolicies.update', ['policy' => $type->id])}}" method="POST" class="modal-content">
-                                                                @csrf
-                                                                @method('PUT')
-                                                               <div class="modal-body">
-                                                                    <div class="">
-                        
-                                                                        <div class="row">
-                                                                            <div class="d-flex flex-column ">
-                                                                                <label class="form-label" for="update_title-{{$type->id}}">Title</label>
-                                                                                <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required >
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("title")
-                                                                                        {{ $message }}
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="row">
-                                                                            <div>
-                                                                                <label class="form-label" for="update_is_unlimited-{{$type->id}}">Set limit</label>
-                                                                                <select name="is_unlimited"  class="form-select update_is_unlimited" data-id="{{$type->id}}" data-days="{{$type->days}}" id="update_is_unlimited-{{$type->id}}" >
-                        
-                                                                                    <option {{$type->is_unlimited=="0"?"selected":""}}  value="0">Limited</option>
-                                                                                    <option {{$type->is_unlimited=="1"?"selected":""}}  value="1">Unlimited</option>
-                                                                                
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("is_unlimited")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                        
-                                                                        <div class="row d-flex align-items-end my-4">
-                        
-                                                                            <div id="max_day_div-{{$type->id}}" style="display: none;" class="flex-column  col-md-3">
-                                                                               <label class="form-label" for="update_max_days-{{$type->id}}">Max Days</label>
-                                                                                <input class="form-control" id="update_max_days-{{$type->id}}"  name="max_days" value="{{$type->max_days}}" type="number" required >
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("max_days")
-                                                                                        {{ $message }}
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div id="update_days_div-{{$type->id}}" style="display: flex" class="flex-column  col-md-3">
-                                                                               <label class="form-label" for="update_days-{{$type->id}}">Days</label>
-                                                                                <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("days")
-                                                                                        {{ $message }}
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                        
-                                                                            <div id="update_monthly_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
-                                                                                <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox update_monthly" data-id={{$type->id}} data-category="monthly" type="checkbox">
-                                                                                <label for="update_monthly-{{$type->id}}" class="form-check-label">Monthly</label>
-                                                                            </div>
-                        
-                                                                            <div id ="update_advance_salary_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
-                                                                                <input id='update_advance_salary-{{$type->id}}' {{$type->advance_salary?"checked":""}} name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
-                                                                                <label for="update_advance_salary-{{$type->id}}" class="form-check-label">Advance Salary</label>
-                                                                            </div>
-                        
-                                                                        </div>
-                        
-                                                                        <div class="row">
-                        
-                        
-                                                                            <div class="col-md-3">
-                                                                                <label class="form-label" for="update_role-{{$type->id}}">{{ trans('admin/user.role') }}</label>
-                                                                                <select name="role"  class="form-select" id="update_role-{{$type->id}}">
-                                                                                    
-                                                                                    <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
-                                                                                    @foreach ($roles as $role)
-                                                                                        <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->title }}">
-                                                                                            {{ $role->title }}
-                                                                                        </option>
-                                                                                     @endforeach
-                                                                        
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("role")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                        
-                                                                            <div class="col-md-3">
-                                                                                <label class="form-label" for="update_gender-{{$type->id}}">Gender</label>
-                                                                                <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
-                                                
-                                                                                    <option   value="">All</option>       
-                                                                                    <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
-                                                                                    <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
-                                                                        
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("gender")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                        
-                                                                            <div class="col-md-3">
-                                                                                <label class="form-label" for="update_marital_status-{{$type->id}}">Marital status</label>
-                                                                                <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
-                                                
-                                                                                    <option   value="">All</option>       
-                                                                                    <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
-                                                                                    <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">Married</option>
-                                                                        
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("marital_status")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                        
-                        
-                                                                        </div>
-                        
-                                                                        <div class="row d-flex align-items-end my-4">
-                        
-                                                                            <div class="col-md-3">
-                                                                            
-                                                                                <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
-                                                                                <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required>
-                                                
-                                                                                    <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
-                                                                                    <option {{$type->activate=="immediately_after_hiring"?"selected":""}} value="immediately_after_hiring">Immediately After Hiring</option>
-                                                                        
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("activate")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-                        
-                                                                                
-                                                                             <div class="form-check checkbox checkbox-dark  mx-3 col-md-5">
-                        
-                                                                                <input id='update_existing_user-{{$type->id}}' {{$type->apply_existing_users?"checked":""}} name="existing_user" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
-                                                                                 <label for="update_existing_user-{{$type->id}}" class="form-check-label">Apply to existing user</label>
-                        
-                                                                             </div>
-                        
-                                                                        </div>
-                        
-                                                                       
-                        
-                                                                        
-                                                                            
-                        
-                                                                           
-                                                                     </div>
-                                                              </div>
-                                                              <div class="modal-footer">
-                                                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                                                <button class="btn btn-primary" type="submit">Update</button>
-                                                             </div>
-                                                              </form>
-                        
-                                                             
-                                                           </div>
-                                                        </div>
-                                                     </div>
 
                                                     <form action="{{ route('admin.'.$url.'.leavePolicies.destroy', ['policy' => $type->id]) }}" method="post">
                                                         @csrf

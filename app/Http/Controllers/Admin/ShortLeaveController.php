@@ -129,7 +129,6 @@ class ShortLeaveController extends Controller
         abort_if(Gate::denies('short_leave_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $validation = $request->validate([
-            'date' => 'required',
             'from' => 'required',
             'to' => 'required',
             'reason' => 'required',
@@ -154,7 +153,7 @@ class ShortLeaveController extends Controller
  
         $shortLeave->update(
             [
-                'date' => $request->date,
+                'date' =>  $currentDate,
                 'from' => $request->from,
                 'to' => $request->to,
                 'reason' => $request->reason

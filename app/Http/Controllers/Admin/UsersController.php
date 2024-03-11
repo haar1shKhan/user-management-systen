@@ -64,7 +64,7 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -153,10 +153,15 @@ class UsersController extends Controller
         //  Save the profile data and associate it with the user
         $user->profile()->save($profile);
 
+        $joining_date = strtotime($request->input('joined_at'));
+        $end_year = date('Y-m-d',strtotime('+1 year',$joining_date));
+
         $jobDetail = new JobDetail([
             'hired_at' => date("Y-m-d",strtotime($request->input('hired_at'))),
-            'joined_at' => date("Y-m-d",strtotime($request->input('joined_at'))),
+            'joined_at' => date("Y-m-d",$joining_date),
             'resigned_at' => date("Y-m-d",strtotime($request->input('resigned_at'))),
+            'start_year' => date("Y-m-d",$joining_date),
+            'end_year' => date("Y-m-d",$end_year),
             'source_of_hire' => $request->input('source_of_hire'),
             'job_type' => $request->input('job_type'),
             'status' => $request->input('status'),

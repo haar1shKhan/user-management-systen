@@ -30,13 +30,14 @@ class LeaveController extends Controller
         abort_if(Gate::denies('long_leave_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $leave_balance = array();
-        $leaveEntitlement= LeaveEntitlement::where('user_id',auth()->user()->id)->whereYear("leave_year",Carbon::now()->year)->with("policy","user")->get();
+        $leaveEntitlement= LeaveEntitlement::where('user_id',auth()->user()->id)->where('start_year',auth()->user()->jobDetail->start_year)->where('end_year',auth()->user()->jobDetail->end_year)->with("policy","user")->get();
         $longLeave= longLeave::where('user_id',auth()->user()->id)->with("entitlement","approvedBy","user")->orderBy('id', 'desc')->get();
         $last_month = Carbon::now()->month-1;
 
         foreach ($leaveEntitlement as $key => $value) {
 
-            $leaves = longLeave::where('entitlement_id', $value->id)->where('user_id',auth()->user()->id)->where('approved',1)->get();
+            $days = $value->days;
+            $leave_taken_value = $value->leave_taken;
 
             if ($value->policy->monthly) { 
                 
@@ -55,17 +56,28 @@ class LeaveController extends Controller
                     $leave_taken += $fromDate->diffInDays($toDate);
                 }
                
-                $expired = ($value->days/12) * $last_month - $leave_taken;
-                $remaining = ($value->days - $value->leave_taken) - $expired;
-            }else{
-                $remaining = $value->days - $value->leave_taken;
+                $expired = ($days/12) * $last_month - $leave_taken;
+                $remaining = ($days - $leave_taken_value) - $expired;
+            }
+            elseif($value->policy->is_unlimited){
+                $expired = "0";
+                $remaining = $days - $leave_taken_value;
+            }
+            else{
+                $remaining = $days - $leave_taken_value;
                 $expired = 0;
             }
 
-            $leave_balance[$key]['leaveYear'] = $value->leave_year;
+            $leave_year = date('M Y', strtotime($value->start_year)).'-'.date('M Y', strtotime($value->end_year));
+
+            if(date('Y', strtotime($value->start_year)) == date('Y', strtotime('-1 day',strtotime($value->end_year)))){
+                $leave_year = date('Y', strtotime($value->start_year));
+            }
+
+            $leave_balance[$key]['leaveYear'] = $leave_year;
             $leave_balance[$key]['leaveType'] = $value->policy->title;
-            $leave_balance[$key]['totaDays'] = $value->days;
-            $leave_balance[$key]['leaveTaken'] = $value->leave_taken;
+            $leave_balance[$key]['totaDays'] = $days;
+            $leave_balance[$key]['leaveTaken'] = $leave_taken_value;
             $leave_balance[$key]['remainingLeave'] = $remaining;
             $leave_balance[$key]['expiredLeave'] = $expired;
            

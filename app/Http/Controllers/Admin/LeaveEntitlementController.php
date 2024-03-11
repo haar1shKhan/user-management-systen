@@ -62,15 +62,21 @@ class LeaveEntitlementController extends Controller
           }
   
           foreach($users as $user){
-            
-          $leaveEntitlement = new LeaveEntitlement([
-            'leave_policy_id' => $request->input('leave_policy_id'),
-            'leave_year' => $request->input('leave_year'),
-            'days' =>  $days,
-            'user_id' => $user,
-        ]);
 
-        $leaveEntitlement->save();
+            $user_model = User::find($user);
+
+            if (LeaveEntitlement::where('leave_policy_id', $request->input('leave_policy_id'))->where('user_id',$user_model->id)->where('start_year',$user_model->jobDetail->start_year)->where('end_year',$user_model->jobDetail->end_year)->exists()) {
+                continue;
+            }
+
+            $leaveEntitlement = new LeaveEntitlement([
+                'leave_policy_id' => $request->input('leave_policy_id'),
+                'start_year' => $user_model->jobDetail->start_year,
+                'end_year' => $user_model->jobDetail->end_year,
+                'days' =>  $days,
+                'user_id' => $user,
+            ]);
+            $leaveEntitlement->save();
         }
 
         // Save the LeaveEntitlement instance
@@ -97,10 +103,9 @@ class LeaveEntitlementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, LeaveEntitlement $leaveEntitlement)
     {
         abort_if(Gate::denies('leave_entitlement_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $leaveEntitlement = LeaveEntitlement::findOrFail($id);
         $days = $request->input('days');
         if($leaveEntitlement->policy->montly){
             if($days > 31){
@@ -110,11 +115,13 @@ class LeaveEntitlementController extends Controller
             $days = $request->input("days") * 12;
         }
 
+        if($days <= $leaveEntitlement->leave_taken){
+            $statusMessage = 'The user already has taken '.$leaveEntitlement->leave_taken.' days leave';
+            return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+        }
+
         $leaveEntitlement -> update([
-            'leave_policy_id' => $request->input('leave_policy_id'),
-            'leave_year' => $request->input('leave_year'),
             'days' => $days,
-            // 'user_id' => $user,
         ]);
 
         return redirect('admin/leaveSettings/leaveEntitlement');

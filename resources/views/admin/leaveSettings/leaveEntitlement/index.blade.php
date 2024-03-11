@@ -36,8 +36,55 @@
         {{ session('status') }}
     </div>
 @endif
+@if(!is_null($leaveEntitlement))
+@foreach ($leaveEntitlement as $list)
+<div class="modal fade bd-{{$list->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+       <div class="modal-content">
+          <div class="modal-header">
+             <h4 class="modal-title" id="myLargeModalLabel">{{$list->policy->title}}</h4>
+             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
 
+          <form action="{{route('admin.'.$url.'.leaveEntitlement.update', ['leaveEntitlement' => $list->id])}}" method="POST" class="modal-content">
+            @csrf
+            @method('PUT')
+        
+        <div class="modal-body">
+                <div class="">
+
+                    <div class="row">
+
+                        <div class="d-flex flex-column  col-md-6 mb-3">
+                            <label class="form-label" for="days-{{$list->id}}">Days</label>
+                            <input class="form-control" id="days-{{$list->id}}" value="{{$list->max_days > 0 ? $list->max_days :  $list->days}}"  name="days" type="number"  data-bs-original-title="" title="">
+                            <div class="text-danger mt-1">
+                                @error("days")
+                                    {{ $message }}
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-danger">*Leave year will be counted from User's joining date.</p>
+                </div>
+        </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Add</button>
+         </div>
+          </form>
+
+         
+       </div>
+    </div>
+ </div>
+ @endforeach
+ @endif
+ 
 <div class="container-fluid">
+    
     <div class="row">
 
         <!-- Zero Configuration  Starts-->
@@ -52,7 +99,7 @@
                             {{-- @can('permission_create') --}}
 
                             {{-- modal start --}}
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Apply Leave</button>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Add Entitlment</button>
 
                             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
@@ -71,13 +118,13 @@
 
                                                 <div class="row">
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-6 mb-3">
                                                         <label class="form-label" for="leave_policy">Leave policy</label>
                                                         <select name="leave_policy_id"  class="form-select" id="leave_policy" >
                         
                                                             <option selected="true" disabled value="">Choose...</option>
                                                             @foreach ($leavePolicies as $policies)
-                                                             <option data-days="{{ $policies->days }}" data-monthly={{$policies->monthly}} value="{{ $policies->id }}">
+                                                             <option data-days="{{ $policies->max_days > 0 ? $policies->max_days : $policies->days }}" data-unlimited="{{$policies->is_unlimited}}" data-monthly={{$policies->monthly}} value="{{ $policies->id }}">
                                                                  {{ $policies->title }}
                                                              </option>
                                                             @endforeach
@@ -90,23 +137,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <label class="form-label" for="leave_year">Leave Year</label>
-                                                        <select name="leave_year"  class="form-select" id="leave_year" >
-
-                                                            <option   value="{{date("Y")}}">{{date("Y")}}</option>
-                                                            <option   value="{{date("Y", strtotime("+1 year"))}}">{{date("Y", strtotime("+1 year"))}}</option>
-                                                
-                                                        </select>
-                                                        <div class="text-danger mt-1">
-                                                            @error("leave_year")
-                                                            {{$message}}    
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="d-flex flex-column  col-md-4">
+                                                    <div class="d-flex flex-column  col-md-6 mb-3">
                                                         <label class="form-label" for="days" id="daysLabel">Days</label>
                                                          <input class="form-control" id="days"  name="days" type="number"  data-bs-original-title="" title="">
                                                          <div class="text-danger mt-1">
@@ -117,11 +148,11 @@
                                                      </div>
 
                                                 </div>
-
+                                                <p class="text-danger">*Leave year will be counted from User's joining date.</p>
                                                 <div class="row">
                                                     <div class="o-hidden">
                                                         <div class="mb-2">
-                                                            <div class="form-label">Default Placeholder</div>
+                                                            <div class="form-label">Select Users</div>
                                                             <select name="user_id[]" class="js-example-placeholder-multiple col-sm-12" multiple="multiple">
                                                                 @foreach ($users as $user)
                                                                 <option value="{{ $user->id }}">
@@ -182,9 +213,10 @@
                                     {{-- @endcan --}}
 
                                     <th>{{trans('global.id') }}</th>
-                                    <th class="col-8">{{trans('admin/leaveSettings/leaveEntitlement.type') }}</th>
+                                    <th>Type</th>
                                     <th>Leave year</th>
                                     <th>days</th>
+                                    <th>Leave taken</th>
                                     <th>Users</th>
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
@@ -207,8 +239,9 @@
                                             <td>
                                                 <h6>{{$list->policy->title}}</h6>
                                             </td>
-                                            <td>{{$list->leave_year}}</td>
-                                            <td>{{$list->days ?? $list->policy->days}}</td>
+                                            <td>{{date('d M Y',strtotime($list->start_year))}} - {{date('d M Y',strtotime($list->end_year))}}</td>
+                                            <td>{{$list->max_days > 0 ? $list->policy->max_days : $list->days }}</td>
+                                            <td>{{$list->leave_taken }}</td>
                                             <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
                                             <td>
                                                 <ul class="action">
@@ -219,85 +252,6 @@
 
                                                         </button>
                                                     </li>
-
-                                                    <div class="modal fade bd-{{$list->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg">
-                                                           <div class="modal-content">
-                                                              <div class="modal-header">
-                                                                 <h4 class="modal-title" id="myLargeModalLabel">Update Policies</h4>
-                                                                 <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                              </div>
-                                                              
-                        
-                                                              <form action="{{route('admin.'.$url.'.leaveEntitlement.update', ['leaveEntitlement' => $list->id])}}" method="POST" class="modal-content">
-                                                                @csrf
-                                                                @method('PUT')
-                                                            
-                                                            <div class="modal-body">
-                                                                    <div class="">
-
-                                                                        <div class="row">
-
-                                                                            <div class="col-md-4">
-                                                                                <label class="form-label" for="leave_policy_id-{{$list->id}}">Leave policy</label>
-                                                                                <select name="leave_policy_id"  class="form-select" id="leave_policy_id-{{$list->id}}" >
-                                                
-                                                                                    <option selected="true" disabled value="">Choose...</option>
-                                                                                    @foreach ($leavePolicies as $policies)
-                                                                                    <option {{$list->policy->id == $policies->id? "selected": ""}} value="{{ $policies->id }}">
-                                                                                        {{ $policies->title }}
-                                                                                    </option>
-                                                                                @endforeach
-                                                                        
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("leave_policy_id")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="col-md-4">
-                                                                                <label class="form-label" for="leave_year-{{$list->id}}">Leave Year</label>
-                                                                                <select name="leave_year"  class="form-select" id="leave_year-{{$list->id}}" >
-
-                                                                                    <option {{ $list->leave_year == date('Y') ? 'selected' : '' }} value="{{ date('Y') }}">{{ date('Y') }}</option>
-                                                                                    <option {{ $list->leave_year == date('Y', strtotime('+1 year')) ? 'selected' : '' }} value="{{ date('Y', strtotime('+1 year')) }}">{{ date('Y', strtotime('+1 year')) }}</option>
-
-                                                                                </select>
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("leave_year")
-                                                                                    {{$message}}    
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-
-
-                                                                            <div class="d-flex flex-column  col-md-4">
-                                                                                <label class="form-label" for="days-{{$list->id}}">Days</label>
-                                                                                <input class="form-control" id="days-{{$list->id}}" value="{{$list->days ?? $list->policy->days}}"  name="days" type="number"  data-bs-original-title="" title="">
-                                                                                <div class="text-danger mt-1">
-                                                                                    @error("days")
-                                                                                        {{ $message }}
-                                                                                    @enderror
-                                                                                </div>
-                                                                            </div>
-
-                                                                        </div>
-                                                                        
-                                                                    </div>
-                                                            </div>
-
-                                                              <div class="modal-footer">
-                                                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                                                <button class="btn btn-primary" type="submit">Add</button>
-                                                             </div>
-                                                              </form>
-                        
-                                                             
-                                                           </div>
-                                                        </div>
-                                                     </div>
 
                                                     <form action="{{ route('admin.'.$url.'.leaveEntitlement.destroy', ['leaveEntitlement' => $list->id]) }}" method="post">
                                                         @csrf
@@ -429,15 +383,19 @@
 
             var days = selectedLeaveType.data('days');
             var monthly = selectedLeaveType.data('monthly');
-            console.log(monthly);
+            var unlimited = selectedLeaveType.data('unlimited');
+
+           
             $('input[name="days"]').val(days);
+
+            $('#daysLabel').text("Days per year");
 
             if (monthly) {
                 $('#daysLabel').text("Days per month");
-            } else {
-                $('#daysLabel').text("Days per year");
+            } 
+            if(unlimited){
+                $('#daysLabel').text("Days (no limit)");
             }
-
         }
 </script>
     <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>

@@ -12,6 +12,8 @@ class JobDetail extends Model
     protected $fillable = [
         'hired_at',
         'joined_at',
+        'start_year',
+        'end_year',
         'resigned_at',
         'source_of_hire',
         'job_type',
