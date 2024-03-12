@@ -11,7 +11,7 @@
 @endsection
 
 @section('breadcrumb-title')
-    <h3>{{ trans('admin/user.user') }}</h3>
+    <h3>المستخدمين</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -34,7 +34,7 @@
                     <form action="{{route("admin.user.update",['user'=>$user->id])}}" method="POST"  enctype="multipart/form-data" class="needs-validation" novalidate="">
                         @csrf
                         @method('PUT')
-                        <h5 class="my-3">User personal Detail</h5>
+                        <h5 class="my-3">>التفاصيل الشخصية</h5>
 
                         <div class="row my-4">
 

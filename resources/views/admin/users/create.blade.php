@@ -61,7 +61,7 @@
                                 @enderror
                             </div>
 							<div class="mb-3">
-								<label class="form-label" for="phone">رقم التليفون</label>
+								<label class="form-label" for="phone">رقم تليفون</label>
                                 <input class="form-control" id="phone" type="tel" name="phone" value="{{old('phone')}}" required>
                                 
                                 @error("phone")
@@ -105,7 +105,7 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-4">
-                                    <label for="date_of_birth" class="form-label">Date of birth</label>
+                                    <label for="date_of_birth" class="form-label">تاريخ الميلاد</label>
                                     <div class="col-sm-12">
                                         <input class="datepicker-here form-control digits" type="text" data-language="en" id="date_of_birth" name="date_of_birth" value="{{date('Y-m-d')}}">
                                     </div>
@@ -114,12 +114,12 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="gender">Gender</label>
+                                    <label class="form-label" for="gender">جنس</label>
                                     <select name="gender"  class="form-select" id="gender" required>
 
                                         <option selected value="">Choose a gender...</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
+                                        <option value="Male">ذكر</option>
+                                        <option value="Female">أنثى</option>
                         
                                     </select>
                                 
@@ -131,11 +131,11 @@
                             </div>
 							<div class="row g-3">
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="marital_status">Marital status</label>
+                                    <label class="form-label" for="marital_status">الحالة الاجتماعية</label>
                                     <select name="marital_status"  class="form-select" id="marital_status" required>
                                         <option selected value="">Choose...</option>
-                                        <option value="Bachelor">Bachelor</option>
-                                        <option value="Married">Married</option>
+                                        <option value="Bachelor">أعزب</option>
+                                        <option value="Married">متزوج/متزوجة</option>
                                     </select>
                                 
                                     @error("marital_status")
@@ -143,7 +143,7 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="nationality">Nationality</label>
+                                    <label class="form-label" for="nationality">الجنسية</label>
                                     <input class="form-control" id="nationality" type="text" name="nationality" value="{{old('nationality')}}"  required>
                                 
                                     @error("nationality")
@@ -151,7 +151,7 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="religion">Religion (اختياري)</label>
+                                    <label class="form-label" for="religion">الديانة (اختياري)</label>
                                     <input class="form-control" id="religion" type="text" name="religion" value="{{old('religion')}}">
                                 
                                     @error("religion")  
@@ -162,7 +162,7 @@
                             </div>
 							<div class="row g-3">
 							    <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="personal_email">Personal Email (اختياري)</label>
+                                    <label class="form-label" for="personal_email">بريد إلكتروني إضافي (اختياري)</label>
                                     <input class="form-control" id="personal_email" type="text" name="personal_email" value="{{old('email')}}">
 
                                     @error("personal_email")
@@ -170,7 +170,7 @@
                                     @enderror
                                 </div>
 							    <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="mobile">Mobile Number (اختياري)</label>
+                                    <label class="form-label" for="mobile">رقم تليفون إضافي (اختياري)</label>
                                     <input class="form-control" id="mobile" type="tel" name="mobile" value="{{old('mobile')}}">
 
                                     @error("mobile")
