@@ -492,22 +492,22 @@
                                                 <h6>{{$type->max_days > 0 ? $type->max_days : $type->days}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->monthly?"True" : "False" }}</h6>
+                                                <h6>{{$type->monthly?"نشيط" : "غير نشط" }}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->is_unlimited === 1?"True" : "False" }}</h6>
+                                                <h6>{{$type->is_unlimited === 1?"نشيط" : "غير نشط" }}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->advance_salary? "True" : "False"}}</h6>
+                                                <h6>{{$type->advance_salary? "نشيط" : "غير نشط"}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->roles ?? "All" }}</h6>
+                                                <h6>{{$type->roles ?? "الجميع" }}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->gender ?? "All"}}</h6>
+                                                <h6>{{$type->gender ?? "الجميع"}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->marital_status ?? "All"}}</h6>
+                                                <h6>{{$type->marital_status ?? "الجميع"}}</h6>
                                             </td>
                                             <td>
                                                 <h6>{{$type->activate}}</h6>
