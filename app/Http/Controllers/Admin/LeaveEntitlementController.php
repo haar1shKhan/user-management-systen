@@ -50,6 +50,9 @@ class LeaveEntitlementController extends Controller
         abort_if(Gate::denies('leave_entitlement_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
           // Create a new LeaveEntitlement instance
           $users = $request->input("user_id");
+          if (empty($users)) {
+            return redirect('admin/leaveSettings/leaveEntitlement')->with('status','Please Choose Users');
+          }
           $leavePolicies = LeavePolicies::find($request->input('leave_policy_id'));
           $days = $request->input('days');
         
