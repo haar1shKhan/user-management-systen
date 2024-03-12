@@ -513,7 +513,7 @@
 						<div>
 							<div class="text-end btn-mb">
 								<button class="btn btn-secondary" id="prevBtn" type="button" onclick="nextPrev(-1)">السابق</button>
-								<button class="btn btn-primary" id="nextBtn" type="button" onclick="nextPrev(1)">التالي</button>
+								<button class="btn btn-primary" id="nextBtn" type="button" onclick="nextPrev(1)">التالي</button> 
 							</div>
 						</div>
 						<!-- Circles which indicates the steps of the form:-->
