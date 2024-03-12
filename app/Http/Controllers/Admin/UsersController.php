@@ -204,7 +204,8 @@ class UsersController extends Controller
                     LeaveEntitlement::create(
                         [
                             'leave_policy_id' => $value->id,
-                            'leave_year' => date('Y'),
+                            'start_year' => $user->jobDetail->start_year,
+                            'end_year' => $user->jobDetail->end_year,
                             'days' => $value->days ,
                             'user_id' => $user->id,
                         ]
