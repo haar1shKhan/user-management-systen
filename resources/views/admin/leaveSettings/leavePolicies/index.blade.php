@@ -20,7 +20,7 @@
 @endsection
 
 @section('breadcrumb-title')
-    <h3>{{trans('admin/leaveSettings/leavePolicies.leaveTypes') }}</h3>
+    <h3>سياسات الاجازة</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -43,7 +43,7 @@
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
           <div class="modal-header">
-             <h4 class="modal-title" id="myLargeModalLabel">Update Policies</h4>
+             <h4 class="modal-title" id="myLargeModalLabel">تحديث السياسة</h4>
              <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           
@@ -56,7 +56,7 @@
 
                     <div class="row">
                         <div class="d-flex flex-column ">
-                            <label class="form-label" for="update_title-{{$type->id}}">Title</label>
+                            <label class="form-label" for="update_title-{{$type->id}}">الاسم</label>
                             <input class="form-control" id="update_title-{{$type->id}}"  name="title" value="{{$type->title}}" type="text" required >
                             <div class="text-danger mt-1">
                                 @error("title")
@@ -68,11 +68,11 @@
 
                     <div class="row">
                         <div>
-                            <label class="form-label" for="update_is_unlimited-{{$type->id}}">Set limit</label>
+                            <label class="form-label" for="update_is_unlimited-{{$type->id}}">الحد</label>
                             <select name="is_unlimited"  class="form-select update_is_unlimited" data-id="{{$type->id}}" data-days="{{$type->days}}" id="update_is_unlimited-{{$type->id}}" >
 
-                                <option {{$type->is_unlimited=="0"?"selected":""}}  value="0">Limited</option>
-                                <option {{$type->is_unlimited=="1"?"selected":""}}  value="1">Unlimited</option>
+                                <option {{$type->is_unlimited=="0"?"selected":""}}  value="0">إجازة سنوية</option>
+                                <option {{$type->is_unlimited=="1"?"selected":""}}  value="1">غير محدود</option>
                             
                             </select>
                             <div class="text-danger mt-1">
@@ -86,7 +86,7 @@
                     <div class="row d-flex align-items-end my-4">
 
                         <div id="max_day_div-{{$type->id}}" style="display: none;" class="flex-column  col-md-3">
-                           <label class="form-label" for="update_max_days-{{$type->id}}">Days</label>
+                           <label class="form-label" for="update_max_days-{{$type->id}}">الأيام</label>
                             <input class="form-control" id="update_max_days-{{$type->id}}"  name="max_days" value="{{$type->max_days}}" type="number" required >
                             <div class="text-danger mt-1">
                                 @error("max_days")
@@ -96,7 +96,7 @@
                         </div>
 
                         <div id="update_days_div-{{$type->id}}" style="display: flex" class="flex-column  col-md-3">
-                           <label class="form-label" for="update_days-{{$type->id}}">Days</label>
+                           <label class="form-label" for="update_days-{{$type->id}}">الأيام</label>
                             <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
                             <div class="text-danger mt-1">
                                 @error("days")
@@ -107,12 +107,12 @@
 
                         <div id="update_monthly_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
                             <input id='update_monthly-{{$type->id}}' {{$type->monthly?"checked":""}} name="monthly" class="form-check-input monthly-checkbox update_monthly" data-id={{$type->id}} data-category="monthly" type="checkbox">
-                            <label for="update_monthly-{{$type->id}}" class="form-check-label">Monthly</label>
+                            <label for="update_monthly-{{$type->id}}" class="form-check-label">الأيام شهريا</label>
                         </div>
 
                         <div id ="update_advance_salary_div-{{$type->id}}" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
                             <input id='update_advance_salary-{{$type->id}}' {{$type->advance_salary?"checked":""}} name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
-                            <label for="update_advance_salary-{{$type->id}}" class="form-check-label">Advance Salary</label>
+                            <label for="update_advance_salary-{{$type->id}}" class="form-check-label">راتب مقدما</label>
                         </div>
 
                     </div>
@@ -125,7 +125,7 @@
                             <select name="role"  class="form-select" id="update_role-{{$type->id}}">
                                 
                                 @foreach ($roles as $role)
-                                <option {{$type->roles == $role->title  ?"selected":""}} value="">All</option>
+                                <option {{$type->roles == $role->title  ?"selected":""}} value="">الجميع</option>
                                     <option {{$type->roles == $role->title  ?"selected":""}} value="{{ $role->title }}">
                                         {{ $role->title }}
                                     </option>
@@ -140,12 +140,12 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label" for="update_gender-{{$type->id}}">Gender</label>
+                            <label class="form-label" for="update_gender-{{$type->id}}">جنس</label>
                             <select name="gender"  class="form-select" id="update_gender-{{$type->id}}" >
 
-                                <option   value="">All</option>       
-                                <option  {{$type->gender=="male"?"selected":""}} value="male">Male</option>
-                                <option  {{$type->gender=="female"?"selected":""}}  value="female">Female</option>
+                                <option   value="">الجميع</option>       
+                                <option  {{$type->gender=="male"?"selected":""}} value="male">ذكر</option>
+                                <option  {{$type->gender=="female"?"selected":""}}  value="female">أنثى</option>
                     
                             </select>
                             <div class="text-danger mt-1">
@@ -156,12 +156,12 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label" for="update_marital_status-{{$type->id}}">Marital status</label>
+                            <label class="form-label" for="update_marital_status-{{$type->id}}">الحالة الاجتماعية</label>
                             <select name="marital_status-{{$type->id}}"  class="form-select" id="update_marital_status" >
 
-                                <option   value="">All</option>       
-                                <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">Bachelor</option>
-                                <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">Married</option>
+                                <option   value="">الجميع</option>       
+                                <option {{$type->marital_status=="Bachelor"?"selected":""}}   value="Bachelor">أعزب</option>
+                                <option {{$type->marital_status=="Married"?"selected":""}}  value="Married">متزوج/متزوجة</option>
                     
                             </select>
                             <div class="text-danger mt-1">
@@ -178,11 +178,11 @@
 
                         <div class="col-md-3">
                         
-                            <label class="form-label" for="update_validationCustom04-{{$type->id}}">Activate</label>
+                            <label class="form-label" for="update_validationCustom04-{{$type->id}}">تفعيل</label>
                             <select name="activate"  class="form-select" id="update_validationCustom04-{{$type->id}}" required>
 
-                                <option {{$type->activate=="manual"?"selected":""}}   value="manual">Manually</option>
-                                <option {{$type->activate=="immediately_after_hiring"?"selected":""}} value="immediately_after_hiring">Immediately After Hiring</option>
+                                <option {{$type->activate=="manual"?"selected":""}}   value="manual">يدويا</option>
+                                <option {{$type->activate=="immediately_after_hiring"?"selected":""}} value="immediately_after_hiring">للجميع</option>
                     
                             </select>
                             <div class="text-danger mt-1">
@@ -196,7 +196,7 @@
                          <div class="form-check checkbox checkbox-dark  mx-3 col-md-5">
 
                             <input id='update_existing_user-{{$type->id}}' {{$type->apply_existing_users?"checked":""}} name="existing_user" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
-                             <label for="update_existing_user-{{$type->id}}" class="form-check-label">Apply to existing user</label>
+                             <label for="update_existing_user-{{$type->id}}" class="form-check-label">تنطبق على المستخدمين الحاليين</label>
 
                          </div>
 
@@ -211,8 +211,8 @@
                  </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-            <button class="btn btn-primary" type="submit">Update</button>
+            <button class="btn btn-danger" type="button" data-bs-dismiss="modal">اغلاق</button>
+            <button class="btn btn-primary" type="submit">تحديث</button>
          </div>
           </form>
 
@@ -239,13 +239,13 @@
                             {{-- @can('permission_create') --}}
 
                             {{-- modal start --}}
-                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Add Policy</button>
+                            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">إضافة</button>
 
                             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                    <div class="modal-content">
                                       <div class="modal-header">
-                                         <h4 class="modal-title" id="myLargeModalLabel">Add Policy</h4>
+                                         <h4 class="modal-title" id="myLargeModalLabel">إضافة سياسة</h4>
                                          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       
@@ -258,7 +258,7 @@
 
                                                 <div class="row">
                                                     <div class="d-flex flex-column ">
-                                                        <label class="form-label" for="title">Title</label>
+                                                        <label class="form-label" for="title">الاسم</label>
                                                         <input class="form-control" id="title"  name="title" type="text" required >
                                                         <div class="text-danger mt-1">
                                                             @error("title")
@@ -270,11 +270,11 @@
 
                                                 <div class="row">
                                                     <div>
-                                                        <label class="form-label" for="is_unlimited">Set limit</label>
+                                                        <label class="form-label" for="is_unlimited">الحد</label>
                                                         <select name="is_unlimited"  class="form-select" id="is_unlimited" >
 
-                                                            <option   value="0">Limited</option>
-                                                            <option   value="1">Unlimited</option>
+                                                            <option   value="0">إجازة سنوية</option>
+                                                            <option   value="1">غير محدود</option>
                                                         
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -288,7 +288,7 @@
                                                 <div class="row d-flex align-items-end my-4">
 
                                                     <div id="max_day_div" style="display: none;" class=" flex-column  col-md-3">
-                                                       <label class="form-label" for="max_days">Days</label>
+                                                       <label class="form-label" for="max_days">الأيام</label>
                                                         <input class="form-control" id="max_days"  name="max_days" type="number" >
                                                         <div class="text-danger mt-1">
                                                             @error("max_days")
@@ -298,7 +298,7 @@
                                                     </div>
 
                                                     <div id="days_div" style="display: flex;" class="flex-column  col-md-3">
-                                                       <label class="form-label" for="days">Days</label>
+                                                       <label class="form-label" for="days">الأيام</label>
                                                         <input class="form-control" id="days"  name="days" type="number" required >
                                                         <div class="text-danger mt-1">
                                                             @error("days")
@@ -310,12 +310,12 @@
 
                                                     <div id="monthly_div" class="form-check checkbox checkbox-dark  mx-3  col-md-3">
                                                         <input id='monthly' name="monthly" class="form-check-input monthly-checkbox" data-category="monthly" type="checkbox">
-                                                        <label for="monthly" class="form-check-label">Monthly</label>
+                                                        <label for="monthly" class="form-check-label">الأيام شهريا</label>
                                                     </div>
 
                                                     <div id="advance_salary_div" class="form-check checkbox checkbox-dark  mx-3 col-md-3">
                                                         <input id='advance_salary' name="advance_salary" class="form-check-input advance-salary-checkbox" data-category="advance_salary" type="checkbox">
-                                                        <label for="advance_salary" class="form-check-label">Advance Salary</label>
+                                                        <label for="advance_salary" class="form-check-label">راتب مقدما</label>
                                                     </div>
 
                                                 </div>
@@ -326,7 +326,7 @@
                                                     <div class="col-md-3">
                                                         <label class="form-label" for="role">{{ trans('admin/user.role') }}</label>
                                                         <select name="role"  class="form-select" id="role">
-                                                            <option  value="">All</option>
+                                                            <option  value="">الجميع</option>
                                                             @foreach ($roles as $role)
                                                                 <option value="{{ $role->title }}">
                                                                     {{ $role->title }}
@@ -342,11 +342,11 @@
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <label class="form-label" for="gender">Gender</label>
+                                                        <label class="form-label" for="gender">جنس</label>
                                                         <select name="gender"  class="form-select" id="gender" >
-                                                            <option   value="">All</option>
-                                                            <option   value="male">Male</option>
-                                                            <option   value="female">Female</option>
+                                                            <option   value="">الجميع</option>
+                                                            <option   value="male">ذكر</option>
+                                                            <option   value="female">أنثى</option>
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -357,11 +357,11 @@
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <label class="form-label" for="marital_status">Marital status</label>
+                                                        <label class="form-label" for="marital_status">الحالة الاجتماعية</label>
                                                         <select name="marital_status"  class="form-select" id="marital_status" >
-                                                            <option   value="">All</option>
-                                                            <option   value="Bachelor">Bachelor</option>
-                                                            <option   value="Married">Married</option>
+                                                            <option   value="">الجميع</option>
+                                                            <option   value="Bachelor">ذكر</option>
+                                                            <option   value="Married">أنثى</option>
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -378,11 +378,11 @@
 
                                                     <div class="col-md-3">
                                                     
-                                                        <label class="form-label" for="activate">Activate</label>
+                                                        <label class="form-label" for="activate">تفعيل</label>
                                                         <select name="activate"  class="form-select" id="activate" required>
                         
-                                                            <option   value="manual">Manually</option>
-                                                            <option   value="immediately_after_hiring">Immediately After Hiring</option>
+                                                            <option   value="manual">يدويا</option>
+                                                            <option   value="immediately_after_hiring">للجميع</option>
                                                 
                                                         </select>
                                                         <div class="text-danger mt-1">
@@ -396,7 +396,7 @@
                                                      <div class="form-check checkbox checkbox-dark  mx-3 col-md-5">
 
                                                          <input id='existing_user' name="existing_user" class="form-check-input existing-user-checkbox" data-category="existing_user" type="checkbox">
-                                                         <label for="existing_user" class="form-check-label">Apply to existing user</label>
+                                                         <label for="existing_user" class="form-check-label">تنطبق على المستخدمين الحاليين</label>
 
                                                      </div>
 
@@ -411,8 +411,8 @@
                                              </div>
                                       </div>
                                       <div class="modal-footer">
-                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                        <button class="btn btn-primary" type="submit">Add</button>
+                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">اغلاق</button>
+                                        <button class="btn btn-primary" type="submit">إضافة</button>
                                      </div>
                                       </form>
 
@@ -427,7 +427,7 @@
                             {{-- <a class="btn btn-danger" href="{{'/admin'.'/'.$url.'s?trash=1'}}">Trash</a> --}}
                             {{-- @can('permission_create') --}}
 
-                            <button class="btn btn-danger"  id="massActionButton" type="submit" >{{trans('global.deleteAll') }}</button>
+                            <button class="btn btn-danger"  id="massActionButton" type="submit" >حذف الكل</button>
 
                             {{-- @endcan --}}
 
@@ -458,14 +458,14 @@
 
                                     {{-- <th>{{trans('global.id') }}</th> --}}
                                     <th class="col-8">{{trans('admin/leaveSettings/leavePolicies.type') }}</th>
-                                    <th class="col-8">Days</th>
-                                    <th class="col-8">Monthly</th>
-                                    <th class="col-8">Unlimited</th>
-                                    <th class="col-8">Advance Salary</th>
+                                    <th class="col-8">الأيام</th>
+                                    <th class="col-8">الأيام شهريا</th>
+                                    <th class="col-8">الحد</th>
+                                    <th class="col-8">راتب مقدما</th>
                                     <th class="col-8">Roles</th>
-                                    <th class="col-8">Gender</th>
-                                    <th class="col-8">Marital Status</th>
-                                    <th class="col-8">Activate</th>
+                                    <th class="col-8">جنس</th>
+                                    <th class="col-8">الحالة الإجنماعية</th>
+                                    <th class="col-8">تفعيل</th>
 
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
