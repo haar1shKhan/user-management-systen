@@ -20,7 +20,7 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-title')
-    <h3>{{ trans('admin/user.user') }}</h3>
+    <h3>المستخدمين</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -45,12 +45,11 @@ form button.border-none {
                 <div class="card-header pb-0 card-no-border">
                     <div class="row">
                         @if($trash)
-                        <div class="d-flex justify-content-between">
-                            <h3>{{ trans('global.trashTable') }}</h3>
+                        <div class="d-flex justify-content-end"> 
                             <div>
-                                <a class="btn btn-primary" href="/admin/users">{{ trans('global.back') }}</a>
-                                <button class="btn btn-danger massActionButton"   type="submit"  onclick="setActionType('forceDestroyAll')" data-bs-original-title="" title="">{{ trans('global.deleteAll') }}</button>
-                                <button class="btn btn-success massActionButton"  onclick="setActionType('restoreAll')"  type="submit" data-bs-original-title="" title="">{{ trans('global.restoreAll') }}</button>
+                                <a class="btn btn-primary" href="/admin/users">العودة</a>
+                                <button class="btn btn-danger massActionButton"   type="submit"  onclick="setActionType('forceDestroyAll')" data-bs-original-title="" title="">حذف الكل</button>
+                                <button class="btn btn-success massActionButton"  onclick="setActionType('restoreAll')"  type="submit" data-bs-original-title="" title="">استعادة الكل</button>
                             </div>
                         </div>
                         @else
@@ -58,14 +57,14 @@ form button.border-none {
                             <div>
                                     @can('user_create')
                                     
-                                    <a class="btn btn-primary" href="{{ route('admin.user.create') }}">{{ trans('admin/user.addUser') }}</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.user.create') }}">إضافة مستخدم جديد</a>
                                     
                                     @endcan 
                                     
                                     @can('user_delete')
                                     
-                                    <a class="btn btn-danger" href="/admin/users?trash=1">{{ trans('global.trash') }}</a>
-                                    <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
+                                    <a class="btn btn-danger" href="/admin/users?trash=1">سلة المهملات</a>
+                                    <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">حذف الكل</button>
                                     
                                     @endcan
                             </div>
