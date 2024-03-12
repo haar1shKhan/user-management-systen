@@ -457,7 +457,7 @@
                                     {{-- @endcan --}}
 
                                     {{-- <th>{{trans('global.id') }}</th> --}}
-                                    <th class="col-8">{{trans('admin/leaveSettings/leavePolicies.type') }}</th>
+                                    <th class="col-8">نوع الإجازة</th>
                                     <th class="col-8">الأيام</th>
                                     <th class="col-8">الأيام شهريا</th>
                                     <th class="col-8">الحد</th>
