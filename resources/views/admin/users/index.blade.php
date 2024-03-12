@@ -89,15 +89,15 @@ form button.border-none {
 
                                     @endif
 
-                                    <th>{{ trans('global.id') }}</th>
-                                    <th>{{ trans('admin/user.name') }}</th>
-                                    <th>{{ trans('admin/user.email') }}</th>
-                                    <th>{{ trans('admin/user.role') }}</th>
+                                    <th>رقم التعريفي</th>
+                                    <th>الاسم</th>
+                                    <th>البريد الالكتروني</th>
+                                    <th>الأدوار</th>
 
 
                                     @if (Gate::check('user_edit') || Gate::check('user_delete'))
 
-                                    <th>{{ trans('global.action') }}</th>
+                                    <th>الإجراءات</th>
 
                                     @endif
                                 </tr>
