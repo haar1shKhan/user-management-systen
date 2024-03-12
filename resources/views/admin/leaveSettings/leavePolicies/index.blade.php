@@ -510,7 +510,7 @@
                                                 <h6>{{$type->marital_status ?? "الجميع"}}</h6>
                                             </td>
                                             <td>
-                                                <h6>{{$type->activate}}</h6>
+                                                <h6>{{$type->activate == "manual" ? "يدوي" : "للجميع" }}</h6>
                                             </td>
                                             <td>
                                                 <ul class="action">
