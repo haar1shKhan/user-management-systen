@@ -93,7 +93,7 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
-                            <span>Leave Requests @if(config('count.total'))<span  class="text-white badge rounded-pill badge-danger">{{config('count.total')}}@endif</span> </span>
+                            <span>طلبات الإجازة @if(config('count.total'))<span  class="text-white badge rounded-pill badge-danger">{{config('count.total')}}@endif</span> </span>
                         </a>
                     </li>
                     @endcan
@@ -108,17 +108,17 @@
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
 
-                            <span class="trans_leave_manager">Leave Manager</span>
+                            <span class="">إعدادات الاجازة</span>
                         </a>
                         <ul class="sidebar-submenu">
                             @can('leave_policy_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}" class="trans_leave_policy">Leave Policies</a>
+                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}" class=" ">سياسات الاجازة'</a>
                             </li>
                             @endcan
                             @can('leave_entitlement_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}" class="trans_leave_entitlements">Leave Entitlement</a>
+                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}" class=" ">استحقاقات الإجازة</a>
                             </li>
                             @endcan
                         </ul>
