@@ -135,32 +135,32 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-others') }}"></use>
                             </svg>
-                            <span>System</span>
+                            <span>نظام</span>
                         </a>
                         <ul class="sidebar-submenu">
                             @can('setting_access')
                             <li>
-                                <a href="{{ route('admin.settings') }}">Settings</a>
+                                <a href="{{ route('admin.settings') }}">إعدادات</a>
                             </li>
                             @endcan
                             @can('user_management_access')
                             <li>
                                 <a class="submenu-title" href="#">
-                                    User management
+                                    إدارة المستخدمين
                                     <span class="sub-arrow">
                                         <i class="fa fa-angle-right"></i>
                                     </span>
                                 </a>
                                 <ul class="nav-sub-childmenu submenu-content">
                                     @can('user_access')
-                                    <li><a class="lan-5" href="{{ route('admin.users') }}">Users</a></li>
+                                    <li><a class="lan-5" href="{{ route('admin.users') }}">المستخدمين</a></li>
                                     @endcan
                                     @can('role_access')
-                                    <li><a class="" href="{{ route('admin.roles') }}">Roles</a></li>
+                                    <li><a class="" href="{{ route('admin.roles') }}">الأدوار والأذونات</a></li>
                                     @endcan
-                                    @can('permission_access')
+                                    {{-- @can('permission_access')
                                     <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
-                                    @endcan
+                                    @endcan --}}
                                 </ul>
                             </li>
                             @endcan
