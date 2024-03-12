@@ -387,7 +387,7 @@
             var unlimited = selectedLeaveType.data('unlimited');
 
            
-            $('input[name="days"]').val(days);
+            $('#days').val(days);
 
             $('#daysLabel').text("Days per year");
 
