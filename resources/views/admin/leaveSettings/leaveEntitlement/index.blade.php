@@ -25,7 +25,7 @@
 @endsection
 
 @section('breadcrumb-items')
-    <li class="breadcrumb-item">{{ $page_title }}</li>
+    <li class="breadcrumb-item trans_leave_entitlements">{{ $page_title }}</li>
     <li class="breadcrumb-item active">{{trans('admin/leaveSettings/leaveEntitlement.leaveTypes') }}</li>
 @endsection
 
