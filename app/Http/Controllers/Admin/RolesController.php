@@ -36,6 +36,7 @@ class RolesController extends Controller
     
     public function duplicateUser ()
     {
+        dd(2);
         $role = Role::find(2)->replicate()->save();
         $role = Role::with('permissions')->find(2);
         $newRole = Role::latest()->first();
