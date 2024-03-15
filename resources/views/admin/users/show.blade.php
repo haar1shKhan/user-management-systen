@@ -51,7 +51,7 @@ form button.border-none {
 
         <div class="row ">
             <div class=" mb-3  d-flex justify-content-end">
-                <a href="{{route('admin.user.edit',['user_profile'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
+                <a href="{{route('admin.user.edit',['user'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
                 <a href="{{ url('admin/users') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
