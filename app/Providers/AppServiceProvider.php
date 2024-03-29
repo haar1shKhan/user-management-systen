@@ -77,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
                         $user->jobDetail->start_year = $end_year;
                         $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
                         $user->jobDetail->save();
+                        $end_year = $user->jobDetail->end_year;
                     }
 
                 }
