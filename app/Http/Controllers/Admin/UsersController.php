@@ -12,6 +12,8 @@ use App\Models\Profile;
 use App\Models\JobDetail;
 use App\Models\LeavePolicies;
 use App\Models\LeaveEntitlement;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
@@ -177,9 +179,19 @@ class UsersController extends Controller
     
         $jobDetail->save();
 
+        $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+        $end_year = date('Y-m-d',strtotime($user->jobDetail->end_year));
+
+        while($end_year <= $current_date->format('Y-m-d')){
+            $user->jobDetail->start_year = $end_year;
+            $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
+            $user->jobDetail->save();
+            $end_year = $user->jobDetail->end_year;
+        }
         // policies immidiatly after hiring
 
         $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
+
         if (count($leave_policies) > 0){
             foreach ($leave_policies as $key => $value) {
 
@@ -349,6 +361,16 @@ class UsersController extends Controller
             'payment_method' => $request->input('payment_method'),
             'supervisor_id' => $request->input('supervisor_id'), 
         ]);
+
+        $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+        $end_year = date('Y-m-d',strtotime($user->jobDetail->end_year));
+
+        while($end_year <= $current_date->format('Y-m-d')){
+            $user->jobDetail->start_year = $end_year;
+            $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
+            $user->jobDetail->save();
+            $end_year = $user->jobDetail->end_year;
+        }
 
         $user->roles()->sync([$request->input('role')]);
 
