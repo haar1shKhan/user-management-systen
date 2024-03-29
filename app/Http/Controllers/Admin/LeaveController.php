@@ -502,7 +502,3 @@ class LeaveController extends Controller
     }
     
 }
-
-
-
-// 12 days (0+2+3+0) (0+0+0+3)

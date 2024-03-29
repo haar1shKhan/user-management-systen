@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+
 use DateTime;
 use DateTimeZone;
 use App\Models\Setting;
@@ -8,6 +9,8 @@ use App\Models\longLeave;
 use App\Models\LateAttendance;
 use App\Models\ShortLeave;
 use App\Models\User;
+use App\Models\LeavePolicies;
+use App\Models\LeaveEntitlement;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Config;
 
@@ -34,9 +37,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         if (Schema::hasTable('settings')) {
-            
+
             foreach (Setting::all() as $setting) {
-                Config::set($setting->code.'.'.$setting->key, $setting->value);
+                Config::set($setting->code . '.' . $setting->key, $setting->value);
             }
 
             $smtp = [
@@ -53,9 +56,9 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if (Schema::hasTable('long_leaves')) {
-            $leave_request = longLeave::where('approved','0')->count();
-            $late_request  = LateAttendance::where('approved','0')->count();
-            $short_request = ShortLeave::where('approved','0')->count();
+            $leave_request = longLeave::where('approved', '0')->count();
+            $late_request  = LateAttendance::where('approved', '0')->count();
+            $short_request = ShortLeave::where('approved', '0')->count();
             $total_request = $leave_request + $late_request + $short_request;
 
             Config::set('count.leave', $leave_request);
@@ -64,21 +67,20 @@ class AppServiceProvider extends ServiceProvider
             Config::set('count.total', $total_request);
         }
 
-        if(Schema::hasTable('users')){
+        if (Schema::hasTable('users')) {
 
             $users = User::get();
             $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
 
             if (!empty($users)) {
-                foreach($users as $user){
-                    $end_year = date('Y-m-d',strtotime($user->jobDetail->end_year));
+                foreach ($users as $user) {
+                    $end_year = date('Y-m-d', strtotime($user->jobDetail->end_year));
 
-                    if($end_year <= $current_date->format('Y-m-d')){
+                    if ($end_year <= $current_date->format('Y-m-d')) {
                         $user->jobDetail->start_year = $end_year;
-                        $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
+                        $user->jobDetail->end_year = date('Y-m-d', strtotime('+1 year', strtotime($user->jobDetail->end_year)));
                         $user->jobDetail->save();
                     }
-
                 }
             }
         }

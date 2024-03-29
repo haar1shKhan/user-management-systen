@@ -138,7 +138,7 @@ class UsersController extends Controller
             'passport' => $request->input('passport'),
             'passport_issued_at' => $request->input('passport_issued_at'),
             'passport_expires_at' => $request->input('passport_expires_at'),
-            'passport_file' => $passport_file ?? null,
+            'passport_file' => $request->passport_file ?? null,
             'nid' => $request->input('nid'),
             'nid_issued_at' => $request->input('nid_issued_at'),
             'nid_expires_at' => $request->input('nid_expires_at'),
@@ -146,7 +146,7 @@ class UsersController extends Controller
             'visa' => $request->input('visa'),
             'visa_issued_at' => $request->input('visa_issued_at'),
             'visa_expires_at' => $request->input('visa_expires_at'),
-            'visa_file' => $visa_file ?? null,
+            'visa_file' => $request->visa_file ?? null,
             'country' => $request->input('country'),
         ]);
         
