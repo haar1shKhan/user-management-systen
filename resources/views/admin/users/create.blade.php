@@ -251,7 +251,7 @@
                             <div class="row g-3">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label" for="salary">راتب</label>
-                                    <input class="form-control" id="salary" type="number" name="salary" value="{{old('salary')}}" required>
+                                    <input class="form-control" id="salary" type="number" name="salary" value="{{ old('salary') ? old('salary') : __('0') }}" required>
 
                                     @error("salary")
                                     <div class="invalid-feedback">{{$message}}</div>   
@@ -471,7 +471,6 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label" for="payment_method">طريقة الدفع</label>
                                     <select name="payment_method"  class="form-select" id="payment_method" required>
-                                        <option selected="true" value="">Choose...</option>
                                         <option value="Cash">كاش</option>
                                         <option value="Bank Transfer">تحويل بنكي</option>
                                     </select>
