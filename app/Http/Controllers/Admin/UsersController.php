@@ -283,8 +283,6 @@ class UsersController extends Controller
                 'last_name' => 'required',
                 'email' => 'required',
                 'phone' => 'required',
-                'password' => 'required',
-                'password_confirmation' => 'required',
                 'role' => 'required',
                 'date_of_birth' => 'required',
                 'gender' => 'required',
