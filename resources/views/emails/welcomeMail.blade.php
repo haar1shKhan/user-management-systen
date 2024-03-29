@@ -14,6 +14,8 @@ Hello {{$employee_name}},
 I'm thrilled to welcome you to Ansee Nails Care! We're excited to have you on board. 
 Your expertise and energy will undoubtedly contribute to our success.
 
+Your joining date: {{ $joining_date }}  
+
 Here are a few quick details to help you get started:
 
 - Login Credentials:

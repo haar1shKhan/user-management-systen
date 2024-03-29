@@ -93,7 +93,7 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
-                            <span>Leave Requests @if(config('count.total'))<span  class="text-white badge rounded-pill badge-danger">{{config('count.total')}}@endif</span> </span>
+                            <span>طلبات الإجازة @if(config('count.total'))<span  class="text-white badge rounded-pill badge-danger">{{config('count.total')}}@endif</span> </span>
                         </a>
                     </li>
                     @endcan
@@ -108,17 +108,17 @@
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
                             </svg>
 
-                            <span class="trans_leave_manager">Leave Manager</span>
+                            <span class="">إعدادات الاجازة</span>
                         </a>
                         <ul class="sidebar-submenu">
                             @can('leave_policy_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}" class="trans_leave_policy">Leave Policies</a>
+                                <a href="{{ route('admin.leaveSettings.leavePolicies') }}" class=" ">سياسات الاجازة'</a>
                             </li>
                             @endcan
                             @can('leave_entitlement_access')
                             <li>
-                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}" class="trans_leave_entitlements">Leave Entitlement</a>
+                                <a href="{{ route('admin.leaveSettings.leaveEntitlement') }}" class=" ">استحقاقات الإجازة</a>
                             </li>
                             @endcan
                         </ul>
@@ -135,32 +135,32 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-others') }}"></use>
                             </svg>
-                            <span>System</span>
+                            <span>نظام</span>
                         </a>
                         <ul class="sidebar-submenu">
                             @can('setting_access')
                             <li>
-                                <a href="{{ route('admin.settings') }}">Settings</a>
+                                <a href="{{ route('admin.settings') }}">إعدادات</a>
                             </li>
                             @endcan
                             @can('user_management_access')
                             <li>
                                 <a class="submenu-title" href="#">
-                                    User management
+                                    إدارة المستخدمين
                                     <span class="sub-arrow">
                                         <i class="fa fa-angle-right"></i>
                                     </span>
                                 </a>
                                 <ul class="nav-sub-childmenu submenu-content">
                                     @can('user_access')
-                                    <li><a class="lan-5" href="{{ route('admin.users') }}">Users</a></li>
+                                    <li><a class="lan-5" href="{{ route('admin.users') }}">المستخدمين</a></li>
                                     @endcan
                                     @can('role_access')
-                                    <li><a class="" href="{{ route('admin.roles') }}">Roles</a></li>
+                                    <li><a class="" href="{{ route('admin.roles') }}">الأدوار والأذونات</a></li>
                                     @endcan
-                                    @can('permission_access')
+                                    {{-- @can('permission_access')
                                     <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
-                                    @endcan
+                                    @endcan --}}
                                 </ul>
                             </li>
                             @endcan

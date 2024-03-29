@@ -21,7 +21,7 @@
 @endsection
 
 @section('breadcrumb-title')
-    <h3>{{trans('admin/leaveSettings/leaveEntitlement.leaveTypes') }}</h3>
+    <h3 class="trans_leave_entitlements">{{trans('admin/leaveSettings/leaveEntitlement.leaveTypes') }}</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -36,6 +36,7 @@
         {{ session('status') }}
     </div>
 @endif
+
 @if(!is_null($leaveEntitlement))
 @foreach ($leaveEntitlement as $list)
 <div class="modal fade bd-{{$list->id}}-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -239,7 +240,7 @@
                                             <td>
                                                 <h6>{{$list->policy->title}}</h6>
                                             </td>
-                                            <td>{{date('d M Y',strtotime($list->start_year))}} - {{date('d M Y',strtotime($list->end_year))}}</td>
+                                            <td style="direction:ltr;">{{date('d M Y',strtotime($list->start_year))}} {{date('d M Y',strtotime($list->end_year))}}</td>
                                             <td>{{$list->max_days > 0 ? $list->policy->max_days : $list->days }}</td>
                                             <td>{{$list->leave_taken }}</td>
                                             <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
@@ -386,7 +387,7 @@
             var unlimited = selectedLeaveType.data('unlimited');
 
            
-            $('input[name="days"]').val(days);
+            $('#days').val(days);
 
             $('#daysLabel').text("Days per year");
 

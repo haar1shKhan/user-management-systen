@@ -76,10 +76,11 @@ class AppServiceProvider extends ServiceProvider
                 foreach ($users as $user) {
                     $end_year = date('Y-m-d', strtotime($user->jobDetail->end_year));
 
-                    if ($end_year <= $current_date->format('Y-m-d')) {
+                    while($end_year <= $current_date->format('Y-m-d')){
                         $user->jobDetail->start_year = $end_year;
                         $user->jobDetail->end_year = date('Y-m-d', strtotime('+1 year', strtotime($user->jobDetail->end_year)));
                         $user->jobDetail->save();
+                        $end_year = $user->jobDetail->end_year;
                     }
                 }
             }

@@ -12,6 +12,8 @@ use App\Models\Profile;
 use App\Models\JobDetail;
 use App\Models\LeavePolicies;
 use App\Models\LeaveEntitlement;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
@@ -161,7 +163,7 @@ class UsersController extends Controller
             'joined_at' => date("Y-m-d",$joining_date),
             'resigned_at' => date("Y-m-d",strtotime($request->input('resigned_at'))),
             'start_year' => date("Y-m-d",$joining_date),
-            'end_year' => date("Y-m-d",$end_year),
+            'end_year' => $end_year,
             'source_of_hire' => $request->input('source_of_hire'),
             'job_type' => $request->input('job_type'),
             'status' => $request->input('status'),
@@ -177,9 +179,19 @@ class UsersController extends Controller
     
         $jobDetail->save();
 
+        $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+        $end_year = date('Y-m-d',strtotime($user->jobDetail->end_year));
+
+        while($end_year <= $current_date->format('Y-m-d')){
+            $user->jobDetail->start_year = $end_year;
+            $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
+            $user->jobDetail->save();
+            $end_year = $user->jobDetail->end_year;
+        }
         // policies immidiatly after hiring
 
         $leave_policies = LeavePolicies::where('activate','=','immediately_after_hiring')->get();
+
         if (count($leave_policies) > 0){
             foreach ($leave_policies as $key => $value) {
 
@@ -204,7 +216,8 @@ class UsersController extends Controller
                     LeaveEntitlement::create(
                         [
                             'leave_policy_id' => $value->id,
-                            'leave_year' => date('Y'),
+                            'start_year' => $user->jobDetail->start_year,
+                            'end_year' => $user->jobDetail->end_year,
                             'days' => $value->days ,
                             'user_id' => $user->id,
                         ]
@@ -217,6 +230,7 @@ class UsersController extends Controller
         $mailData = [
             'name' => $user->first_name.' '.$user->last_name,
             'email' => $user->email,
+            'joining_date' => date("d/m/Y",$joining_date),
         ];
 
         Mail::to($user->email)->queue(new WelcomeMail($mailData));
@@ -267,7 +281,7 @@ class UsersController extends Controller
             $request->validate([
                 'first_name' => 'required',
                 'last_name' => 'required',
-                'email' => 'required | email',
+                'email' => 'required',
                 'phone' => 'required',
                 'password' => 'required',
                 'password_confirmation' => 'required',
@@ -328,10 +342,15 @@ class UsersController extends Controller
             ]);
         }    
 
+        $joining_date = strtotime($request->input('joined_at'));
+        $end_year = date('Y-m-d',strtotime('+1 year',$joining_date));
+
         $user->jobDetail->update([
             'hired_at' => $request->input('hired_at'),
-            'joined_at' => $request->input('joined_at'),
+            'joined_at' => date("Y-m-d",$joining_date),
             'resigned_at' => $request->input('resigned_at'),
+            'start_year' => date("Y-m-d",$joining_date),
+            'end_year' => $end_year,
             'source_of_hire' => $request->input('source_of_hire'),
             'job_type' => $request->input('job_type'),
             'status' => $request->input('status'),
@@ -342,6 +361,16 @@ class UsersController extends Controller
             'payment_method' => $request->input('payment_method'),
             'supervisor_id' => $request->input('supervisor_id'), 
         ]);
+
+        $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+        $end_year = date('Y-m-d',strtotime($user->jobDetail->end_year));
+
+        while($end_year <= $current_date->format('Y-m-d')){
+            $user->jobDetail->start_year = $end_year;
+            $user->jobDetail->end_year = date('Y-m-d',strtotime('+1 year',strtotime($user->jobDetail->end_year)));
+            $user->jobDetail->save();
+            $end_year = $user->jobDetail->end_year;
+        }
 
         $user->roles()->sync([$request->input('role')]);
 
