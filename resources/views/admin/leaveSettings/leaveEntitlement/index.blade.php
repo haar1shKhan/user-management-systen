@@ -214,11 +214,11 @@
                                     {{-- @endcan --}}
 
                                     <th>{{trans('global.id') }}</th>
-                                    <th>Type</th>
-                                    <th>Leave year</th>
-                                    <th>days</th>
-                                    <th>Leave taken</th>
-                                    <th>Users</th>
+                                    <th>نوع الإجازة</th>
+                                    <th>سنة العمل</th>
+                                    <th>الأيام</th>
+                                    <th>عدد اجازات الماخوذة</th>
+                                    <th>موظف</th>
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
                                     <th>{{trans('global.action') }}</th>
