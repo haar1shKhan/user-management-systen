@@ -118,7 +118,7 @@ class LeaveEntitlementController extends Controller
             $days = $request->input("days") * 12;
         }
 
-        if($days != 0){
+        if($days > 0){
             if($days <= $leaveEntitlement->leave_taken){
                 $statusMessage = 'The user already has taken '.$leaveEntitlement->leave_taken.' days leave';
                 return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
@@ -136,10 +136,16 @@ class LeaveEntitlementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(LeaveEntitlement $leaveEntitlement)
     {
         abort_if(Gate::denies('leave_entitlement_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        LeaveEntitlement::find($id)->delete();
+    
+        if($leaveEntitlement->leave_taken > 0 ){
+            $statusMessage = 'The user already has taken '.$leaveEntitlement->leave_taken.' days leave';
+            return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+        }
+
+        $leaveEntitlement->delete();
         
         return redirect('admin/leaveSettings/leaveEntitlement');
         
@@ -152,9 +158,10 @@ class LeaveEntitlementController extends Controller
         $massAction = $request['massAction'];
 
         foreach ($massAction as $id) {
-            
-            LeaveEntitlement::find($id)->delete();
-
+            $item = LeaveEntitlement::find($id);
+            if($item->leave_taken <= 0 ){
+                $item->delete();
+            }
         }
         return redirect('admin/leaveSettings/leaveEntitlement');
 
