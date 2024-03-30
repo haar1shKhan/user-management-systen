@@ -214,11 +214,12 @@
                                     {{-- @endcan --}}
 
                                     <th>{{trans('global.id') }}</th>
+                                    <th>موظف</th>
                                     <th>نوع الإجازة</th>
                                     <th>سنة العمل</th>
                                     <th>الأيام</th>
                                     <th>عدد اجازات الماخوذة</th>
-                                    <th>موظف</th>
+                                   
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
                                     <th>{{trans('global.action') }}</th>
@@ -237,13 +238,13 @@
                                                 </div>
                                             </td>
                                             <td>{{$list->id}}</td>
+                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
                                             <td>
                                                 <h6>{{$list->policy->title}}</h6>
                                             </td>
                                             <td style="direction:ltr;">{{date('d M Y',strtotime($list->start_year))}} {{date('d M Y',strtotime($list->end_year))}}</td>
                                             <td>{{$list->max_days > 0 ? $list->policy->max_days : $list->days }}</td>
                                             <td>{{$list->leave_taken }}</td>
-                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
                                             <td>
                                                 <ul class="action">
                                                     <li class="edit">
