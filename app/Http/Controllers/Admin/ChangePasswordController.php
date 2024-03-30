@@ -25,7 +25,7 @@ class ChangePasswordController extends Controller
         $user = User::findOrFail($user_id);
         
         if (Hash::check($request->current_password, $user->password)){
-           $user->update(['password'=> bcrypt($request->new_password)]);
+           $user->update(['password'=> Hash::make($request->new_password)]);
            return redirect()->route('admin.account.profile');
         }
 
