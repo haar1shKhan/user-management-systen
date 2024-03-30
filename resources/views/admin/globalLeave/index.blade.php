@@ -234,7 +234,7 @@
                     <div class="card-header pb-0 card-no-border">
 
                         <div class="d-flex justify-content-between">
-                            <h3>{{ trans('admin/longLeave.leaveTable') }}</h3>
+                            <h3></h3>
                             <div>
 
                                 {{-- @can('role_delete') --}}
@@ -258,15 +258,15 @@
 
                             <li class="nav-item"><a onclick="setTableType('long-leave')" class="nav-link active"
                                     id="top-home-tab" data-bs-toggle="tab" href="#long-leave" role="tab"
-                                    aria-controls="top-home" aria-selected="true"><i class="icofont icofont-layout"></i>Long Leave @if(config('count.leave'))<span class="badge rounded-pill badge-danger">{{config('count.leave')}}</span> @endif </a></li>
+                                    aria-controls="top-home" aria-selected="true"><i class="icofont icofont-layout"></i>جميع الاجازات @if(config('count.leave'))<span class="badge rounded-pill badge-danger">{{config('count.leave')}}</span> @endif </a></li>
                             <li class="nav-item"><a onclick="setTableType('late-attendance')" class="nav-link"
                                     id="profile-top-tab" data-bs-toggle="tab" href="#late-attendance" role="tab"
                                     aria-controls="top-profile" aria-selected="false"><i
-                                        class="icofont icofont-man-in-glasses"></i>Late Attendance @if(config('count.late'))<span class="badge rounded-pill badge-danger">{{config('count.late')}}</span>@endif</a></li>
+                                        class="icofont icofont-man-in-glasses"></i>تأخر عن العمل @if(config('count.late'))<span class="badge rounded-pill badge-danger">{{config('count.late')}}</span>@endif</a></li>
                             <li class="nav-item"><a onclick="setTableType('short-leave')" class="nav-link"
                                     id="contact-top-tab" data-bs-toggle="tab" href="#short-leave" role="tab"
                                     aria-controls="top-contact" aria-selected="false"><i
-                                        class="icofont icofont-contacts"></i>Short Leave @if(config('count.short'))<span class="badge rounded-pill badge-danger">{{config('count.short')}}</span> @endif</a></li>
+                                        class="icofont icofont-contacts"></i>اذن خروج @if(config('count.short'))<span class="badge rounded-pill badge-danger">{{config('count.short')}}</span> @endif</a></li>
 
                         </ul>
                         <div class="tab-content" id="top-tabContent">

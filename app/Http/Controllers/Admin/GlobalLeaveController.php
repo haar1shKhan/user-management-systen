@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\LeavePolicies;
+use App\Mail\LeaveRequestMail;
+use Illuminate\Http\Request; 
 use App\Models\LeaveEntitlement;
 use App\Models\ShortLeave;
 use App\Models\LateAttendance;
 use App\Models\longLeave;
-use App\Models\User;
 use Carbon\Carbon;
-use App\Mail\LeaveStatusMail;
 use Illuminate\Support\Facades\Mail;
 use illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +30,7 @@ class GlobalLeaveController extends Controller
         $shortLeave = ShortLeave::orderBy('id', 'desc')->get();
         $lateAttendances = LateAttendance::orderBy('id', 'desc')->get();
 
-        $page_title = 'Leave Requests';
+        $page_title = 'طلبات الإجازة';
         $trash = false;
         $data['url']='leave.requests';
 
@@ -100,7 +98,7 @@ class GlobalLeaveController extends Controller
                             'status' => 'Approved'
                         ];
         
-                        Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));  
+                        Mail::to($longLeave->user->email)->send(new LeaveRequestMail($data));
         
                 
                 // Update the approved_by field with the supervisor's ID (assuming you have the supervisor ID in your request)
