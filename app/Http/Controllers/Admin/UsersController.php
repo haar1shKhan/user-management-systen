@@ -315,6 +315,7 @@ class UsersController extends Controller
                 'image' => $fileName,
             ]);
         }
+
         if ($request->hasFile('passport_file')) {
             $fileName = $user->id . '.' . $request->passport_file->extension();
             $request->file('passport_file')->storeAs('public/passport_files', $fileName);
@@ -339,6 +340,32 @@ class UsersController extends Controller
                 'visa_file' => $fileName,
             ]);
         }    
+
+        $user->profile->update([
+            'email' => $request->input('personal_email'),
+            'phone' => $request->input('phone'),
+            'mobile' => $request->input('mobile'),
+            'date_of_birth' => date("Y-m-d",strtotime($request->input('date_of_birth'))),
+            'gender' => $request->input('gender'),
+            'nationality' => $request->input('nationality'),
+            'marital_status' => $request->input('marital_status'),
+            'biography' => $request->input('biography'),
+            'religion' => $request->input('religion'),
+            'address' => $request->input('address'),
+            'address2' => $request->input('address2'),
+            'city' => $request->input('city'),
+            'province' => "Null",
+            'passport' => $request->input('passport'),
+            'passport_issued_at' => $request->input('passport_issued_at'),
+            'passport_expires_at' => $request->input('passport_expires_at'),
+            'nid' => $request->input('nid'),
+            'nid_issued_at' => $request->input('nid_issued_at'),
+            'nid_expires_at' => $request->input('nid_expires_at'),
+            'visa' => $request->input('visa'),
+            'visa_issued_at' => $request->input('visa_issued_at'),
+            'visa_expires_at' => $request->input('visa_expires_at'),
+            'country' => $request->input('country'),
+        ]);
 
         $joining_date = strtotime($request->input('joined_at'));
         $end_year = date('Y-m-d',strtotime('+1 year',$joining_date));
