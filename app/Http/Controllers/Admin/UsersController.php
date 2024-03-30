@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
@@ -95,7 +96,7 @@ class UsersController extends Controller
             'first_name' => $request->input('first_name'),
             'last_name' => $request->input('last_name'),
             'email' => $request->input('email'), //
-            'password' => bcrypt($request->input('password')),//
+            'password' => Hash::make($request->input('password')),
         ]);
         
         $user->save();
