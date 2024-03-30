@@ -118,9 +118,11 @@ class LeaveEntitlementController extends Controller
             $days = $request->input("days") * 12;
         }
 
-        if($days <= $leaveEntitlement->leave_taken){
-            $statusMessage = 'The user already has taken '.$leaveEntitlement->leave_taken.' days leave';
-            return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+        if($days != 0){
+            if($days <= $leaveEntitlement->leave_taken){
+                $statusMessage = 'The user already has taken '.$leaveEntitlement->leave_taken.' days leave';
+                return redirect()->route('admin.leaveSettings.leaveEntitlement')->with("status",$statusMessage);
+            }
         }
 
         $leaveEntitlement -> update([

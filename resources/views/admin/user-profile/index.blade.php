@@ -71,7 +71,7 @@ form button.border-none {
                     </div>
                     @else
                     <div class="media">
-                        <img class="img-70 rounded-circle" alt=""  src="{{ asset('storage/profile_images/placeholder.png') }}" >
+                        <img class="img-70 rounded-circle" alt=""  src="{{  asset('assets/images/placeholder.png') }}" >
                         <div class="media-body">
                             <h5 class="mb-1">{{ucwords($user->first_name)}} {{ucwords($user->last_name)}}</h5>
                             <p>

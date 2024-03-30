@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-danger">*Leave year will be counted from User's joining date.</p>
+                    <p class="text-danger">*سيتم احتساب سنة العمل من تاريخ تعيين الموظف.</p>
                 </div>
         </div>
 
@@ -149,7 +149,7 @@
                                                      </div>
 
                                                 </div>
-                                                <p class="text-danger">*Leave year will be counted from User's joining date.</p>
+                                                <p class="text-danger">*سيتم احتساب سنة العمل من تاريخ تعيين الموظف.</p>
                                                 <div class="row">
                                                     <div class="o-hidden">
                                                         <div class="mb-2">
@@ -214,11 +214,11 @@
                                     {{-- @endcan --}}
 
                                     <th>{{trans('global.id') }}</th>
-                                    <th>Type</th>
-                                    <th>Leave year</th>
-                                    <th>days</th>
-                                    <th>Leave taken</th>
-                                    <th>Users</th>
+                                    <th>نوع الإجازة</th>
+                                    <th>سنة العمل</th>
+                                    <th>الأيام</th>
+                                    <th>عدد اجازات الماخوذة</th>
+                                    <th>موظف</th>
                                     {{-- @can('permission_edit' || 'permission_delete') --}}
 
                                     <th>{{trans('global.action') }}</th>
