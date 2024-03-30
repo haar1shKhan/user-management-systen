@@ -74,7 +74,7 @@
                         <img id="profile-image" height="140px" width="140px"
                             class="rounded-circle media profile-media profile-image"
                             style="max-width: 150px; max-height: 150px;"
-                            src="{{ asset('storage/profile_images/placeholder.png') }}" alt="">
+                            src="{{  asset('assets/images/placeholder.png') }}" alt="">
 
                         <div class="col-md-6">
                             <label class="col-sm-3 col-form-label">Profile picture</label>
