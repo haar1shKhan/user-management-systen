@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\LeaveRequestMail;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Models\LeaveEntitlement;
 use App\Models\ShortLeave;
 use App\Models\LateAttendance;
