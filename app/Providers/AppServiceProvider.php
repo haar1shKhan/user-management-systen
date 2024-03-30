@@ -67,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
             Config::set('count.total', $total_request);
         }
 
-        if (Schema::hasTable('users')) {
+        if (Schema::hasTable('users') && Schema::hasTable('leave_policies') && Schema::hasTable('leave_entitlements')) {
 
             $users = User::get();
             $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
@@ -76,11 +76,23 @@ class AppServiceProvider extends ServiceProvider
                 foreach ($users as $user) {
                     $end_year = date('Y-m-d', strtotime($user->jobDetail->end_year));
 
-                    while($end_year <= $current_date->format('Y-m-d')){
+                    while ($end_year <= $current_date->format('Y-m-d')) {
                         $user->jobDetail->start_year = $end_year;
                         $user->jobDetail->end_year = date('Y-m-d', strtotime('+1 year', strtotime($user->jobDetail->end_year)));
                         $user->jobDetail->save();
                         $end_year = $user->jobDetail->end_year;
+                        if($end_year > $current_date->format('Y-m-d')) {
+                            $policies = LeavePolicies::where('activate', '=', 'immediately_after_hiring')->get();
+                            foreach ($policies as $policy) {
+                                LeaveEntitlement::create([
+                                    'leave_policy_id' => $policy->id,
+                                    'days' => $policy->days!=0?$policy->days:$policy->max_days,
+                                    'user_id' => $user->id,
+                                    'start_year' =>  $user->jobDetail->start_year,
+                                    'end_year' =>    $user->jobDetail->end_year
+                                ]);
+                            }
+                        }
                     }
                 }
             }

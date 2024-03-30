@@ -34,7 +34,7 @@
                     <form action="{{route("admin.user.update",['user'=>$user->id])}}" method="POST"  enctype="multipart/form-data" class="needs-validation" novalidate="">
                         @csrf
                         @method('PUT')
-                        <h5 class="my-3">>التفاصيل الشخصية</h5>
+                        <h5 class="my-3">التفاصيل الشخصية</h5>
 
                         <div class="row my-4">
 
@@ -107,34 +107,35 @@
                                         @enderror
                                     </div>
                                 </div>
-    
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
-                                    <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{$user->profile->email ?? ""}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
-                                    <div class="text-danger mt-1">
-                                        @error("personal_email")
-                                        {{$message}}    
-                                        @enderror
-                                    </div>
-    
-                                </div>
-
-                                <div class="col-md-3">
-                                    <label class="form-label">Date of birth</label>
-                                    <div class="col-sm-12">
-                                        <input class="form-control digits" name="date_of_birth" value="{{$user->profile->date_of_birth ?? ""}}" type="date" value="2018-01-01">
-                                    </div>
-                                    <div class="text-danger mt-1">
-                                        @error("date_of_birth")
-                                        {{$message}}    
-                                        @enderror
-                                    </div>
-                                </div>
-
 
                         </div>
 
-                        <div class="row g-3">
+                        <h5 class="my-4">Profile</h5>
+
+                        <div class="row g-3" >
+
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
+                                <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{$user->profile->email ?? ""}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
+                                <div class="text-danger mt-1">
+                                    @error("personal_email")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Date of birth</label>
+                                <div class="col-sm-12">
+                                    <input class="form-control digits" name="date_of_birth" value="{{$user->profile->date_of_birth ?? ""}}" type="date" value="2018-01-01">
+                                </div>
+                                <div class="text-danger mt-1">
+                                    @error("date_of_birth")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="col-md-3 mb-3">
                                 <label class="form-label" for="validationCustomEmail">Phone Number</label>
@@ -146,6 +147,11 @@
                                 </div>
 
                             </div>
+
+
+                        </div>
+
+                        <div class="row g-3">
 
                             <div class="col-md-3 mb-3">
                                 <label class="form-label" for="validationCustomEmail">Phone Number (optional)</label>
@@ -229,6 +235,26 @@
                             </div>
 
                         </div>
+
+                        <div class="row">
+
+                            <div class="col-md-9">
+                                <div>
+                                    <label class="form-label" for="exampleFormControlTextarea14">Biography </label>
+                                    <textarea name="biography" class="form-control btn-square" id="exampleFormControlTextarea14" rows="8">{{$user->profile->biography ?? ""}}</textarea>
+                                  </div>
+
+                                <div class="text-danger mt-1">
+                                    @error("biography")
+                                    {{$message}}    
+                                    @enderror
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <h5 class="my-4">Job Details</h5>
 
                         <div class="row g-3">
                             
@@ -401,24 +427,6 @@
 
                         </div>
 
-                        <div class="row">
-
-                            <div class="col-md-9">
-                                <div>
-                                    <label class="form-label" for="exampleFormControlTextarea14">Biography </label>
-                                    <textarea name="biography" class="form-control btn-square" id="exampleFormControlTextarea14" rows="8">{{$user->profile->biography ?? ""}}</textarea>
-                                  </div>
-
-                                <div class="text-danger mt-1">
-                                    @error("biography")
-                                    {{$message}}    
-                                    @enderror
-                                </div>
-                            </div>
-
-                        </div>
-
-
                         <h5 class="my-3">Legal Documents</h5>
 
                         <div class="row mb-5">
@@ -572,7 +580,7 @@
 
                         </div>
 
-                        <h5 class="my-3">Bank Details</h5>
+                        <h5 class="my-4">Bank Details</h5>
 
                         <div class="row">
 
@@ -617,8 +625,6 @@
                                 @else
                                     <select name="payment_method"  class="form-select" id="validationCustom04" required="">
                                         <option selected="true" disabled value="">Choose...</option>
-                                            <option   value="cash">Cash</option>
-                                            <option   value="bank_transfer">Bank Transfer</option>
                                             <option {{$user->jobDetail->payment_method == 'cash'? "selected" : "" }}  value="cash">Cash</option>
                                             <option {{$user->jobDetail->payment_method == 'bank_transfer'? "selected" : "" }} value="bank_transfer">Bank Transfer</option>
                                     </select>
@@ -696,7 +702,7 @@
 
                         <div class="row">
                             <div class="col-md-9 offset-md-10">
-                                <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">{{ trans('admin/user.addUser') }}</button>
+                                <button class="btn btn-primary" type="submit" data-bs-original-title="" title="">Save</button>
                             </div>
                         </div>
                     </form>
