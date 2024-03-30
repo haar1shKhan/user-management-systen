@@ -234,7 +234,7 @@
                     <div class="card-header pb-0 card-no-border">
 
                         <div class="d-flex justify-content-between">
-                            <h3>{{ trans('admin/longLeave.leaveTable') }}</h3>
+                            <h3></h3>
                             <div>
 
                                 {{-- @can('role_delete') --}}
