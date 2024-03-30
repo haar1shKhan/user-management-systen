@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-danger">*Leave year will be counted from User's joining date.</p>
+                    <p class="text-danger">*سيتم احتساب سنة العمل من تاريخ تعيين الموظف.</p>
                 </div>
         </div>
 
