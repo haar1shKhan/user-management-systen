@@ -20,7 +20,7 @@ form button.border-none {
 @endsection
 
 @section('breadcrumb-title')
-    <h3>المستخدمين</h3>
+    <h3>الموظفين</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -57,7 +57,7 @@ form button.border-none {
                             <div>
                                     @can('user_create')
                                     
-                                    <a class="btn btn-primary" href="{{ route('admin.user.create') }}">إضافة مستخدم جديد</a>
+                                    <a class="btn btn-primary" href="{{ route('admin.user.create') }}">إضافة موظف جديد</a>
                                     
                                     @endcan 
                                     

@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumb-title')
-    <h3>المستخدمين</h3>
+    <h3>الموظفين</h3>
 @endsection
 
 @section('breadcrumb-items')
@@ -28,7 +28,7 @@
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<h5>إضافة مستخدم جديد</h5>
+					<h5>إضافة موظف جديد</h5>
 					<span>يرجى التأكد من ملء جميع الحقول قبل النقر على الزر التالي</span>
 				</div>
 				<div class="card-body">
@@ -91,10 +91,10 @@
                             <h5 class="my-3">التفاصيل الشخصية</h5>
 							<div class="row g-3">
 							    <div class="mb-3 col-md-4">
-                                    <label class="form-label" for="role">Role</label>
+                                    <label class="form-label" for="role">Role <span class="text-danger">(اجباري)</span></label>
                                     <select name="role" class="form-select" id="role" required>
                                         @foreach ($roles as $key => $role)
-                                            <option value="{{ $role->id }}" @if (old('role') == $role->id) selected @endif>
+                                            <option value="{{ $role->id }}" @if ($role->id == 2) selected @endif>
                                                 {{ $role->title }}
                                             </option>
                                          @endforeach

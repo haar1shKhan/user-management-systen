@@ -146,14 +146,14 @@
                             @can('user_management_access')
                             <li>
                                 <a class="submenu-title" href="#">
-                                    إدارة المستخدمين
+                                    إدارة الموظفين
                                     <span class="sub-arrow">
                                         <i class="fa fa-angle-right"></i>
                                     </span>
                                 </a>
                                 <ul class="nav-sub-childmenu submenu-content">
                                     @can('user_access')
-                                    <li><a class="lan-5" href="{{ route('admin.users') }}">المستخدمين</a></li>
+                                    <li><a class="lan-5" href="{{ route('admin.users') }}">الموظفين</a></li>
                                     @endcan
                                     @can('role_access')
                                     <li><a class="" href="{{ route('admin.roles') }}">الأدوار والأذونات</a></li>

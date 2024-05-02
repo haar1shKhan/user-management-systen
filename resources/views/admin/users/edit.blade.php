@@ -11,7 +11,7 @@
 @endsection
 
 @section('breadcrumb-title')
-    <h3>المستخدمين</h3>
+    <h3>الموظفين</h3>
 @endsection
 
 @section('breadcrumb-items')
