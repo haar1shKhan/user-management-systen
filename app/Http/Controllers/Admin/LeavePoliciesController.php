@@ -128,9 +128,18 @@ class LeavePoliciesController extends Controller
         //
         // dd($request->all());
         $leavePolicies = LeavePolicies::findOrFail($id);
-        $days = $request->input('days');
-        $max_days = $request->input('max_days');
         
+        // $days = $request->input('days');
+
+        if(!$request->input('is_unlimited')){
+            $days = $request->input('days');
+            $max_days = 0;
+
+        } else {
+           $max_days = $request->input('max_days');
+           $days = 0;
+        }
+
         if($request->has('monthly')){
             if($days > 31){
                 $statusMessage = 'You cannot choose more than 31 days ';

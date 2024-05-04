@@ -39,7 +39,7 @@
                         <div class="row my-4">
 
                             <div class="col-md-6">
-                                <label class="col-sm-3 col-form-label">Profile picture</label>
+                                <label class="col-sm-3 col-form-label">Profile picture  (اختياري)</label>
                                 <input name="image" class="form-control"  type="file">
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
@@ -54,7 +54,7 @@
                         
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom01">First Name</label>
+                                <label class="form-label" for="validationCustom01">First Name <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom01" name="first_name" value="{{$user->first_name}}" type="text"  required="" data-bs-original-title="" title="">
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
@@ -65,7 +65,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom01">Last Name</label>
+                                <label class="form-label" for="validationCustom01">Last Name <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom01" name="last_name" value="{{$user->last_name}}" type="text"  required="" data-bs-original-title="" title="">
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
@@ -76,7 +76,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }}</label>
+                                <label class="form-label" for="validationCustom04">{{ trans('admin/user.role') }} <span class="text-danger">(اجباري)</span></label>
                                 <select name="role"  class="form-select" id="validationCustom04" required="">
                                     <option selected="true"  value="2">Choose...</option>
                                     @foreach ($roles as $role)
@@ -99,7 +99,7 @@
                         <div class="row g-3">
 
                                 <div class="col-md-3 mb-3">
-                                    <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }}</label>
+                                    <label class="form-label" for="validationCustomEmail">{{ trans('admin/user.email') }} <span class="text-danger">(اجباري)</span></label>
                                     <input class="form-control" id="validationCustom" type="text" name="email"  placeholder="Email"  value="{{$user->email}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                     <div class="text-danger mt-1">
                                         @error("email")
@@ -115,7 +115,7 @@
                         <div class="row g-3" >
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Personal email (optional)</label>
+                                <label class="form-label" for="validationCustomEmail">Personal email  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="text" name="personal_email"  placeholder="Email"  value="{{$user->profile->email ?? ""}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("personal_email")
@@ -126,7 +126,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Date of birth</label>
+                                <label class="form-label">Date of birth <span class="text-danger">(اجباري)</span></label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" name="date_of_birth" value="{{$user->profile->date_of_birth ?? ""}}" type="date" value="2018-01-01">
                                 </div>
@@ -138,7 +138,7 @@
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Phone Number</label>
+                                <label class="form-label" for="validationCustomEmail">Phone Number <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom" type="tel" name="phone"  placeholder="+971 50 123 4567"  value="{{$user->profile->phone ?? ""}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("phone")
@@ -154,7 +154,7 @@
                         <div class="row g-3">
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Phone Number (optional)</label>
+                                <label class="form-label" for="validationCustomEmail">Phone Number  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="tel" name="mobile"  placeholder="+971 50 123 4567"  value="{{$user->profile->mobile ?? ""}}" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("mobile")
@@ -165,7 +165,7 @@
                             </div>
                             
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Gender</label>
+                                <label class="form-label" for="validationCustom04">Gender <span class="text-danger">(اجباري)</span></label>
                                 @if (empty($user->profile->gender))
                                 <select name="gender"  class="form-select" id="validationCustom04" required="">
                                         <option selected="true" disabled value="">Choose...</option>
@@ -193,7 +193,7 @@
                         <div class="row g-3">
                           
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Marital status</label>
+                                <label class="form-label" for="validationCustom04">Marital status <span class="text-danger">(اجباري)</span></label>
                                 @if (empty($user->profile->marital_status))
                                     <select name="marital_status"  class="form-select" id="validationCustom04" required="">
                                         <option selected="true" disabled value="">Choose...</option>
@@ -215,7 +215,7 @@
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Nationality</label>
+                                <label class="form-label" for="validationCustomEmail">Nationality <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom" type="text" name="nationality" value="{{$user->profile->nationality ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("nationality")
@@ -225,7 +225,7 @@
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Religion</label>
+                                <label class="form-label" for="validationCustomEmail">Religion  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="text" name="religion" value="{{$user->profile->religion ?? " "}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("religion")
@@ -240,7 +240,7 @@
 
                             <div class="col-md-9">
                                 <div>
-                                    <label class="form-label" for="exampleFormControlTextarea14">Biography </label>
+                                    <label class="form-label" for="exampleFormControlTextarea14">Biography  (اختياري)</label>
                                     <textarea name="biography" class="form-control btn-square" id="exampleFormControlTextarea14" rows="8">{{$user->profile->biography ?? ""}}</textarea>
                                   </div>
 
@@ -259,7 +259,7 @@
                         <div class="row g-3">
                             
                             <div class="col-md-3">
-                                <label class="form-label">Hired at</label>
+                                <label class="form-label">Hired at <span class="text-danger">(اجباري)</span></label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" name="hired_at" value="{{$user->jobDetail->hired_at ?? ""}}" type="date">
                                 </div>
@@ -271,7 +271,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Joined at</label>
+                                <label class="form-label">Joined at <span class="text-danger">(اجباري)</span></label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->jobDetail->joined_at ?? ""}}" name="joined_at" type="date">
                                 </div>
@@ -283,7 +283,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Resigned at</label>
+                                <label class="form-label">Resigned at  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->jobDetail->resigned_at ?? ""}}" name="resigned_at" type="date">
                                 </div>
@@ -299,7 +299,7 @@
                         <div class="row g-3 my-1">
                             
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Source Of Hiring</label>
+                                <label class="form-label" for="validationCustom04">Source Of Hiring  (اختياري)</label>
                                 @if ( !empty($user->profile->source_of_hire))
                                     <select name="source_of_hire"  class="form-select" id="validationCustom04" required="">
 
@@ -328,7 +328,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Job Type</label>
+                                <label class="form-label" for="validationCustom04">Job Type <span class="text-danger">(اجباري)</span></label>
                                 @if ( !empty($user->profile->job_type))
                                     <select name="job_type"  class="form-select" id="validationCustom04" required="">
                                         <option selected="true" disabled value="">Choose...</option>
@@ -356,7 +356,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Status</label>
+                                <label class="form-label" for="validationCustom04">Status <span class="text-danger">(اجباري)</span></label>
 
                                 @if ( !empty($user->profile->status))
                                     <select name="status"  class="form-select" id="validationCustom04" required="">
@@ -387,7 +387,7 @@
                         <div class="row">
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Salary</label>
+                                <label class="form-label" for="validationCustomEmail">Salary <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom" type="number" name="salary" value="{{$user->jobDetail->salary ?? 0}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("salary")
@@ -405,7 +405,7 @@
                                 <div class="row">
                                     <div class="o-hidden">
                                         <div class="mb-2">
-                                            <div class="form-label">Reporting To</div>
+                                            <div class="form-label">Reporting To <span class="text-danger">(اجباري)</span></div>
                                             <select name="supervisor_id" class="js-example-basic-single col-sm-12">
                                                 @if( !empty($user->jobDetail->supervisor_id))
                                                     @foreach ($supervisors as $supervisors)
@@ -432,7 +432,7 @@
                         <div class="row mb-5">
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustomEmail">Passport ID</label>
+                                <label class="form-label" for="validationCustomEmail">Passport ID  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="text" name="passport" value="{{$user->profile->passport ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("passport")
@@ -442,7 +442,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Passport Issue Date</label>
+                                <label class="form-label">Passport Issue Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->profile->passport_issued_at ?? ""}}" name="passport_issued_at" type="date">
                                 </div>
@@ -454,7 +454,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Passport Expiry Date</label>
+                                <label class="form-label">Passport Expiry Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits"  name="passport_expires_at"  value="{{$user->profile->passport_expires_at ?? ""}}"  type="date" >
                                 </div>
@@ -468,7 +468,7 @@
                             <div class="row">
 
                                 <div class="col-md-6">
-                                    <label class="col-sm-3 col-form-label">Passport</label>
+                                    <label class="col-sm-3 col-form-label">Passport  (اختياري)</label>
                                     <input name="passport_file" class="form-control" type="file">
                                     {{-- <div class="valid-feedback">Looks good!</div> --}}
                                     <div class="text-danger mt-1">
@@ -485,7 +485,7 @@
                         <div class="row mb-5">
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustomEmail">Emirates ID</label>
+                                <label class="form-label" for="validationCustomEmail">Emirates ID  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="text" name="nid" value="{{$user->profile->nid ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("nid")
@@ -495,7 +495,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Emirates ID Issue Date</label>
+                                <label class="form-label">Emirates ID Issue Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->profile->nid_issued_at ?? ""}}" name="nid_issued_at"  type="date" >
                                 </div>
@@ -507,7 +507,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Emirates ID Expiry Date</label>
+                                <label class="form-label">Emirates ID Expiry Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->profile->nid_expires_at ?? ""}}" name="nid_expires_at"  type="date" >
                                 </div>
@@ -519,7 +519,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="col-sm-3 col-form-label">Emirates ID</label>
+                                <label class="col-sm-3 col-form-label">Emirates ID  (اختياري)</label>
                                 <input name="nid_file" class="form-control" type="file">
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
@@ -534,7 +534,7 @@
                         <div class="row mb-5">
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustomEmail">Visa</label>
+                                <label class="form-label" for="validationCustomEmail">Visa  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="text" name="visa" value="{{$user->profile->visa ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("visa")
@@ -544,7 +544,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Visa Issue Date</label>
+                                <label class="form-label">Visa Issue Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->profile->visa_issued_at ?? ""}}" name="visa_issued_at"  type="date" >
                                 </div>
@@ -556,7 +556,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label">Visa Expiry Date</label>
+                                <label class="form-label">Visa Expiry Date  (اختياري)</label>
                                 <div class="col-sm-12">
                                     <input class="form-control digits" value="{{$user->profile->visa_expires_at ?? ""}}" name="visa_expires_at"  type="date" >
                                 </div>
@@ -568,7 +568,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="col-sm-3 col-form-label">Visa</label>
+                                <label class="col-sm-3 col-form-label">Visa  (اختياري)</label>
                                 <input name="visa_file" class="form-control" type="file">
                                 {{-- <div class="valid-feedback">Looks good!</div> --}}
                                 <div class="text-danger mt-1">
@@ -615,7 +615,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label" for="validationCustom04">Payment method</label>
+                                <label class="form-label" for="validationCustom04">Payment method <span class="text-danger">(اجباري)</span></label>
                                 @if (!empty($user->profile->payment_method))
                                     <select name="payment_method"  class="form-select" id="validationCustom04" required="">
                                             <option selected="true" disabled value="">Choose...</option>
@@ -644,7 +644,7 @@
                         <div class="row">
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Address</label>
+                                <label class="form-label" for="validationCustomEmail">Address <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom" type="address" name="address" value="{{$user->profile->address ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("address")
@@ -654,7 +654,7 @@
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">Second Address (optional)</label>
+                                <label class="form-label" for="validationCustomEmail">Second Address  (اختياري)</label>
                                 <input class="form-control" id="validationCustom" type="address" name="address2" value="{{$user->profile->address2 ?? ""}}" placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("address2")
@@ -664,7 +664,7 @@
                             </div>
 
                             <div class="col-md-3 mb-3">
-                                <label class="form-label" for="validationCustomEmail">City</label>
+                                <label class="form-label" for="validationCustomEmail">City <span class="text-danger">(اجباري)</span></label>
                                 <input class="form-control" id="validationCustom" type="text" name="city"  value="{{$user->profile->city ?? ""}}"  placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                                 <div class="text-danger mt-1">
                                     @error("city")
@@ -689,7 +689,7 @@
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <label class="form-label" for="validationCustomEmail">country</label>
+                            <label class="form-label" for="validationCustomEmail">country <span class="text-danger">(اجباري)</span></label>
                             <input class="form-control" id="validationCustom" type="text" name="country"  value="{{$user->profile->country ?? ""}}" placeholder="" aria-describedby="inputGroupPrepend" required="" data-bs-original-title="" title="">
                             <div class="text-danger mt-1">
                                 @error("country")

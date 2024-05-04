@@ -130,10 +130,15 @@ button.border-none {
                                                                <option selected="true" disabled value="">Choose...</option>
                                                                @foreach ($leaveEntitlement as $leaveType)
                                                                        @php
+
                                                                            // remaining = total - num of current month * (total/12)
 
                                                                            // $expired = ($value->days/12) * $last_month - $leave_taken;
                                                                            // $remaining = ($value->days - $value->leave_taken) - $expired
+                                                                           if(date('Y-m-d', strtotime($leaveType->end_year)) !== date('Y-m-d', strtotime(auth()->user()->jobDetail->end_year))){
+                                                                                continue;
+                                                                            }
+
                                                                            if($leaveType->policy->monthly){
                                                                                $leave_taken = 0;
                                                                             
@@ -419,7 +424,7 @@ button.border-none {
                                                         @endcan
 
                                                         @can("long_leave_delete")
-                                                            <form action="{{route('admin.'.$url.'.destroy',['long_leave'=>$list->id])}}" method="post">
+                                                            <form onsubmit="return confirm('Are you sure you want to delete this leave?')" action="{{route('admin.'.$url.'.destroy',['long_leave'=>$list->id])}}" method="post">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>

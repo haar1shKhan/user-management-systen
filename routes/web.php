@@ -179,6 +179,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     Route::get('user/restore/{user}', [UsersController::class,'restore'])->name('user.restore');
     Route::delete('user/forceDelete/{user}', [UsersController::class,'forceDelete'])->name('user.forceDelete');
     Route::post('user/massAction', [UsersController::class,'massAction'])->name('user.massAction');
+    Route::post('user/storeLongLeave/{user}', [UsersController::class,'storeLongLeave'])->name('user.store_long_leave');
     
     /*---------
     |  ROLES  |

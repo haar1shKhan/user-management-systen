@@ -97,7 +97,7 @@
 
                         <div id="update_days_div-{{$type->id}}" style="display: flex" class="flex-column  col-md-3">
                            <label class="form-label" for="update_days-{{$type->id}}">الأيام</label>
-                            <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->days}}" type="number" required >
+                            <input class="form-control" id="update_days-{{$type->id}}"  name="days" value="{{$type->monthly ? $type->days/12 : $type->days}}" type="number" required >
                             <div class="text-danger mt-1">
                                 @error("days")
                                     {{ $message }}
@@ -522,7 +522,7 @@
                                                         </button>
                                                     </li>
 
-                                                    <form action="{{ route('admin.'.$url.'.leavePolicies.destroy', ['policy' => $type->id]) }}" method="post">
+                                                    <form onsubmit="return confirm('Are you sure you want to delete this Policy?')" action="{{ route('admin.'.$url.'.leavePolicies.destroy', ['policy' => $type->id]) }}" method="post">
                                                         @csrf
                                                         @method('DELETE')
                                                         <li class="delete">
@@ -625,10 +625,10 @@
     })
 
     $('.update_is_unlimited').each(function () {
-    $(this).change(function (e) {
-        var selectedValue = $(this).val();
-        var days = $(this).data('days');
-        var type_id = $(this).data('id');
+
+        let selectedValue = $(this).val();
+        let days = $(this).data('days');
+        let type_id = $(this).data('id');
 
         console.log(type_id);
 
@@ -636,10 +636,15 @@
         $('#update_monthly_div-'+type_id).show();
         $('#update_advance_salary_div-'+type_id).show();
         $("#max_day_div-"+type_id).css('display', 'none');
-
         $('#update_days-'+type_id).val(days);
-        $('#update_monthly-'+type_id).prop('checked', false);
-        $('#update_advance_salary-'+type_id).prop('checked', false);
+
+        let isMonthlyChecked = $('#update_monthly-'+type_id).prop('checked');
+
+        // console.log(isMonthlyChecked);
+        $('#update_advance_salary-'+type_id).prop('disabled', isMonthlyChecked);
+        if(isMonthlyChecked){
+            $('#update_days-'+type_id).val(days/12);
+        }
 
         if (selectedValue == 1) {
             $("#max_day_div-"+type_id).css('display', 'flex');
@@ -648,17 +653,43 @@
             $('#update_advance_salary_div-'+type_id).hide();
 
             $('#update_days-'+type_id).val(0);
-
-            if ($('#update_monthly-'+type_id).prop('checked')) {
-                $('#update_monthly-'+type_id).prop('checked', false);
-            }
-
-            if ($('#update_advance_salary-'+type_id).prop('checked')) {
-                $('#update_advance_salary-'+type_id).prop('checked', false);
-            }
         }
-    });
-});
+
+        $(this).change(function (e) {
+            let selectedValue = $(this).val();
+            let days = $(this).data('days');
+            let type_id = $(this).data('id');
+
+            console.log(type_id);
+
+            $('#update_days_div-'+type_id).show();
+            $('#update_monthly_div-'+type_id).show();
+            $('#update_advance_salary_div-'+type_id).show();
+            $("#max_day_div-"+type_id).css('display', 'none');
+
+            $('#update_days-'+type_id).val(days);
+            $('#update_monthly-'+type_id).prop('checked', false);
+            $('#update_advance_salary-'+type_id).prop('checked', false);
+
+            if (selectedValue == 1) {
+                $("#max_day_div-"+type_id).css('display', 'flex');
+                $('#update_days_div-'+type_id).hide();
+                $('#update_monthly_div-'+type_id).hide();
+                $('#update_advance_salary_div-'+type_id).hide();
+
+                $('#update_days-'+type_id).val(0);
+
+                if ($('#update_monthly-'+type_id).prop('checked')) {
+                    $('#update_monthly-'+type_id).prop('checked', false);
+                }
+
+                if ($('#update_advance_salary-'+type_id).prop('checked')) {
+                    $('#update_advance_salary-'+type_id).prop('checked', false);
+                }
+            }
+        });
+        });
+
 
         $('.update_monthly').each(function(){
 
@@ -668,6 +699,7 @@
                   if ($('#update_advance_salary-'+type_id).prop('checked')) {
                       $('#update_advance_salary-'+type_id).prop('checked', false);
                   }
+                  $('#update_advance_salary-'+type_id).prop('disabled', isChecked);
                   $('#update_advance_salary-'+type_id).css('display', 'block');
 
                   if(isChecked){

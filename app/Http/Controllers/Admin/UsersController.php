@@ -11,12 +11,18 @@ use App\Models\Profile;
 use App\Models\JobDetail;
 use App\Models\LeavePolicies;
 use App\Models\LeaveEntitlement;
+use App\Models\longLeave;
+use App\Models\ShortLeave;
+use App\Models\LateAttendance;
 use DateTime;
 use DateTimeZone;
+use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+
+
 
 class UsersController extends Controller
 {
@@ -68,7 +74,7 @@ class UsersController extends Controller
         $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required | email',
+            'email' => 'required | email |unique:users',
             'phone' => 'required',
             'password' => 'required',
             'password_confirmation' => 'required',
@@ -242,10 +248,40 @@ class UsersController extends Controller
     public function show(string $id)
     {
         $user = User::with('roles','profile','jobDetail')->find($id);
+        $longLeave= longLeave::where('user_id',$id)->with("entitlement","approvedBy","user")->orderBy('id', 'desc')->get();
+        $shortLeave= ShortLeave::where('user_id',$id)->with("approvedBy","user")->orderBy('id', 'desc')->get();
+        $lateAttendance= LateAttendance::where('user_id',$id)->with("approvedBy","user")->orderBy('id', 'desc')->get();
+        $leaveEntitlement= LeaveEntitlement::where('user_id',$id) ->orderBy('start_year', 'desc')->get();
+        $last_month = Carbon::now()->month-1;
+        $policies= LeavePolicies::all();
+
+        $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
+
+        $end_year = date('Y/m/d', strtotime('+1 year', strtotime($user->jobDetail->joined_at))); //2018 - 2019
+        $employee_years = [date('Y/m/d', strtotime($user->jobDetail->joined_at)).'-'.date('Y/m/d', strtotime($end_year))]; //2018 - 2019
+
+
+        while ($end_year <= $current_date->format('Y/m/d')) {
+            $start_year = $end_year;
+            $end_year = date('Y/m/d', strtotime('+1 year', strtotime($end_year)));
+            $employee_years[] = $start_year.'-'.$end_year; 
+        }
+
+        
+        // dd($employee_year);
         $data['page_title'] = 'User Detail';
         $data['user'] = $user;
-        return view('admin/users/show',$data);
+        $data['longLeave'] = $longLeave;
+        $data['shortLeave'] = $shortLeave;
+        $data['lateAttendance'] = $lateAttendance;
+        $data['leaveEntitlement'] = $leaveEntitlement;
+        $data['employee_years'] = $employee_years;
+        $data['policies'] = $policies;
+        $data['lastMonth'] = $last_month;
 
+        $data['url'] = 'user';
+
+        return view('admin/users/show',$data);
     }
 
     /**
@@ -465,5 +501,176 @@ class UsersController extends Controller
 
         User::withTrashed()->find($id)->forceDelete();
         return redirect('admin/users?trash=1');
+    }
+
+
+    public function storeLongLeave(Request $request, string $id)
+    {       
+    //    dd($request->all()); 
+     abort_if(Gate::denies('long_leave_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+  
+     $validation = $request->validate([
+         'startDate' => 'required',
+         'endDate' => 'required',
+         'policy_id' => 'required',
+         'comment' => 'required',
+     ]);
+ 
+     $startDate = Carbon::parse($request->input('startDate'));
+     $endDate = Carbon::parse($request->input('endDate'));
+     $numberOfDays = $startDate->diffInDays($endDate);
+     $currentMonth = Carbon::now()->month;
+     $year = $startDate->year;
+     $month = $startDate->month;
+     $fileName ="";
+ 
+     if ($startDate->gt($endDate)) {
+         $statusMessage = 'Start date cannot be after End date, please Insert Correct input.';
+         return redirect()->back()->with('status', $statusMessage);
+     }
+ 
+     if ($startDate->eq($endDate)) {
+         $statusMessage = 'Cannot have holiday on same date';
+         return redirect()->back()->with('status', $statusMessage);
+     }
+     $dates = explode('-', $request->input('entitlement_year'));
+     
+     $userEntitlement = LeaveEntitlement::where('user_id',$id)->where('leave_policy_id', $request->input('policy_id'))
+     ->where('start_year', $dates[0])
+     ->where('end_year',  $dates[1])
+     ->with("policy","user")->first();
+
+     
+     if(empty($userEntitlement)){
+        $leavePolicies = LeavePolicies::find($request->input('policy_id'));
+        $days = $request->input('days');
+      
+        if($leavePolicies->monthly){
+            if($days > 31){
+                $statusMessage = 'You cannot choose more than 31 days ';
+                return redirect()->back()->with("status",$statusMessage);
+              }
+              $days = $request->input("days") * 12;
+        }
+
+        $userEntitlement =  new LeaveEntitlement([
+            'leave_policy_id' => $request->input('policy_id'),
+            'start_year' => $dates[0],
+            'end_year' => $dates[1],
+            'days' =>  $request->input('days'),
+            'user_id' => $id,
+        ]);
+        $userEntitlement->save();
+     }
+
+      $existingLeave = longLeave::where('user_id', $id)
+         ->where(function ($query) use ($startDate, $endDate) {
+             $query->whereBetween('from', [$startDate, $endDate])
+                   ->orWhereBetween('to', [$startDate, $endDate])
+                   ->orWhere(function ($query) use ($startDate, $endDate) {
+                       $query->where('from', '<', $startDate)
+                             ->where('to', '>', $endDate);
+                   });
+         })
+         ->get(); // Use get() to retrieve multiple overlapping records
+ 
+     if ($existingLeave->count() > 0) {
+         $overlappingDates = $existingLeave->pluck('from', 'to')->toArray();
+ 
+         $statusMessage = 'You have overlapping leave dates on ';
+         foreach ($overlappingDates as $toDate => $fromDate) {
+             $statusMessage .= "{$fromDate} to {$toDate}, ";
+         }
+         $statusMessage = rtrim($statusMessage, ', '); // Remove trailing comma and space
+ 
+         return redirect()->back()->with('status', $statusMessage);
+     }
+ 
+     if ($userEntitlement->policy->monthly == 1) {
+ 
+        //  if($month !== $currentMonth){
+        //      $statusMessage = 'Cannot apply leave for comming month in advance';
+        //      return redirect()->back()->with('status', $statusMessage);
+        //  }
+ 
+     // Check if the user has already applied for leave in the current month
+     // Check if leave already exists for the same user and entitlement in the same month
+     $existingLeave = longLeave::where('user_id', $id)
+     ->where('entitlement_id', $userEntitlement->id)
+     ->where(function ($query) use ($year, $month) {
+         $query->whereYear('from', $year)
+             ->whereMonth('from', $month)
+             ->orWhere(function ($query) use ($year, $month) {
+                 $query->whereYear('to', $year)
+                     ->whereMonth('to', $month);
+             });
+     })
+     ->get();
+ 
+     
+     if($existingLeave->count() > 0){
+         $totalLeave=$numberOfDays;
+ 
+         foreach($existingLeave as $leave){  
+             //Check if the user have monthly holiday available.
+             $leaveStartDate =  Carbon::parse($leave->from);
+             $leaveEndDate = Carbon::parse($leave->to);
+             $totalLeave += $leaveStartDate->diffInDays($leaveEndDate);
+             if($totalLeave > 3){
+     
+                 $statusMessage = "You have already used your leave for this month" ;
+                 return redirect()->back()->with('status', $statusMessage);
+ 
+             }
+         }
+         
+         // dd($totalLeave);
+         
+     }
+ 
+      if ($numberOfDays > 3) {
+          // Handle exceeding the maximum limit (e.g., return an error response)
+          $statusMessage = "Cannot take leave more than monthly set limit";
+           return redirect()->back()->with('status', $statusMessage);
+      }
+ 
+     }
+ 
+     //check if the days are available for applying holidays.
+     $days = $userEntitlement->days?$userEntitlement->days:$userEntitlement->policy->days;
+     $remainingDays = $days - $userEntitlement->leave_taken; 
+ 
+     if($remainingDays < $numberOfDays){
+         $statusMessage = "You have exceeded the limit";
+         return redirect()->back()->with('status', $statusMessage);
+     }
+ 
+     if($request->leave_file)
+     {
+         $fileName =  now()->timestamp * 1000 . '.' . $request->leave_file->extension();
+         // $fileName = time() . '.' . $request->image->extension();
+         $request->file('leave_file')->storeAs('public/leave_files', $fileName);
+      }
+
+      $totalDays = $userEntitlement->leave_taken + $numberOfDays;
+      $userEntitlement->update(['leave_taken'=>$totalDays]);
+ 
+     longLeave::create([
+         'user_id' => $id,
+         'entitlement_id' => $userEntitlement->id,
+         'from' => $startDate,
+         'to' => $endDate,
+         'approved' => 1,
+         'approved_by' =>  auth()->user()->id,
+         'number_of_days' => $numberOfDays,
+         "leave_file"=> $fileName,
+         "salary"=> $request->has('advance_salary'),
+         'reason' => $request->input("comment"),
+         // Other leave-related data
+     ]);
+ 
+ 
+     return redirect()->back();
+ 
     }
 }

@@ -129,7 +129,7 @@ form button.border-none {
                                                 @endforeach
                                             </td>
 
-                                            @if (Gate::check('user_edit') || Gate::check('user_delete'))
+                                            @if (Gate::check('user_edit') || Gate::check('user_delete') || Gate::check('user_delete'))
 
                                                 <td>
                                                         <ul class="action">
@@ -140,12 +140,18 @@ form button.border-none {
                                                                     <i class="fa fa-undo"></i>
                                                                 </a>
                                                                 </li>
-                                                                <form action="{{route('admin.user.forceDelete',['user'=>$user->id])}}" method="post">
+                                                                <form onsubmit="return confirm('Are you sure you want to delete this user?')" action="{{route('admin.user.forceDelete',['user'=>$user->id])}}" method="post">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
                                                                 </form>
                                                                 @else
+                                                                
+                                                                @can('user_show')      
+                                                                <li class="mx-2"> <a href="{{route('admin.user.show',['user'=>$user->id])}}">
+                                                                    <i class="icofont icofont-eye"></i></a>
+                                                                </li>
+                                                                @endcan
                                                                 
                                                                 @can('user_edit')      
                                                                 <li class="edit"> <a href="{{route('admin.user.edit',['user'=>$user->id])}}">
@@ -159,7 +165,7 @@ form button.border-none {
                                                                     @method('DELETE')
                                                                     <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
                                                                 </form>
-                                                                    @endcan
+                                                                @endcan
 
                                                         @endif
                                                     </ul>

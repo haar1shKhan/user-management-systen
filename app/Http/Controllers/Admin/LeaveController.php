@@ -30,16 +30,24 @@ class LeaveController extends Controller
         abort_if(Gate::denies('long_leave_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $leave_balance = array();
-        $leaveEntitlement= LeaveEntitlement::where('user_id',auth()->user()->id)->where('start_year',auth()->user()->jobDetail->start_year)->where('end_year',auth()->user()->jobDetail->end_year)->with("policy","user")->get();
+        // $leaveEntitlement= LeaveEntitlement::where('user_id',auth()->user()->id)->where('start_year',auth()->user()->jobDetail->start_year)->where('end_year',auth()->user()->jobDetail->end_year)->with("policy","user")->get();
+        $leaveEntitlement= LeaveEntitlement::where('user_id',auth()->user()->id)->with("policy","user")->get();
         $longLeave= longLeave::where('user_id',auth()->user()->id)->with("entitlement","approvedBy","user")->orderBy('id', 'desc')->get();
         $last_month = Carbon::now()->month-1;
-
+        // dd($leaveEntitlement);
         foreach ($leaveEntitlement as $key => $value) {
 
             $days = $value->days;
             $leave_taken_value = $value->leave_taken;
 
             if ($value->policy->monthly) { 
+
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType'] && $value->end_year !== auth()->user()->jobdetail->end_year) {
+                        continue 2;
+                    }
+                    unset($balance); 
+                }
                 
                 $leaves_subMonth = longLeave::where('entitlement_id', $value->id)
                 ->where('user_id',auth()->user()->id)
@@ -60,10 +68,28 @@ class LeaveController extends Controller
                 $remaining = ($days - $leave_taken_value) - $expired;
             }
             elseif($value->policy->is_unlimited){
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType']) {
+                        $balance['remainingLeave'] += $days - $leave_taken_value;
+                        $balance['totaDays'] += $days;
+                        $balance['leaveTaken'] += $leave_taken_value;
+                        continue 2;
+                    }
+                }
+                unset($balance); 
                 $expired = "0";
                 $remaining = $days - $leave_taken_value;
             }
             else{
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType']) {
+                        $balance['remainingLeave'] += $days - $leave_taken_value;
+                        $balance['totaDays'] += $days;
+                        $balance['leaveTaken'] += $leave_taken_value;
+                        continue 2;
+                    }
+                }
+                unset($balance); 
                 $remaining = $days - $leave_taken_value;
                 $expired = 0;
             }
@@ -82,6 +108,7 @@ class LeaveController extends Controller
             $leave_balance[$key]['expiredLeave'] = $expired;
            
         }
+        
        
        $page_title = 'Request For Leave';
        $trash = false;

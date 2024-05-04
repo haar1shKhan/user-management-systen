@@ -293,7 +293,7 @@
                                                     @endcan
 
                                                     @can("late_attendance_delete")  
-                                                        <form action="{{route('admin.'.$url.'.destroy',['late_attendance'=>$list->id])}}" method="post">
+                                                        <form onsubmit="return confirm('Are you sure you want to delete this leave?')" action="{{route('admin.'.$url.'.destroy',['late_attendance'=>$list->id])}}" method="post">
                                                             @csrf
                                                             @method('DELETE')
                                                             <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>

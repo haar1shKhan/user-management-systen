@@ -52,10 +52,13 @@
 
                 @if (!empty($user->profile->image))
                     <div class="row mb-4 d-flex align-items-center">
-                        <img id="profile-image" height="140px" width="140px"
+                        <div class="media profile-media col-md-2">
+                            <img id="profile-image" height="140px" width="140px"
                             src="{{ asset('storage/profile_images/' . $user->profile->image ?? '') }}" alt="Profile Picture"
-                            class="rounded-circle media profile-media profile-image"
+                            class="rounded-circle  profile-image"
                             style="max-width: 150px; max-height: 150px;">
+                        </div>
+                      
 
                         <div class="col-md-6">
                             <label class="col-sm-3 col-form-label">Profile picture</label>

@@ -288,6 +288,7 @@
                                                             @endcan
                                                             @can('short_leave_delete')
                                                                 <form
+                                                                    onsubmit="return confirm('Are you sure you want to delete this leave?')"
                                                                     action="{{ route('admin.' . $url . '.destroy', ['short_leave' => $list->id]) }}"
                                                                     method="post">
                                                                     @csrf

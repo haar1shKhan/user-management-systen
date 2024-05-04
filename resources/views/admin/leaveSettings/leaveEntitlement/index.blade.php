@@ -255,13 +255,14 @@
                                                         </button>
                                                     </li>
 
-                                                    <form action="{{ route('admin.'.$url.'.leaveEntitlement.destroy', ['leaveEntitlement' => $list->id]) }}" method="post">
+                                                    <form onsubmit="return confirm('Are you sure you want to delete this Entitlement?')" action="{{ route('admin.'.$url.'.leaveEntitlement.destroy', ['leaveEntitlement' => $list->id]) }}" method="post">
                                                         @csrf
                                                         @method('DELETE')
                                                         <li class="delete">
                                                             <button class="border-none" type="submit"><i class="icon-trash"></i></button>
                                                         </li>
                                                     </form>
+                                                    
                                                 </ul>
                                             </td>
                                         </tr>
