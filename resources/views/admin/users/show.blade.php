@@ -199,15 +199,15 @@ form button.border-none {
 
                 <li class="nav-item"><a class="nav-link" id="long-leave-tab" data-bs-toggle="tab"
                         href="#long-leave" role="tab" aria-controls="long-leave"
-                        aria-selected="false"><i class="icofont icofont-list"></i>Long Leave</a></li>
+                        aria-selected="false"><i class="icofont icofont-list"></i>جميع الاجازات </a></li>
                         
                 <li class="nav-item"><a class="nav-link" id="short-leave-tab" data-bs-toggle="tab"
                         href="#short-leave" role="tab" aria-controls="short-leave"
-                        aria-selected="false"><i class="icofont icofont-list"></i>Short Leave</a></li>
+                        aria-selected="false"><i class="icofont icofont-list"></i>اذن خروج</a></li>
 
                 <li class="nav-item"><a class="nav-link" id="late-attendance-tab" data-bs-toggle="tab"
                         href="#late-attendance" role="tab" aria-controls="late-attendance"
-                        aria-selected="false"><i class="icofont icofont-list"></i>Late Attendance</a></li>
+                        aria-selected="false"><i class="icofont icofont-list"></i>تأخر عن العمل </a></li>
             </ul>
 
             <div class="tab-content" id="icon-tabContent">
@@ -462,13 +462,13 @@ form button.border-none {
                         {{-- @can('role_delete') --}}
                         @can("long_leave_create")
                             
-                            <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Add Leave</button>
+                            <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">أضف إجازة</button>
                     
                             <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" id="myLargeModalLabel">Add Leave<span class="text-danger">{{$error??""}}</span></h4>
+                                            <h4 class="modal-title" id="myLargeModalLabel">أضف إجازة<span class="text-danger">{{$error??""}}</span></h4>
                                             <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
 
@@ -480,7 +480,7 @@ form button.border-none {
                                             <div class="">
                                                 <div class="row d-flex align-items-end">
                                                     <div class="col-md-8">
-                                                            <label class="col-form-label">Leave Title</label>
+                                                            <label class="col-form-label">استحقاق الإجازة</label>
                                                             <select name="policy_id" class="form-select" id="policy_id" required="">
                                                                 <option selected="true" disabled value="">Choose...</option>
                                                                 @foreach ($leaveEntitlement as $leaveType)
@@ -527,7 +527,7 @@ form button.border-none {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 mb-2">
-                                                        <button type="button" id="add_entitlement" onclick="showEntitlment()" class="btn btn-primary">Add Entitlement</button>
+                                                        <button type="button" id="add_entitlement" onclick="showEntitlment()" class="btn btn-primary">إضافة استحقاق</button>
                                                     </div>
                                                 </div>
 
@@ -535,7 +535,7 @@ form button.border-none {
                                                     <div class="my-2 row">
 
                                                         <div class="col-md-4">
-                                                            <label class="form-label" for="days" id="daysLabel">Days</label>
+                                                            <label class="form-label" for="days" id="daysLabel">الأيام</label>
                                                             <input class="form-control" id="days"  name="days" type="number" disabled data-bs-original-title="" title="">
                                                             <div class="text-danger ">
                                                                 @error("days")
@@ -545,7 +545,7 @@ form button.border-none {
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                        <label class="col-form-label">Entitlement year</label>
+                                                        <label class="col-form-label">سنة العمل</label>
                                                             <select class="form-select" name="entitlement_year" disabled id="entitlement_year">
                                                                 @foreach ($employee_years as $years )
                                                                     @php
@@ -562,7 +562,7 @@ form button.border-none {
                                                         </div>
 
                                                         <div class="col-md-4">
-                                                        <label class="col-form-label">Policy</label>
+                                                        <label class="col-form-label">سياسة</label>
                                                         <select class="form-select" name="policy_id" id="new_policy_id" disabled>
                                                                 <option selected="true" disabled value="">Choose...</option>
                                                                 @foreach ($policies as $policy )
@@ -577,20 +577,20 @@ form button.border-none {
 
                                                 <div class="row" id="longLeaveFields">
                                                     <div class="col-md-4">
-                                                        <label class="col-form-label">Start Date</label>
+                                                        <label class="col-form-label">تاريخ البدء</label>
                                                         <div class="col-sm-12">
                                                             <input class="form-control digits" type="date"  id="startDate" name="startDate" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <label class="col-form-label">End Date</label>
+                                                        <label class="col-form-label">تاريخ الانتهاء</label>
                                                         <div class="col-sm-12">
                                                             <input class="form-control digits" type="date"  id="endDate"  name="endDate" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
                                                         <div class="mx-2 days-field">
-                                                            Remaining days: 0
+                                                            الأيام المتبقية: 0
                                                         </div>
                                                     </div>
                                                 </div>
@@ -623,7 +623,7 @@ form button.border-none {
                                                         <div class="row">
                                                             <div class="col">
                                                             <div>
-                                                                <label class="form-label" for="exampleFormControlTextarea4">Comments</label>
+                                                                <label class="form-label" for="exampleFormControlTextarea4">تعليقات</label>
                                                                 <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3" required></textarea>
                                                             </div>
                                                             </div>
@@ -631,8 +631,8 @@ form button.border-none {
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
-                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">Close</button>
-                                        <button class="btn btn-primary" type="submit">Add</button>
+                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">يغلق</button>
+                                        <button class="btn btn-primary" type="submit">يضيف</button>
                                         </div>
                                         </form>
                                     
@@ -909,7 +909,7 @@ form button.border-none {
             // If newEntitlementDiv is visible, hide it and disable elements
             
             newEntitlementDiv.hide();
-            addEntitlement.text('Add Entitlement');
+            addEntitlement.text('إضافة استحقاق');
             daysField.show()
             days.prop('disabled', true);
             entitlementYear.prop('disabled', true);
@@ -919,7 +919,7 @@ form button.border-none {
         } else {
             // If newEntitlementDiv is hidden, show it and enable elements
             newEntitlementDiv.show();
-            addEntitlement.text('Cancel');
+            addEntitlement.text('yulghi');
             daysField.hide()
             days.prop('disabled', false);
             entitlementYear.prop('disabled', false);
