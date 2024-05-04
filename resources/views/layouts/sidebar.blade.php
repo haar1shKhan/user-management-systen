@@ -97,7 +97,6 @@
                         </a>
                     </li>
                     @endcan
-
                     @can("leave_manager_access")   
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#">
@@ -126,7 +125,7 @@
                     @endcan
 
 
-                    @can('system_access')
+                    @can('user_management_access')
                     <li class="sidebar-list">
                         <a class="sidebar-link sidebar-title" href="#">
                             <svg class="stroke-icon">
@@ -135,33 +134,17 @@
                             <svg class="fill-icon">
                                 <use href="{{ asset('assets/svg/icon-sprite.svg#fill-others') }}"></use>
                             </svg>
-                            <span>نظام</span>
+                            <span>إدارة الموظفين</span>
                         </a>
                         <ul class="sidebar-submenu">
-                            @can('setting_access')
+                            @can('user_access')
                             <li>
-                                <a href="{{ route('admin.settings') }}">إعدادات</a>
+                                <a href="{{ route('admin.users') }}">الموظفين</a>
                             </li>
                             @endcan
-                            @can('user_management_access')
+                            @can('role_access')
                             <li>
-                                <a class="submenu-title" href="#">
-                                    إدارة الموظفين
-                                    <span class="sub-arrow">
-                                        <i class="fa fa-angle-right"></i>
-                                    </span>
-                                </a>
-                                <ul class="nav-sub-childmenu submenu-content">
-                                    @can('user_access')
-                                    <li><a class="lan-5" href="{{ route('admin.users') }}">الموظفين</a></li>
-                                    @endcan
-                                    @can('role_access')
-                                    <li><a class="" href="{{ route('admin.roles') }}">الأدوار والأذونات</a></li>
-                                    @endcan
-                                    {{-- @can('permission_access')
-                                    <li><a class="" href="{{ route('admin.permissions') }}">Permissions</a></li>
-                                    @endcan --}}
-                                </ul>
+                                <a href="{{ route('admin.roles') }}">الأدوار والأذونات</a>
                             </li>
                             @endcan
                             {{-- MAINTANANCE PAGES DISABLED --}}
@@ -173,6 +156,19 @@
                                 </ul>
                             </li> --}}
                         </ul>
+                    </li>
+                    @endcan
+                    @can('setting_access')       
+                    <li class="sidebar-list">
+                        <a class="sidebar-link sidebar-title link-nav" href="{{ route('admin.settings') }}">
+                            <svg class="stroke-icon">
+                                <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
+                            </svg>
+                            <svg class="fill-icon">
+                                <use href="{{ asset('assets/svg/icon-sprite.svg#stroke-calendar') }}"></use>
+                            </svg>
+                            <span>إعدادات</span>
+                        </a>
                     </li>
                     @endcan
                     {{-- DISBALED --}}
