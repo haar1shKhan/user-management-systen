@@ -152,12 +152,8 @@ class LeaveController extends Controller
         return redirect($this->base_url)->with('status', $statusMessage);
     }
 
-    if ($startDate->eq($endDate)) {
-        $statusMessage = 'Cannot have holiday on same date';
-        return redirect($this->base_url)->with('status', $statusMessage);
-    }
-
     $userEntitlement = LeaveEntitlement::where('user_id',auth()->user()->id)->where('leave_policy_id', $request->input('policy_id'))->with("policy","user")->first();
+    $allUserEntitlement = LeaveEntitlement::where('user_id',auth()->user()->id)->where('leave_policy_id', $request->input('policy_id'))->with("policy","user")->get();
 
      $existingLeave = longLeave::where('user_id', auth()->user()->id)
         ->where(function ($query) use ($startDate, $endDate) {
@@ -233,8 +229,17 @@ class LeaveController extends Controller
     }
 
     //check if the days are available for applying holidays.
-    $days = $userEntitlement->days?$userEntitlement->days:$userEntitlement->policy->days;
-    $remainingDays = $days - $userEntitlement->leave_taken; 
+    $days = 0;
+    $leave_taken = 0;
+
+    foreach ($allUserEntitlement as $balance) { // Note the "&" before $balance to make it a reference
+          $days += $balance->days;
+          $leave_taken += $balance->leave_taken;
+    }
+    
+    $remainingDays = $days - $leave_taken; 
+
+    // dd($remainingDays);
 
     if($remainingDays < $numberOfDays){
         $statusMessage = "You have exceeded the limit";

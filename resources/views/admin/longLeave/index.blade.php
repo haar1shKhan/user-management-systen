@@ -463,6 +463,8 @@ button.border-none {
     <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script>
 
     <script>
+            $('.days-field').hide();
+
         $(document).ready(function () {
             // Disable the button initially if massDestroy array is empty
             updatemassActionButtonState();
@@ -575,7 +577,7 @@ button.border-none {
             var monthly = selectedLeaveType.data('monthly');
             var advanceSalary = selectedLeaveType.data('advance-salary');
             var numberOfDays = selectedLeaveType.data('number-of-days');
-
+            
             $('.days-field').text('Remaining days: ' + numberOfDays);
 
             if (monthly) {

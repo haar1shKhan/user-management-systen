@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('date');
             $table->time('from');
             $table->time('to');
-            $table->longText('reason');
+            $table->longText('reason')->nullable();
             $table->boolean('approved')->default(0);
             $table->text('reject_reason')->nullable();
             $table->timestamps();

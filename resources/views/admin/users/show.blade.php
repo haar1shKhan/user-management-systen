@@ -208,6 +208,11 @@ form button.border-none {
                 <li class="nav-item"><a class="nav-link" id="late-attendance-tab" data-bs-toggle="tab"
                         href="#late-attendance" role="tab" aria-controls="late-attendance"
                         aria-selected="false"><i class="icofont icofont-list"></i>تأخر عن العمل </a></li>
+
+                <li class="nav-item"><a class="nav-link" id="entitlement-year-tab" data-bs-toggle="tab"
+                    href="#entitlement_year_tab" role="tab" aria-controls="entitlement_year_tab"
+                    aria-selected="false"><i class="icofont icofont-user-search"></i>Employee Entitlement</a></li>
+
             </ul>
 
             <div class="tab-content" id="icon-tabContent">
@@ -481,7 +486,7 @@ form button.border-none {
                                                 <div class="row d-flex align-items-end">
                                                     <div class="col-md-8">
                                                             <label class="col-form-label">استحقاق الإجازة</label>
-                                                            <select name="policy_id" class="form-select" id="policy_id" required="">
+                                                            <select name="entit_id" class="form-select" id="policy_id" required="">
                                                                 <option selected="true" disabled value="">Choose...</option>
                                                                 @foreach ($leaveEntitlement as $leaveType)
                                                                         @php
@@ -514,67 +519,19 @@ form button.border-none {
                                                                         
                                                                         
                                                                         @endphp 
-                                                                    <option class="py-3" value="{{ $leaveType->policy->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
+                                                                    <option class="py-3" value="{{ $leaveType->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
                                                                     data-number-of-days="@if($leaveType->policy->monthly) {{$totalDays/12}} @else{{$remainingDays}}@endif">
                                                                         {{ $leaveType->policy->title."  -  ".date('M Y', strtotime($leaveType->start_year))." to ".date('M Y', strtotime($leaveType->end_year))}}
                                                                     </option>
                                                                 @endforeach
                                                             </select>    
                                                         <div class="text-danger mt-1">
-                                                            @error("policy_id")
+                                                            @error("entit_id")
                                                             {{$message}}    
                                                             @enderror
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 mb-2">
-                                                        <button type="button" id="add_entitlement" onclick="showEntitlment()" class="btn btn-primary">إضافة استحقاق</button>
-                                                    </div>
                                                 </div>
-
-                                                <div id="new_entitlement_div">
-                                                    <div class="my-2 row">
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="days" id="daysLabel">الأيام</label>
-                                                            <input class="form-control" id="days"  name="days" type="number" disabled data-bs-original-title="" title="">
-                                                            <div class="text-danger ">
-                                                                @error("days")
-                                                                    {{ $message }}
-                                                                @enderror
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                        <label class="col-form-label">سنة العمل</label>
-                                                            <select class="form-select" name="entitlement_year" disabled id="entitlement_year">
-                                                                @foreach ($employee_years as $years )
-                                                                    @php
-                                                                                                                                    
-                                                                    // Explode the string by "-"
-                                                                    $dates = explode('-', $years);
-                                                                    $formated_date =date('M Y', strtotime($dates[0])) .' - '.date('M Y', strtotime($dates[1]));
-
-                                                                    @endphp
-
-                                                                    <option  value="{{$years}}">{{$formated_date}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                        <label class="col-form-label">سياسة</label>
-                                                        <select class="form-select" name="policy_id" id="new_policy_id" disabled>
-                                                                <option selected="true" disabled value="">Choose...</option>
-                                                                @foreach ($policies as $policy )
-                                                                    <option data-add-monthly="{{ $policy->monthly }}" data-add-number-of-days="@if($policy->monthly) {{$policy->days/12}} @else{{!$policy->is_unlimited ? $policy->days : $policy->max_days }}@endif" value="{{$policy->id}}">{{$policy->title}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            
-
                                                 <div class="row" id="longLeaveFields">
                                                     <div class="col-md-4">
                                                         <label class="col-form-label">تاريخ البدء</label>
@@ -631,8 +588,8 @@ form button.border-none {
                                                 </div>
                                         </div>
                                         <div class="modal-footer">
-                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">يغلق</button>
-                                        <button class="btn btn-primary" type="submit">يضيف</button>
+                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">الغاء</button>
+                                        <button class="btn btn-primary" type="submit">اضافة</button>
                                         </div>
                                         </form>
                                     
@@ -806,6 +763,130 @@ form button.border-none {
                         </table>
                     </div>
                 </div>
+
+                <div class="tab-pane fade show " id="entitlement_year_tab" role="tabpanel"
+                    aria-labelledby="entitlement-year-tab">
+                    <div class="table-responsive">
+
+                        <div class="d-flex justify-content-end mt-4">
+
+                            {{-- @can('role_delete') --}}
+                            @can("long_leave_create")
+                                
+                                <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg1">Add Entitlement</button>
+                        
+                                <div class="modal fade bd-example-modal-lg1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="myLargeModalLabel">أضف إجازة<span class="text-danger">{{$error??""}}</span></h4>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+    
+                                        
+                                            <form enctype="multipart/form-data" action="{{route('admin.'.$url.".store_entitlement",['user'=>$user->id])}}" method="POST" class="modal-content">
+                                                @csrf
+                                                <div class="modal-body">
+                                                    <div class="">
+
+        
+                                                            <div class="my-2 row">
+        
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="days" id="daysLabel">الأيام</label>
+                                                                    <input class="form-control" id="days"  name="days" type="number"  data-bs-original-title="" title="">
+                                                                    <div class="text-danger ">
+                                                                        @error("days")
+                                                                            {{ $message }}
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+        
+                                                                <div class="col-md-4">
+                                                                <label class="col-form-label">سنة العمل</label>
+                                                                    <select class="form-select" name="entitlement_year"  id="entitlement_year">
+                                                                        @foreach ($employee_years as $years )
+                                                                            @php
+                                                                                                                                            
+                                                                            // Explode the string by "-"
+                                                                            $dates = explode('-', $years);
+                                                                            $formated_date =date('M Y', strtotime($dates[0])) .' - '.date('M Y', strtotime($dates[1]));
+        
+                                                                            @endphp
+        
+                                                                            <option  value="{{$years}}">{{$formated_date}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+        
+                                                                <div class="col-md-4">
+                                                                <label class="col-form-label">سياسة</label>
+                                                                <select class="form-select" name="policy_id" id="new_policy_id" >
+                                                                        <option selected="true" disabled value="">Choose...</option>
+                                                                        @foreach ($policies as $policy )
+                                                                            <option data-add-monthly="{{ $policy->monthly }}" data-add-number-of-days="@if($policy->monthly) {{$policy->days/12}} @else{{!$policy->is_unlimited ? $policy->days : $policy->max_days }}@endif" value="{{$policy->id}}">{{$policy->title}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-danger" type="button" data-bs-dismiss="modal">الغاء</button>
+                                                    <button class="btn btn-primary" type="submit">اضافة</button>
+                                                </div>
+                                            </form>
+                                        
+                                        
+                                        </div>
+                                    </div>
+                                    </div>
+                            @endcan
+                        </div>
+
+
+                        <table class="display" id="basic-4">
+                            <thead>
+                                <tr>
+                                    {{-- @can('user_edit' || 'user_delete') --}}
+
+                                    
+
+                                    {{-- @endcan --}}
+
+                                    <th>{{trans('global.id') }}</th>
+                                    <th>موظف</th>
+                                    <th>نوع الإجازة</th>
+                                    <th>سنة العمل</th>
+                                    <th>الأيام</th>
+                                    <th>عدد اجازات الماخوذة</th>
+                                   
+                                    {{-- @can('permission_edit' || 'permission_delete') --}}
+
+                                    {{-- @endcan --}}
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(!is_null($leaveEntitlement))
+                                    @foreach ($leaveEntitlement as $list)
+                                        <tr>
+                                            <td>{{$list->id}}</td>
+                                            <td>{{$list->user->first_name}} {{$list->user->last_name}}</td>
+                                            <td>
+                                                <h6>{{$list->policy->title}}</h6>
+                                            </td>
+                                            <td style="direction:ltr;">{{date('d M Y',strtotime($list->start_year))}} {{date('d M Y',strtotime($list->end_year))}}</td>
+                                            <td>{{$list->max_days > 0 ? $list->policy->max_days : $list->days }}</td>
+                                            <td>{{$list->leave_taken }}</td>
+                                        </tr>
+                                    @endforeach
+                                 @endif
+                            </tbody>
+                        </table>
+                    </div>
+                
+                </div>
             </div>
 
         </div>
@@ -818,6 +899,7 @@ form button.border-none {
 
     
     <script>
+     $('.days-field').hide();
 
      $('#policy_id',).change(function () {
          var selectedLeaveType = $(this).find(':selected');
@@ -896,39 +978,39 @@ form button.border-none {
 
 
     
-    function showEntitlment(){
-        const newEntitlementDiv = $('#new_entitlement_div');
-        const days = $('#days');
-        const entitlementYear = $('#entitlement_year');
-        const newPolicyId = $('#new_policy_id');
-        const policyId = $('#policy_id');
-        const addEntitlement = $('#add_entitlement');
-        const daysField = $('.days-field');
+    // function showEntitlment(){
+    //     const newEntitlementDiv = $('#new_entitlement_div');
+    //     const days = $('#days');
+    //     const entitlementYear = $('#entitlement_year');
+    //     const newPolicyId = $('#new_policy_id');
+    //     const policyId = $('#policy_id');
+    //     const addEntitlement = $('#add_entitlement');
+    //     const daysField = $('.days-field');
 
-        if (newEntitlementDiv.is(':visible')) {
-            // If newEntitlementDiv is visible, hide it and disable elements
+    //     if (newEntitlementDiv.is(':visible')) {
+    //         // If newEntitlementDiv is visible, hide it and disable elements
             
-            newEntitlementDiv.hide();
-            addEntitlement.text('إضافة استحقاق');
-            daysField.show()
-            days.prop('disabled', true);
-            entitlementYear.prop('disabled', true);
-            newPolicyId.prop('disabled', true);
-            policyId.show(); // Make PolicyId visible
-            policyId.prop('disabled', false); // Enable PolicyId
-        } else {
-            // If newEntitlementDiv is hidden, show it and enable elements
-            newEntitlementDiv.show();
-            addEntitlement.text('يلغي');
-            daysField.hide()
-            days.prop('disabled', false);
-            entitlementYear.prop('disabled', false);
-            newPolicyId.prop('disabled', false);
-            // policyId.hide(); // Hide PolicyId
-            policyId.prop('disabled', true); // Disable PolicyId
-        }
+    //         newEntitlementDiv.hide();
+    //         addEntitlement.text('إضافة استحقاق');
+    //         daysField.show()
+    //         days.prop('disabled', true);
+    //         entitlementYear.prop('disabled', true);
+    //         newPolicyId.prop('disabled', true);
+    //         policyId.show(); // Make PolicyId visible
+    //         policyId.prop('disabled', false); // Enable PolicyId
+    //     } else {
+    //         // If newEntitlementDiv is hidden, show it and enable elements
+    //         newEntitlementDiv.show();
+    //         addEntitlement.text('يلغي');
+    //         daysField.hide()
+    //         days.prop('disabled', false);
+    //         entitlementYear.prop('disabled', false);
+    //         newPolicyId.prop('disabled', false);
+    //         // policyId.hide(); // Hide PolicyId
+    //         policyId.prop('disabled', true); // Disable PolicyId
+    //     }
 
-    }
+    // }
     </script>
 
     <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
