@@ -618,6 +618,7 @@ class UsersController extends Controller
      }
      
      $remainingDays = $days - $leave_taken; 
+     dd($remainingDays,$numberOfDays);
      if($remainingDays < $numberOfDays){
          $statusMessage = "You have exceeded the limit";
          return redirect()->back()->with('status', $statusMessage);
