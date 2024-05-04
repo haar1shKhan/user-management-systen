@@ -919,7 +919,7 @@ form button.border-none {
         } else {
             // If newEntitlementDiv is hidden, show it and enable elements
             newEntitlementDiv.show();
-            addEntitlement.text('yulghi');
+            addEntitlement.text('يلغي');
             daysField.hide()
             days.prop('disabled', false);
             entitlementYear.prop('disabled', false);
