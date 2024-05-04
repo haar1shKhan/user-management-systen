@@ -639,10 +639,10 @@ class UsersController extends Controller
      $days = $userEntitlement->days?$userEntitlement->days:$userEntitlement->policy->days;
      $remainingDays = $days - $userEntitlement->leave_taken; 
  
-     if($remainingDays < $numberOfDays){
-         $statusMessage = "You have exceeded the limit";
-         return redirect()->back()->with('status', $statusMessage);
-     }
+    //  if($remainingDays < $numberOfDays){
+    //      $statusMessage = "You have exceeded the limit";
+    //      return redirect()->back()->with('status', $statusMessage);
+    //  }
  
      if($request->leave_file)
      {
