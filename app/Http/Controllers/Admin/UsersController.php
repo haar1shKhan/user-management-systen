@@ -513,12 +513,11 @@ class UsersController extends Controller
          'startDate' => 'required',
          'endDate' => 'required',
          'policy_id' => 'required',
-         'comment' => 'required',
      ]);
  
      $startDate = Carbon::parse($request->input('startDate'));
      $endDate = Carbon::parse($request->input('endDate'));
-     $numberOfDays = $startDate->diffInDays($endDate);
+     $numberOfDays = $startDate->diffInDays($endDate) + 1;
      $currentMonth = Carbon::now()->month;
      $year = $startDate->year;
      $month = $startDate->month;

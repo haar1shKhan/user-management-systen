@@ -227,7 +227,7 @@ button.border-none {
                                                                    <div class="col">
                                                                    <div>
                                                                        <label class="form-label" for="exampleFormControlTextarea4">Comments</label>
-                                                                       <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3" required></textarea>
+                                                                       <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3"></textarea>
                                                                    </div>
                                                                    </div>
                                                                </div>
@@ -611,10 +611,10 @@ button.border-none {
                 const endDate = new Date(endDateInput);
 
                 // Calculate the difference in milliseconds
-                const timeDifference = endDate - startDate;
+                const timeDifference = (endDate - startDate);
 
                 // Convert milliseconds to days
-                const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)) + 1;
 
                 $('.days-field').html((numberOfDays - daysDifference>0?'Remaining days: ' +( numberOfDays - daysDifference):"<span class='text-danger'>Remaining days: "+0+"</span>"));
 

@@ -137,12 +137,11 @@ class LeaveController extends Controller
         'startDate' => 'required',
         'endDate' => 'required',
         'policy_id' => 'required',
-        'comment' => 'required',
     ]);
 
     $startDate = Carbon::parse($request->input('startDate'));
     $endDate = Carbon::parse($request->input('endDate'));
-    $numberOfDays = $startDate->diffInDays($endDate);
+    $numberOfDays = $startDate->diffInDays($endDate) + 1;
     $currentMonth = Carbon::now()->month;
     $year = $startDate->year;
     $month = $startDate->month;
@@ -290,7 +289,6 @@ class LeaveController extends Controller
        $validation = $request->validate([
         'startDate' => 'required',
         'endDate' => 'required',
-        'comment' => 'required',
         ]);
 
        $longLeave= longLeave::findOrFail($id);
@@ -298,7 +296,7 @@ class LeaveController extends Controller
     //    dd($userEntitlement);
        $startDate = Carbon::parse($request->input('startDate'));
        $endDate = Carbon::parse($request->input('endDate'));
-       $numberOfDays = $startDate->diffInDays($endDate);
+       $numberOfDays = $startDate->diffInDays($endDate) + 1;
        $currentMonth = Carbon::now()->month;
        $year = $startDate->year;
        $month = $startDate->month;
@@ -430,7 +428,8 @@ class LeaveController extends Controller
         
         $startDate = Carbon::parse($leave->from);
         $endDate = Carbon::parse($leave->to);
-        $numberOfDays = $startDate->diffInDays($endDate);
+        $numberOfDays = $startDate->diffInDays($endDate) + 1;
+
 
         $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
 
@@ -453,14 +452,14 @@ class LeaveController extends Controller
     public function reject(Request $request, longLeave $leave){
 
         abort_if(Gate::denies('leave_request_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
+        
         if($leave->approved == -1){
             return redirect()->route('admin.leave.requests');
         }
 
         $startDate = Carbon::parse($leave->from);
         $endDate = Carbon::parse($leave->to);
-        $numberOfDays = $startDate->diffInDays($endDate);
+        $numberOfDays = $startDate->diffInDays($endDate) + 1;
 
         $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
 
@@ -493,7 +492,7 @@ class LeaveController extends Controller
         
         $startDate = Carbon::parse($leave->from);
         $endDate = Carbon::parse($leave->to);
-        $numberOfDays = $startDate->diffInDays($endDate);
+        $numberOfDays = $startDate->diffInDays($endDate) + 1;
 
         $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
 
