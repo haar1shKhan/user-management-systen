@@ -531,7 +531,7 @@ class UsersController extends Controller
      $userEntitlement = LeaveEntitlement::where('user_id',$id)->where("id",$request->input('entit_id'))
      ->with("policy","user")->first();
 
-    $allUserEntitlement = LeaveEntitlement::where('user_id',auth()->user()->id)->where('leave_policy_id', $userEntitlement->policy->id)->with("policy","user")->get();
+    $allUserEntitlement = LeaveEntitlement::where('user_id',$id)->where('leave_policy_id', $userEntitlement->policy->id)->with("policy","user")->get();
 
 
 
@@ -618,7 +618,6 @@ class UsersController extends Controller
      }
      
      $remainingDays = $days - $leave_taken; 
-     dd($remainingDays,$numberOfDays);
      if($remainingDays < $numberOfDays){
          $statusMessage = "You have exceeded the limit";
          return redirect()->back()->with('status', $statusMessage);
