@@ -773,7 +773,7 @@ form button.border-none {
                             {{-- @can('role_delete') --}}
                             @can("long_leave_create")
                                 
-                                <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg1">Add Entitlement</button>
+                                <button class="btn btn-primary mx-1 my-5" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg1">Add Entitlement</button>
                         
                                 <div class="modal fade bd-example-modal-lg1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg">
@@ -845,7 +845,7 @@ form button.border-none {
                         </div>
 
 
-                        <table class="display" id="basic-4">
+                        <table class="display " id="basic-4">
                             <thead>
                                 <tr>
                                     {{-- @can('user_edit' || 'user_delete') --}}
