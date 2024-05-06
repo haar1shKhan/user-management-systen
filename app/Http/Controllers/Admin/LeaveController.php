@@ -400,9 +400,24 @@ class LeaveController extends Controller
    {
        //
        abort_if(Gate::denies('long_leave_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+       
+       $leave = longLeave::find($id);
+       $startDate = Carbon::parse($leave->from);
+       $endDate = Carbon::parse($leave->to);
+       $numberOfDays = $startDate->diffInDays($endDate) + 1;
 
-       longLeave::find($id)->delete();
-       return redirect($this->base_url);
+       $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
+       
+       // Subracting leave taken from entitlement when deleting leave
+       $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+       $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+       $totalDays < 0 ? $totalDays = 0 : $totalDays;
+       
+       $userEntitlement->update(['leave_taken'=>$totalDays]);
+        
+       $leave->delete();
+
+       return redirect()->back();
 
    }
 
@@ -412,8 +427,19 @@ class LeaveController extends Controller
         $massAction = $request['massAction'];
 
         foreach ($massAction as $id) {
-            
-            longLeave::find($id)->delete();
+
+            $leave = longLeave::find($id);
+            $startDate = Carbon::parse($leave->from);
+            $endDate = Carbon::parse($leave->to);
+            $numberOfDays = $startDate->diffInDays($endDate) + 1;
+     
+            $userEntitlement = LeaveEntitlement::findOrFail($leave->entitlement_id);
+     
+            $totalDays = $userEntitlement->leave_taken - $numberOfDays;
+            $totalDays < 0 ? $totalDays = 0 : $totalDays;
+            $userEntitlement->update(['leave_taken'=>$totalDays]);
+             
+            $leave->delete();
 
         }
         return redirect($this->base_url);

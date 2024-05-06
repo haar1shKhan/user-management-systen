@@ -598,11 +598,26 @@ form button.border-none {
                                 </div>
                                 </div>
                         @endcan
+
+                        @can("long_leave_delete")
+                              <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
+                        @endcan
                     </div>
                     <div class="table-responsive my-5">
                         <table class="display" id="basic-1">
                             <thead>
                                 <tr>
+                                    
+                                    @if (Gate::check('long_leave_update') || Gate::check('long_leave_delete'))
+
+                                    <th>
+                                        <div class="form-check checkbox checkbox-dark mb-2">
+                                              <input id='selectall' class="form-check-input select-all-checkbox" data-category="all" type="checkbox">
+                                              <label for="selectall" class="form-check-label"></label>
+                                        </div>
+                                    </th>
+
+                                    @endif
                                     <th>{{ trans('admin/user.name') }}</th>
                                     <th>Leave type</th>
                                     <th>From</th>
@@ -611,6 +626,13 @@ form button.border-none {
                                     <th>File</th>
                                     <th>status</th>
                                     <th>Approved By</th>
+
+                                    @if (Gate::check('long_leave_update') || Gate::check('long_leave_delete'))
+
+                                      <th>{{ trans('global.action') }}</th>
+
+                                    @endif
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -618,7 +640,14 @@ form button.border-none {
                                     @foreach ($longLeave as $list )
 
                                             {{-- @endcan --}}
-
+                                            @if(Gate::check('long_leave_update') || Gate::check('long_leave_delete'))
+                                            <td>
+                                                        <div class="form-check checkbox checkbox-dark mb-0">
+                                                            <input class="form-check-input" name="massAction" id={{"inline-".$list->id}} value="{{ $list->id }}" type="checkbox" data-bs-original-title="" title>
+                                                            <label class="form-check-label" for={{"inline-".$list->id}}></label>
+                                                        </div>
+                                                </td>
+                                            @endif
                                             <td>{{ucwords($list->user->first_name)}} {{ucwords($list->user->last_name)}}</td>
                                             <td>{{$list->entitlement->policy->title}}</td>
                                             <td>{{ date('d/m/Y', strtotime($list->from)) }}</td>
@@ -644,6 +673,18 @@ form button.border-none {
                                             </td>
                                             <td>
                                                 {{ucwords(optional($list->approvedBy)->first_name) . ' ' . ucwords(optional($list->approvedBy)->last_name) ?? 'Not Approved' }}
+                                            </td>
+                                            <td>
+                                                @can("long_leave_delete")
+                                                    <ul class="action">
+                                                        <form onsubmit="return confirm('Are you sure you want to delete this leave?')" action="{{route('admin.longLeave.destroy',['long_leave'=>$list->id])}}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <li class="delete"><button class="border-none" type="submit"><i class="icon-trash"></i></button></li>
+                                                            
+                                                        </form>
+                                                    </ul>
+                                                @endcan
                                             </td>
 
                                         </tr>
@@ -975,6 +1016,93 @@ form button.border-none {
 
         });
     }
+
+    //Toggling button between disable or enable
+    $(document).ready(function () {
+            // Disable the button initially if massDestroy array is empty
+            updatemassActionButtonState();
+
+            // Add an event listener to update the button state when the checkbox state changes
+            $('input[name="massAction"]').change(function () {
+                updatemassActionButtonState();
+            });
+
+
+            //selecting all check boxes
+            $('#selectall').change(function () {
+                $('.form-check-input[name="massAction"]').prop('checked', this.checked);
+                updatemassActionButtonState();
+             });
+         
+             // Function to handle individual checkboxes
+             $('.form-check-input[name="massAction"]').change(function () {
+                 if (!this.checked) {
+                     $('#selectall').prop('checked', false);
+                 }
+             });
+
+     });
+
+    function updatemassActionButtonState() 
+    {
+        var isMassDestroyEmpty = $('input[name="massAction"]:checked').length === 0;
+        $('.massActionButton').prop('disabled', isMassDestroyEmpty);
+    }
+
+    $(function() {
+
+        $('.massActionButton').click(function(e) {
+            e.preventDefault();
+            
+            
+            
+            var selectedUserIds = [];
+            
+
+
+            var isConfirm = confirm('Are you sure');
+            if(!isConfirm) return
+
+
+            // Collect selected user IDs
+            $('input:checkbox[name="massAction"]:checked').each(function() {
+                selectedUserIds.push($(this).val());
+            });
+
+            // Check if any users are selected
+            if (selectedUserIds.length > 0) {
+                // Set the action type in the hidden input
+
+                // Prepare data for AJAX request
+                var requestData = {
+                    action_type: "delete",
+                    massAction: selectedUserIds,
+                    _token: '{{csrf_token()}}'
+
+                };
+            
+                // Make AJAX request
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('admin.longLeave.massAction')}}", // Update the URL to your controller method
+                    data: requestData,
+                    success: function(response) {
+                        // Handle success response
+                        location.reload();
+                        console.log(response);
+                        // Optionally, you can reload the page or update the UI as needed.
+                    },
+                    error: function(error) {
+                        // Handle error response
+                        console.error(error);
+                    }
+                });
+            } else {
+                alert('Please select at least one user to perform the action.');
+            }
+        });  
+
+        });
 
 
     

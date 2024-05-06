@@ -852,6 +852,8 @@
 
         $(document).ready(function() {
             // Function to update the shared select input based on selected checkboxes
+            let isPending = 0;
+
             function updateMassActionButtonState(tableId) {
                 var isMassActionEmpty = $('#' + tableId + ' input[name="massAction"]:checked').length === 0;
                 $('#' + tableId + ' .massActionButton').prop('disabled', isMassActionEmpty);
@@ -881,9 +883,12 @@
             });
 
             // Event listener for the shared select input
-            $('#massActionSelect').change(function() {
-                var selectedAction = $(this).val();
+            const massActionSelect =  $('#massActionSelect');
 
+            massActionSelect.change(function() {
+                var selectedAction = $(this).val();
+                isPending = 1
+                massActionSelect. prop('disabled', isPending);
                 // Iterate over the tables and perform the selected action for each
                 ['basic-1', 'basic-2', 'basic-3'].forEach(function(tableId) {
                     var selectedUserIds = $('#' + tableId + ' input[name="massAction"]:checked')
@@ -908,6 +913,8 @@
                             data: requestData,
                             success: function(response) {
                                 // Handle success response
+                                isPending = 0;
+                                massActionSelect. prop('disabled', isPending);
                                 location.reload();
                                 console.log(response);
                                 // Optionally, you can reload the page or update the UI as needed.
