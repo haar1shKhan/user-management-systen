@@ -462,146 +462,162 @@ form button.border-none {
 
                 <div class="tab-pane fade" id="long-leave" role="tabpanel"
                     aria-labelledby="long-leave-tab">
-                    <div class="d-flex justify-content-end mt-4">
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+
+                        @php
+                            $totalLeaveDays = 0;
+                            $totalTaken = 0;
+                           foreach($leaveEntitlement as $leaveDays){
+                                $totalLeaveDays += $leaveDays->days;
+                                $totalTaken += $leaveDays->leave_taken;
+                           }
+                        @endphp
 
                         {{-- @can('role_delete') --}}
-                        @can("long_leave_create")
-                            
-                            <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">أضف إجازة</button>
-                    
-                            <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myLargeModalLabel">أضف إجازة<span class="text-danger">{{$error??""}}</span></h4>
-                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
+                        <div class="d-flex flex-column">
+                            <span style="font-weight: 500 ; " class="mb-2" >Total Leaves days : {{$totalLeaveDays}}</span>
+                            <span style="font-weight: 500 ; " >Total Leaves Takens : {{$totalTaken}}</span>
+                        </div>
 
+                        <div>
+                                @can("long_leave_create")
                                     
-                                        <form enctype="multipart/form-data" action="{{route('admin.'.$url.".store_long_leave",['user'=>$user->id])}}" method="POST" class="modal-content">
-                                        @csrf
-                                        
-                                        <div class="modal-body">
-                                            <div class="">
-                                                <div class="row d-flex align-items-end">
-                                                    <div class="col-md-8">
-                                                            <label class="col-form-label">استحقاق الإجازة</label>
-                                                            <select name="entit_id" class="form-select" id="policy_id" required="">
-                                                                <option selected="true" disabled value="">Choose...</option>
-                                                                @foreach ($leaveEntitlement as $leaveType)
-                                                                        @php
-                                                                            // remaining = total - num of current month * (total/12)
-
-                                                                            // $expired = ($value->days/12) * $last_month - $leave_taken;
-                                                                            // $remaining = ($value->days - $value->leave_taken) - $expired
-                                                                            if($leaveType->policy->monthly){
-                                                                                $leave_taken = 0;
-                                                                                
-                                                                                foreach ($longLeave as $leave) {
-                                                                                    if ($leave->approved == 1 && $leaveType->policy->id == $leave->entitlement->policy->id) {
-                                                                                        $fromDate = Carbon\Carbon::parse($leave->from);
-                                                                                        $month = $fromDate->month ;
-                                                                                        $toDate = Carbon\Carbon::parse($leave->to);
-                                                                                        if($month <= $lastMonth){
-                                                                                            $leave_taken += $fromDate->diffInDays($toDate);
-                                                                                        }
-                                                                                    }
-                                                                                    }
-
-                                                                                $totalDays = $leaveType->days;
-                                                                                $expired = ($totalDays/12) * $lastMonth - $leave_taken ;
-                                                                                $remainingDays = ($totalDays - $leaveType->leave_taken) - $expired  ;
-                                                                                // $remainingDays =  $leave_taken ;
-                                                                            } else {
-                                                                                $totalDays = $leaveType->days;
-                                                                                $remainingDays = $totalDays - $leaveType->leave_taken;  
-                                                                            }
-                                                                        
-                                                                        
-                                                                        @endphp 
-                                                                    <option class="py-3" value="{{ $leaveType->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
-                                                                    data-number-of-days="@if($leaveType->policy->monthly) {{$totalDays/12}} @else{{$remainingDays}}@endif">
-                                                                        {{ $leaveType->policy->title."  -  ".date('M Y', strtotime($leaveType->start_year))." to ".date('M Y', strtotime($leaveType->end_year))}}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>    
-                                                        <div class="text-danger mt-1">
-                                                            @error("entit_id")
-                                                            {{$message}}    
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row" id="longLeaveFields">
-                                                    <div class="col-md-4">
-                                                        <label class="col-form-label">تاريخ البدء</label>
-                                                        <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date"  id="startDate" name="startDate" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="col-form-label">تاريخ الانتهاء</label>
-                                                        <div class="col-sm-12">
-                                                            <input class="form-control digits" type="date"  id="endDate"  name="endDate" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
-                                                        <div class="mx-2 days-field">
-                                                            الأيام المتبقية: 0
-                                                        </div>
-                                                    </div>
+                                    <button class="btn btn-primary mx-1" type="button" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">أضف إجازة</button>
+                            
+                                    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myLargeModalLabel">أضف إجازة<span class="text-danger">{{$error??""}}</span></h4>
+                                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
 
                                             
-                                                <div class="row mb-2 my-4">
-
-                                                    <div class=" d-flex justify-content-around">
-
-                                                        <div id="advance_salary_div" style="display:none;" class="form-check form-check-inline checkbox checkbox-dark mb-0">
-                                                                <input class="form-check-input" id="inline-1" type="checkbox" name="advance_salary">
-                                                                <label class="form-check-label" for="inline-1">Advance Salary</label>
-                                                        </div>
-
-                                                    </div>
+                                                <form enctype="multipart/form-data" action="{{route('admin.'.$url.".store_long_leave",['user'=>$user->id])}}" method="POST" class="modal-content">
+                                                @csrf
                                                 
-                                                </div>
-                                            
-                                            
-                                                        <div class="row">
-                                                            <div class="col">
-                                                            <div class="mb-3 row">
-                                                                <div class="col-sm-12">
-                                                                <input class="form-control" name="leave_file" type="file">
+                                                <div class="modal-body">
+                                                    <div class="">
+                                                        <div class="row d-flex align-items-end">
+                                                            <div class="col-md-8">
+                                                                    <label class="col-form-label">استحقاق الإجازة</label>
+                                                                    <select name="entit_id" class="form-select" id="policy_id" required="">
+                                                                        <option selected="true" disabled value="">Choose...</option>
+                                                                        @foreach ($leaveEntitlement as $leaveType)
+                                                                                @php
+                                                                                    // remaining = total - num of current month * (total/12)
+
+                                                                                    // $expired = ($value->days/12) * $last_month - $leave_taken;
+                                                                                    // $remaining = ($value->days - $value->leave_taken) - $expired
+                                                                                    if($leaveType->policy->monthly){
+                                                                                        $leave_taken = 0;
+                                                                                        
+                                                                                        foreach ($longLeave as $leave) {
+                                                                                            if ($leave->approved == 1 && $leaveType->policy->id == $leave->entitlement->policy->id) {
+                                                                                                $fromDate = Carbon\Carbon::parse($leave->from);
+                                                                                                $month = $fromDate->month ;
+                                                                                                $toDate = Carbon\Carbon::parse($leave->to);
+                                                                                                if($month <= $lastMonth){
+                                                                                                    $leave_taken += $fromDate->diffInDays($toDate);
+                                                                                                }
+                                                                                            }
+                                                                                            }
+
+                                                                                        $totalDays = $leaveType->days;
+                                                                                        $expired = ($totalDays/12) * $lastMonth - $leave_taken ;
+                                                                                        $remainingDays = ($totalDays - $leaveType->leave_taken) - $expired  ;
+                                                                                        // $remainingDays =  $leave_taken ;
+                                                                                    } else {
+                                                                                        $totalDays = $leaveType->days;
+                                                                                        $remainingDays = $totalDays - $leaveType->leave_taken;  
+                                                                                    }
+                                                                                
+                                                                                
+                                                                                @endphp 
+                                                                            <option class="py-3" value="{{ $leaveType->id }}" data-monthly="{{ $leaveType->policy->monthly }}" data-advance-salary="{{ $leaveType->policy->advance_salary }}" 
+                                                                            data-number-of-days="@if($leaveType->policy->monthly) {{$totalDays/12}} @else{{$remainingDays}}@endif">
+                                                                                {{ $leaveType->policy->title."  -  ".date('M Y', strtotime($leaveType->start_year))." to ".date('M Y', strtotime($leaveType->end_year))}}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>    
+                                                                <div class="text-danger mt-1">
+                                                                    @error("entit_id")
+                                                                    {{$message}}    
+                                                                    @enderror
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="row" id="longLeaveFields">
+                                                            <div class="col-md-4">
+                                                                <label class="col-form-label">تاريخ البدء</label>
+                                                                <div class="col-sm-12">
+                                                                    <input class="form-control digits" type="date"  id="startDate" name="startDate" required>
+                                                                </div>
                                                             </div>
+                                                            <div class="col-md-4">
+                                                                <label class="col-form-label">تاريخ الانتهاء</label>
+                                                                <div class="col-sm-12">
+                                                                    <input class="form-control digits" type="date"  id="endDate"  name="endDate" required>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4 d-flex justify-content-center align-items-end my-4 ">
+                                                                <div class="mx-2 days-field">
+                                                                    الأيام المتبقية: 0
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    
+                                                        <div class="row mb-2 my-4">
+
+                                                            <div class=" d-flex justify-content-around">
+
+                                                                <div id="advance_salary_div" style="display:none;" class="form-check form-check-inline checkbox checkbox-dark mb-0">
+                                                                        <input class="form-check-input" id="inline-1" type="checkbox" name="advance_salary">
+                                                                        <label class="form-check-label" for="inline-1">Advance Salary</label>
+                                                                </div>
+
+                                                            </div>
+                                                        
                                                         </div>
                                                     
-                                                        <div class="row">
-                                                            <div class="col">
-                                                            <div>
-                                                                <label class="form-label" for="exampleFormControlTextarea4">تعليقات</label>
-                                                                <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3"></textarea>
-                                                            </div>
-                                                            </div>
+                                                    
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                    <div class="mb-3 row">
+                                                                        <div class="col-sm-12">
+                                                                        <input class="form-control" name="leave_file" type="file">
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
+                                                            
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                    <div>
+                                                                        <label class="form-label" for="exampleFormControlTextarea4">تعليقات</label>
+                                                                        <textarea class="form-control" name="comment" id="exampleFormControlTextarea4" rows="3"></textarea>
+                                                                    </div>
+                                                                    </div>
+                                                                </div>
                                                         </div>
                                                 </div>
+                                                <div class="modal-footer">
+                                                <button class="btn btn-danger" type="button" data-bs-dismiss="modal">الغاء</button>
+                                                <button class="btn btn-primary" type="submit">اضافة</button>
+                                                </div>
+                                                </form>
+                                            
+                                            
+                                            </div>
                                         </div>
-                                        <div class="modal-footer">
-                                        <button class="btn btn-danger" type="button" data-bs-dismiss="modal">الغاء</button>
-                                        <button class="btn btn-primary" type="submit">اضافة</button>
                                         </div>
-                                        </form>
-                                    
-                                    
-                                    </div>
-                                </div>
-                                </div>
-                        @endcan
+                                @endcan
 
-                        @can("long_leave_delete")
-                              <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
-                        @endcan
+                                @can("long_leave_delete")
+                                    <button class="btn btn-danger massActionButton" id="destroyAll" type="submit" onclick="setActionType('destroyAll')"  data-bs-original-title="" title="">{{ trans('global.deleteAll')}}</button>
+                                @endcan
+                       </div>
                     </div>
                     <div class="table-responsive my-5">
                         <table class="display" id="basic-1">
