@@ -8,6 +8,7 @@
 @endsection
 
 @section('style')
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/vendors/owlcarousel.css')}}">
 <style>
 form button.border-none {
     border: none;
@@ -95,7 +96,14 @@ form button.border-none {
 
         <div class="row ">
             <div class=" mb-3  d-flex justify-content-end align-items-center">
-                <a class="mx-2" href="{{route('admin.user.edit',['user'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
+                <a href="{{route('admin.user.edit',['user'=>$user->id])}}"><h4><i class="icon-pencil-alt"></i></h4></a>
+                
+                <form method="POST" action="{{ route('admin.user.reset_password',['user'=>$user->id]) }}">
+                    @csrf
+
+                    <button class="btn btn-secondary mx-2" type="submit">Reset Password</button>
+                </form>
+
                 <a href="{{ url('admin/users') }}" class="btn btn-primary">Back</a>
             </div>
         </div>
@@ -462,23 +470,50 @@ form button.border-none {
 
                 <div class="tab-pane fade" id="long-leave" role="tabpanel"
                     aria-labelledby="long-leave-tab">
-                    <div class="d-flex justify-content-between align-items-center mt-4">
 
-                        @php
-                            $totalLeaveDays = 0;
-                            $totalTaken = 0;
-                           foreach($leaveEntitlement as $leaveDays){
-                                $totalLeaveDays += $leaveDays->days;
-                                $totalTaken += $leaveDays->leave_taken;
-                           }
-                        @endphp
+                    <div class="row my-3">
+                    @if (!empty($entitlmentArray))
+                    <div class="col-sm-12">
+                                <div class="owl-carousel owl-theme" id="owl-carousel-1">
+                                    @foreach ($entitlmentArray as $entitlement)
+                                    <div class="item">
+                                        <div style="background-color:#efefef;" class="card text-dark shadow-none mb-0">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="mb-5 d-flex justify-content-between">
+                                                        <div>
+                                                            <h6 class="mb-0">{{ $entitlement['leaveType'] }}</h6>
+                                                            <p>{{ $entitlement['totaDays'] }} days</p>
+                                                        </div>
+                                                        <div>
+                                                            <h6>{{ $entitlement['leaveYear'] }}</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between">
+                                                        <div class="text-center mx-2">
+                                                            <h6>Taken</h6>
+                                                            <p>{{ $entitlement['leaveTaken'] }} days</p>
+                                                        </div>
+                                                        <div class="text-center mx-2">
+                                                            <h6>Expired</h6>
+                                                            <p>{{ $entitlement['expiredLeave'] }} days</p>
+                                                        </div>
+                                                        <div class="text-center mx-2">
+                                                            <h6>Remaining</h6>
+                                                            <p>{{ $entitlement['remainingLeave'] }} days</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                    </div> 
+                    @endif
+                    </div> 
 
-                        {{-- @can('role_delete') --}}
-                        <div class="d-flex flex-column">
-                            <span style="font-weight: 500 ; " class="mb-2" >Total Leaves days : {{$totalLeaveDays}}</span>
-                            <span style="font-weight: 500 ; " >Total Leaves Takens : {{$totalTaken}}</span>
-                        </div>
-
+                    <div class="d-flex justify-content-end align-items-center mt-4">
                         <div>
                                 @can("long_leave_create")
                                     
@@ -953,8 +988,9 @@ form button.border-none {
 @endsection
 
 @section('script')
-
-    
+    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+    <script src="{{asset('assets/js/owlcarousel/owl.carousel.js')}}"></script> 
     <script>
      $('.days-field').hide();
 
@@ -1120,6 +1156,23 @@ form button.border-none {
 
         });
 
+        $('#owl-carousel-1').owlCarousel({
+        loop:false,
+        margin:10,
+        nav:false,
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:2
+            },
+            1000:{
+                items:3
+            }
+        }
+    })
+
 
     
     // function showEntitlment(){
@@ -1157,6 +1210,6 @@ form button.border-none {
     // }
     </script>
 
-    <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/datatable/datatables/datatable.custom.js') }}"></script>
+
+
 @endsection

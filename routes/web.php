@@ -181,6 +181,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
     Route::post('user/massAction', [UsersController::class,'massAction'])->name('user.massAction');
     Route::post('user/storeLongLeave/{user}', [UsersController::class,'storeLongLeave'])->name('user.store_long_leave');
     Route::post('user/storeEntitlement/{user}', [UsersController::class,'storeEntitlement'])->name('user.store_entitlement');
+    Route::post('user/send-reset-email/{user}', [UsersController::class,'sendResetEmailToUser'])->name('user.reset_password');
+
     
     /*---------
     |  ROLES  |

@@ -22,6 +22,11 @@
 @endsection
 
 @section('content')
+@if (session('status'))
+    <div class="alert alert-warning " role="alert">
+        {{ session('status') }}
+    </div>
+@endif
 <div class="container-fluid">
     <div class="row starter-main">
         <div class="col-sm-12">

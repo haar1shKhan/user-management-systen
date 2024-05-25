@@ -14,6 +14,8 @@ use App\Models\LeaveEntitlement;
 use App\Models\longLeave;
 use App\Models\ShortLeave;
 use App\Models\LateAttendance;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use DateTime;
 use DateTimeZone;
 use Carbon\Carbon;
@@ -21,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Password;
 
 
 
@@ -106,14 +109,19 @@ class UsersController extends Controller
 
         $user->roles()->sync([$request->input('role')]);
 
+        $fileName ="";
+        $nidFile ="";
+        $visaFile  ="";
+        $passportFile  ="";
+
         if($request->image){
             $fileName = $user->id . '.' . $request->image->extension();
             $request->file('image')->storeAs('public/profile_images', $fileName);
         }
 
         if($request->passport_file){
-            $PassportFile = $user->id . '.' . $request->passport_file->extension();
-            $request->file('passport_file')->storeAs('public/passport_files', $PassportFile);
+            $passportFile = $user->id . '.' . $request->passport_file->extension();
+            $request->file('passport_file')->storeAs('public/passport_files', $passportFile);
         }
 
         if($request->nid_file){
@@ -144,7 +152,7 @@ class UsersController extends Controller
             'passport' => $request->input('passport'),
             'passport_issued_at' => $request->input('passport_issued_at'),
             'passport_expires_at' => $request->input('passport_expires_at'),
-            'passport_file' => $request->passport_file ?? null,
+            'passport_file' => $passportFile ?? null,
             'nid' => $request->input('nid'),
             'nid_issued_at' => $request->input('nid_issued_at'),
             'nid_expires_at' => $request->input('nid_expires_at'),
@@ -152,7 +160,7 @@ class UsersController extends Controller
             'visa' => $request->input('visa'),
             'visa_issued_at' => $request->input('visa_issued_at'),
             'visa_expires_at' => $request->input('visa_expires_at'),
-            'visa_file' => $request->visa_file ?? null,
+            'visa_file' => $visaFile ?? null,
             'country' => $request->input('country'),
         ]);
         
@@ -238,6 +246,7 @@ class UsersController extends Controller
         ];
 
         Mail::to($user->email)->queue(new WelcomeMail($mailData));
+        $this->sendResetEmailToUser($user);
     
         return redirect('admin/users');
     }
@@ -247,6 +256,7 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
+        $leave_balance = array();
         $user = User::with('roles','profile','jobDetail')->find($id);
         $longLeave= longLeave::where('user_id',$id)->with("entitlement","approvedBy","user")->orderBy('id', 'desc')->get();
         $shortLeave= ShortLeave::where('user_id',$id)->with("approvedBy","user")->orderBy('id', 'desc')->get();
@@ -254,6 +264,80 @@ class UsersController extends Controller
         $leaveEntitlement= LeaveEntitlement::where('user_id',$id) ->orderBy('leave_policy_id', 'desc')->get();
         $last_month = Carbon::now()->month-1;
         $policies= LeavePolicies::all();
+
+        foreach ($leaveEntitlement as $key => $value) {
+
+            $days = $value->days;
+            $leave_taken_value = $value->leave_taken;
+
+            if ($value->policy->monthly) { 
+
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType'] && $value->end_year !== auth()->user()->jobdetail->end_year) {
+                        continue 2;
+                    }
+                    unset($balance); 
+                }
+                
+                $leaves_subMonth = longLeave::where('entitlement_id', $value->id)
+                ->where('user_id',auth()->user()->id)
+                ->where(function ($query) {
+                    $query->whereYear('from', Carbon::now()->year)
+                        ->whereBetween(DB::raw('MONTH(`from`)'),[1,Carbon::now()->month-1]);
+                })
+                ->where('approved',1)->get();
+
+                $leave_taken = 0;
+                foreach ($leaves_subMonth as $index => $leave) {
+                    $fromDate =Carbon::parse($leave->from);
+                    $toDate =Carbon::parse($leave->to);
+                    $leave_taken += $fromDate->diffInDays($toDate);
+                }
+               
+                $expired = ($days/12) * $last_month - $leave_taken;
+                $remaining = ($days - $leave_taken_value) - $expired;
+            }
+            elseif($value->policy->is_unlimited){
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType']) {
+                        $balance['remainingLeave'] += $days - $leave_taken_value;
+                        $balance['totaDays'] += $days;
+                        $balance['leaveTaken'] += $leave_taken_value;
+                        continue 2;
+                    }
+                }
+                unset($balance); 
+                $expired = "0";
+                $remaining = $days - $leave_taken_value;
+            }
+            else{
+                foreach ($leave_balance as &$balance) { // Note the "&" before $balance to make it a reference
+                    if ($value->policy->title === $balance['leaveType']) {
+                        $balance['remainingLeave'] += $days - $leave_taken_value;
+                        $balance['totaDays'] += $days;
+                        $balance['leaveTaken'] += $leave_taken_value;
+                        continue 2;
+                    }
+                }
+                unset($balance); 
+                $remaining = $days - $leave_taken_value;
+                $expired = 0;
+            }
+
+            $leave_year = date('M Y', strtotime($value->start_year)).'-'.date('M Y', strtotime($value->end_year));
+
+            if(date('Y', strtotime($value->start_year)) == date('Y', strtotime('-1 day',strtotime($value->end_year)))){
+                $leave_year = date('Y', strtotime($value->start_year));
+            }
+
+            $leave_balance[$key]['leaveYear'] = $leave_year;
+            $leave_balance[$key]['leaveType'] = $value->policy->title;
+            $leave_balance[$key]['totaDays'] = $days;
+            $leave_balance[$key]['leaveTaken'] = $leave_taken_value;
+            $leave_balance[$key]['remainingLeave'] = $remaining;
+            $leave_balance[$key]['expiredLeave'] = $expired;
+           
+        }
 
         $current_date = new DateTime("now", new DateTimeZone("Asia/Dubai"));
 
@@ -269,17 +353,20 @@ class UsersController extends Controller
 
         
         // dd($employee_year);
-        $data['page_title'] = 'User Detail';
-        $data['user'] = $user;
-        $data['longLeave'] = $longLeave;
-        $data['shortLeave'] = $shortLeave;
-        $data['lateAttendance'] = $lateAttendance;
-        $data['leaveEntitlement'] = $leaveEntitlement;
-        $data['employee_years'] = $employee_years;
-        $data['policies'] = $policies;
-        $data['lastMonth'] = $last_month;
 
-        $data['url'] = 'user';
+        $data = [
+            'page_title' => 'User Detail',
+            'user' => $user,
+            'longLeave' => $longLeave,
+            'shortLeave' => $shortLeave,
+            'lateAttendance' => $lateAttendance,
+            'leaveEntitlement' => $leaveEntitlement,
+            'employee_years' => $employee_years,
+            'policies' => $policies,
+            'lastMonth' => $last_month,
+            'entitlmentArrayb' => $leave_balance,
+            'url' => 'user',
+        ];
 
         return view('admin/users/show',$data);
     }
@@ -342,6 +429,11 @@ class UsersController extends Controller
 
 
         if ($request->hasFile('image')) {
+
+            if ($user->image) {
+                Storage::delete('public/profile_images/' . $user->image);
+            }
+        
             $fileName = $user->id . '.' . $request->image->extension();
             $request->file('image')->storeAs('public/profile_images', $fileName);
 
@@ -351,6 +443,11 @@ class UsersController extends Controller
         }
 
         if ($request->hasFile('passport_file')) {
+
+            if ($user->profile->passport_file) {
+                Storage::delete('public/passport_files/' . $user->profile->passport_file);
+            }
+
             $fileName = $user->id . '.' . $request->passport_file->extension();
             $request->file('passport_file')->storeAs('public/passport_files', $fileName);
 
@@ -359,6 +456,11 @@ class UsersController extends Controller
             ]);
         }
         if ($request->hasFile('nid_file')) {
+
+            if ($user->profile->nid_file) {
+                Storage::delete('public/nid_files/' . $user->profile->nid_file);
+            }
+
             $fileName = $user->id . '.' . $request->nid_file->extension();
             $request->file('nid_file')->storeAs('public/nid_files', $fileName);
 
@@ -367,6 +469,11 @@ class UsersController extends Controller
             ]);
         }
         if ($request->hasFile('visa_file')) {
+
+            if ($user->profile->visa_file) {
+                Storage::delete('public/visa_files/' . $user->profile->visa_file);
+            }
+
             $fileName = $user->id . '.' . $request->visa_file->extension();
             $request->file('visa_file')->storeAs('public/visa_files', $fileName);
     
@@ -433,7 +540,7 @@ class UsersController extends Controller
 
         $user->roles()->sync([$request->input('role')]);
 
-        return redirect('admin/users');       
+        return redirect()->back()->with('status',"User has been successfully updated");       
     }
 
     /**
@@ -468,11 +575,25 @@ class UsersController extends Controller
         
             foreach ($massAction as $id) {
 
-                User::withTrashed()->find($id)->forceDelete();
+                $user = User::withTrashed()->find($id);
+
+                if (!empty($user->image)) {
+                    Storage::delete('public/profile_images/' . $user->image);
+                }
+                if (!empty($user->profile->passport_file)) {
+                    Storage::delete('public/passport_files/' . $user->profile->passport_file);
+                }
+                if (!empty($user->profile->nid_file)) {
+                    Storage::delete('public/nid_files/' . $user->profile->nid_file);
+                }
+                if (!empty($user->profile->visa_file)) {
+                    Storage::delete('public/visa_files/' . $user->profile->visa_file);
+                }
+            
+                $user->forceDelete();
                 
             }
             return redirect('admin/users?trash=1');
-            
         }
         
         if($actionType == 'destroyAll'){
@@ -498,11 +619,26 @@ class UsersController extends Controller
     public function forceDelete(string $id)
     {
         abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        User::withTrashed()->find($id)->forceDelete();
+    
+        $user = User::withTrashed()->find($id);
+        
+        if (!empty($user->image)) {
+            Storage::delete('public/profile_images/' . $user->image);
+        }
+        if (!empty($user->profile->passport_file)) {
+            Storage::delete('public/passport_files/' . $user->profile->passport_file);
+        }
+        if (!empty($user->profile->nid_file)) {
+            Storage::delete('public/nid_files/' . $user->profile->nid_file);
+        }
+        if (!empty($user->profile->visa_file)) {
+            Storage::delete('public/visa_files/' . $user->profile->visa_file);
+        }
+    
+        $user->forceDelete();
         return redirect('admin/users?trash=1');
     }
-
+    
 
     public function storeLongLeave(Request $request, string $id)
     {       
@@ -687,6 +823,28 @@ class UsersController extends Controller
             $userEntitlement->save();
 
             return redirect()->back();
+    }
+
+    public function sendResetEmailToUser(User $user)
+    {
+        if (!$user) {
+            return back()->with(['email' => 'User with this email does not exist.']);
+        }
+
+        $response = $this->broker()->sendResetLink(
+            ['email' => $user->email]
+        );
+
+        return $response == Password::RESET_LINK_SENT
+                    ? back()->with('status', trans($response))
+                    : back()->with(
+                        ['status' => trans($response)]
+                    );
+    }
+
+    public function broker()
+    {
+        return Password::broker();
     }
 
 }

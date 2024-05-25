@@ -63,22 +63,22 @@
         </li> --}}
         <li class="profile-nav onhover-dropdown pe-0 py-0">
           <div class="media profile-media">
-            @if (empty(auth()->user()->profile->image))
-            <img width="40px" class="rounded-circle" src="{{ asset('assets/images/placeholder.png') }}" alt="">
-            @else
-            <img width="40px" class="rounded-circle" src="{{ asset('storage/profile_images/' . (auth()->user()->profile->image)) }}" alt="">
-            @endif
-            <div class="media-body"><span>{{auth()->user()->first_name }} {{auth()->user()->last_name}}</span>
-              <p class="mb-0 font-roboto">
-                  @foreach (auth()->user()->roles as $role )
+                  @if (empty(auth()->user()->profile->image))
+                  <img width="40px" height="40px" class="rounded-circle" src="{{ asset('assets/images/placeholder.png') }}" alt="">
+                  @else
+                  <img width="40px" height="40px" class="rounded-circle" src="{{ asset('storage/profile_images/' . (auth()->user()->profile->image)) }}" alt="">
+                  @endif
+                  <div class="media-body"><span>{{auth()->user()->first_name }} {{auth()->user()->last_name}}</span>
+                    <p class="mb-0 font-roboto">
+                        @foreach (auth()->user()->roles as $role )
 
-                    {{$role->title ?? "Unknow role"}}
-                    
-                  @endforeach
-                 <i class="middle fa fa-angle-down"></i>
-              </p>
-        
-      </div>
+                          {{$role->title ?? "Unknow role"}}
+                          
+                        @endforeach
+                      <i class="middle fa fa-angle-down"></i>
+                    </p>
+              
+                </div>
           </div>
           <ul class="profile-dropdown onhover-show-div">
             <li><a href="{{route('admin.account.profile')}}"><i data-feather="user"></i><span>Account </span></a></li>
