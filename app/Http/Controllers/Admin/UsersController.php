@@ -364,7 +364,7 @@ class UsersController extends Controller
             'employee_years' => $employee_years,
             'policies' => $policies,
             'lastMonth' => $last_month,
-            'entitlmentArrayb' => $leave_balance,
+            'entitlmentArray' => $leave_balance,
             'url' => 'user',
         ];
 
