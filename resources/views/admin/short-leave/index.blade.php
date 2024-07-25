@@ -105,6 +105,8 @@
     @endforeach
     @endif
 
+    <iframe id="print-frame"  style="display:none;"></iframe>  
+
     <div class="container-fluid">
         <div class="row">
 
@@ -275,33 +277,37 @@
                                                 </td>
 
                                                 <td>
-                                                    @if ($list->approved == 0)
-                                                        <ul class="action">
-                                                            @can('short_leave_update')
+                                                    <ul class="action">
+                                                        @if ($list->approved == 0)
+                                                                    @can('short_leave_update')
+                                                                        <li class="edit">
+                                                                            <button class="border-none" type="button"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#editModal{{ $list->id }}">
+                                                                                <i class="icon-pencil-alt"></i>
+                                                                            </button>
+                                                                        </li>
+                                                                     @endcan
+                                                                     @can('short_leave_delete')
+                                                                            <form
+                                                                                onsubmit="return confirm('Are you sure you want to delete this leave?')"
+                                                                                action="{{ route('admin.' . $url . '.destroy', ['short_leave' => $list->id]) }}"
+                                                                                method="post">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                                <li class="delete"><button class="border-none"
+                                                                                        type="submit"><i class="icon-trash"></i></button>
+                                                                                </li>
+
+                                                                            </form>
+                                                                    @endcan
+                                                                @endif
                                                                 <li class="edit">
-                                                                    <button class="border-none" type="button"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#editModal{{ $list->id }}">
-                                                                        <i class="icon-pencil-alt"></i>
+                                                                    <button class="border-none" type="button" onclick="printContent('{{ route('admin.'.$url.'.print', ['leave' => $list->id]) }}')">
+                                                                        <i class="icon-printer"></i>
                                                                     </button>
                                                                 </li>
-                                                            @endcan
-                                                            @can('short_leave_delete')
-                                                                <form
-                                                                    onsubmit="return confirm('Are you sure you want to delete this leave?')"
-                                                                    action="{{ route('admin.' . $url . '.destroy', ['short_leave' => $list->id]) }}"
-                                                                    method="post">
-                                                                    @csrf
-                                                                    @method('DELETE')
-                                                                    <li class="delete"><button class="border-none"
-                                                                            type="submit"><i class="icon-trash"></i></button>
-                                                                    </li>
-
-                                                                </form>
-                                                            @endcan
-
                                                         </ul>
-                                                    @endif
                                                 </td>
 
                                             </tr>
@@ -355,6 +361,17 @@
         function updatemassActionButtonState() {
             var isMassDestroyEmpty = $('input[name="massDelete[]"]:checked').length === 0;
             $('.massActionButton').prop('disabled', isMassDestroyEmpty);
+        }
+
+        function printContent(url) {
+            console.log(url);
+            var iframe = document.getElementById('print-frame');
+            // iframe.style.display = 'block';
+            iframe.onload = function() {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+            };
+            iframe.src = url;
         }
 
 

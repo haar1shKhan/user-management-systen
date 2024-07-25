@@ -61,6 +61,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         Route::put('reject/{leave}', 'reject')->name('reject');
     });
 
+    Route::get('longLeave/print_leave/{leave}',[LeaveController::class,'print'])->name('longLeave.print');
     Route::post('longLeave/massAction', [LeaveController::class,'massAction'])->name('longLeave.massAction');
 
     /*---------------
@@ -82,6 +83,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         Route::put('pending/{leave}', 'pending')->name('pending');
         Route::put('reject/{leave}', 'reject')->name('reject');
     });
+    Route::get('short-leave/print_leave/{leave}',[ShortLeaveController::class,'print'])->name('short-leave.print');
     Route::post('short-leave/mass-delete', [ShortLeaveController::class,'massDelete'])->name('user.massDelete');
     
     /*-------------------
@@ -103,6 +105,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->namespace('App\Htt
         Route::put('pending/{leave}', 'pending')->name('pending');
         Route::put('reject/{leave}', 'reject')->name('reject');
     });
+
+    Route::get('late-attendance/print_leave/{leave}',[LateAttendanceController::class,'print'])->name('lateAttendance.print');
     Route::post('late-attendance/mass-action', [LateAttendanceController::class,'massAction'])->name('lateAttendance.massAction');
 
     /*---------------

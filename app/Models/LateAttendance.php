@@ -16,7 +16,8 @@ class LateAttendance extends Model
         'reason',
         'approved',
         'reject_reason',
-        'approved_by'
+        'approved_by',
+        'user_id'
     ];
 
     public function user()

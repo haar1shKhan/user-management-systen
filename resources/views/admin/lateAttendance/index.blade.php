@@ -96,6 +96,9 @@
 @endforeach
 @endif
 
+<iframe id="print-frame"  style="display:none;"></iframe>  
+
+
 <div class="container-fluid">
     <div class="row">
 
@@ -280,9 +283,9 @@
                                             @if (Gate::check('late_attendance_update') || Gate::check('late_attendance_delete'))
 
                                             <td>
+                                             <ul class="action">
                                                 @if($list->approved===0)
 
-                                                <ul class="action">
                                                     
                                                     @can("late_attendance_update")    
                                                         <li class="edit">
@@ -301,8 +304,13 @@
                                                         </form>
                                                     @endcan
                                                     
-                                                  </ul>
-                                                  @endif
+                                                    @endif
+                                                    <li class="edit">
+                                                        <button class="border-none" type="button" onclick="printContent('{{ route('admin.'.$url.'.print', ['leave' => $list->id]) }}')">
+                                                            <i class="icon-printer"></i>
+                                                        </button>
+                                                    </li>
+                                                </ul>
                                             </td>
 
                                             @endif
@@ -364,6 +372,17 @@
         function setActionType(actionType) {
         // Set the value of the hidden input field
             $('#actionType').val(actionType);
+        }
+
+        function printContent(url) {
+            console.log(url);
+            var iframe = document.getElementById('print-frame');
+            // iframe.style.display = 'block';
+            iframe.onload = function() {
+                iframe.contentWindow.focus();
+                iframe.contentWindow.print();
+            };
+            iframe.src = url;
         }
         
         //submitting selected id to massAction

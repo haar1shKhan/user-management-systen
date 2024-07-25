@@ -268,4 +268,16 @@ class LateAttendanceController extends Controller
     
         Mail::to($leave->user->email)->send(new LeaveStatusMail($data));
     }
+
+    public function print(LateAttendance $leave){
+        $leave->load(['user.roles', 'user.jobDetail','user.profile']);
+        $startHour = Carbon::parse($leave->from);
+        $endHour = Carbon::parse($leave->to);
+        $totalLeaveHours = $startHour->diffInHours($endHour) + 1;
+        $data =[
+            "leave" => $leave,
+            "totalLeaveHours" => $totalLeaveHours
+        ];
+        return view('printable.report',$data);
+    }
 }

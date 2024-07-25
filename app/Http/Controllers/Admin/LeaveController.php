@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\LeavePolicies;
 use App\Models\LeaveEntitlement;
+use App\Models\LeavePolicies;
 use App\Models\longLeave;
 use Carbon\Carbon;
 use App\Mail\LeaveRequestMail;
@@ -558,4 +558,27 @@ class LeaveController extends Controller
         Mail::to($leave->user->email)->send(new LeaveStatusMail($data));
     }
     
+    public function print(longLeave $leave){
+        $leave->load(['user.roles', 'user.jobDetail','user.profile','entitlement.policy']);
+        $startDate = Carbon::parse($leave->from);
+        $endDate = Carbon::parse($leave->to);
+        $numberOfDays = $startDate->diffInDays($endDate) + 1;
+        $leaveEntitlement = LeaveEntitlement::where('user_id',$leave->user->id)->where('leave_policy_id',$leave->entitlement->policy->id)->get();
+        $days=0;
+        $leave_taken=0;
+
+        foreach ($leaveEntitlement as $key => $value) {
+            $days += $value->days;
+            $leave_taken += $value->leave_taken;
+        }
+        
+        $days =$days- $leave_taken;
+        
+        $data =[
+            "leave" => $leave,
+            "numberOfDays"=> $numberOfDays,
+            "days"=> $days
+        ];
+        return view('printable.leave_report',$data);
+    }
 }
