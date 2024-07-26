@@ -79,7 +79,7 @@ class GlobalLeaveController extends Controller
                 $userEntitlement = LeaveEntitlement::find($longLeave->entitlement_id);
                 $startDate = Carbon::parse($longLeave->from);
                 $endDate = Carbon::parse($longLeave->to);
-                $numberOfDays = $startDate->diffInDays($endDate);
+                $numberOfDays = $startDate->diffInDays($endDate)+1;
                 
                 // Check if the button clicked is for approval or rejection
                 
@@ -174,7 +174,7 @@ class GlobalLeaveController extends Controller
                     $userEntitlement = LeaveEntitlement::find($longLeave->entitlement_id);
                     $startDate = Carbon::parse($longLeave->from);
                     $endDate = Carbon::parse($longLeave->to);
-                    $numberOfDays = $startDate->diffInDays($endDate);
+                    $numberOfDays = $startDate->diffInDays($endDate)+1;
 
 
                     if(auth()->user()->roles[0]->title == "Admin")
@@ -268,7 +268,7 @@ class GlobalLeaveController extends Controller
                     $userEntitlement = LeaveEntitlement::find($longLeave->entitlement_id);
                     $startDate = Carbon::parse($longLeave->from);
                     $endDate = Carbon::parse($longLeave->to);
-                    $numberOfDays = $startDate->diffInDays($endDate);
+                    $numberOfDays = $startDate->diffInDays($endDate)+1;
 
                     if($longLeave->approved==1){
                         $totalDays = $userEntitlement->leave_taken - $numberOfDays;
